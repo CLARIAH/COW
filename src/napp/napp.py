@@ -18,7 +18,13 @@ mappings = {
     'AGE': lambda x: x.zfill(3)
 }
 
-nocode = ['OCCSTRNG', 'HISPAN']
+nocode = ['BPLPARSE', 'CFU', 'CFUSIZE', 'CITYPOP', 'CNTYAREA', 'COUNTYUS', 
+          'ELDCH', 'ENUMDIST', 'FAMUNIT', 'HEADLOC', 'HHNBRNO', 'HHWT', 
+          'LINENUM', 'MOMLOC', 'NAMEFRST', 'NAMELAST', 'NFAMS', 'NHGISJOIN', 
+          'OCCSTRNG', 'OCSCORUS', 'PAGENUM', 'PARISHGB', 'PARSE', 'PERNUM', 
+          'PERWT', 'POPLOC', 'PRMFAMSZ', 'QOCCGB', 'REALPROP', 'RECTYPE', 
+          'REEL', 'RELATS', 'RESLSNO', 'SDSTCA', 'SEAUS', 'SEIUS', 'SERIAL', 
+          'SPLOC', 'YNGCH', 'YRSUSA1', 'NUMPERHH']
 
 
 def convert(filename):
@@ -32,10 +38,11 @@ def convert(filename):
 
         headers = nappreader.next()
 
+        obsid = 0
         for row in nappreader:
             index = 0
-
-            obs = SDH['observation/{}/{}'.format(dataset_name, ''.join(row).replace(' ','_').replace('{','_').replace('}','_'))]
+            
+            obs = SDH['observation/{}/{}'.format(dataset_name, obsid)]
             g.add((obs, QB['dataset'], dataset_uri))
 
             for col in row:
@@ -53,6 +60,8 @@ def convert(filename):
                     g.add((obs, SDH['dimension/'+headers[index]], URIRef(URI_PATTERN.format(headers[index], value))))
 
                 index += 1
+            
+            obsid += 1
 
     with open('out.ttl','w') as outfile:
         g.serialize(outfile, format='turtle')
