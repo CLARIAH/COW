@@ -125,7 +125,7 @@ class Converter(object):
             for row in r:
                 index = 0
                 obs_count += 1
-                logger.info(obs_count)
+                logger.debug(obs_count)
 
                 if self._number_observations:
                     obs = self.resource('observation/{}'.format(dataset_name), obs_count)
