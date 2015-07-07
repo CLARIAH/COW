@@ -8,7 +8,11 @@ from rdflib import Graph, Namespace, URIRef, RDF, Literal
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(10)
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+logger.addHandler(ch)
+
 
 SDH = Namespace("http://data.socialhistory.org/resource/")
 QB = Namespace("http://purl.org/linked-data/cube#")
@@ -87,61 +91,76 @@ def to_iri(iri):
 
 class Converter(object):
 
-    _VOCAB_BASE = "http://data.socialhistory.org/vocab/"
-    _RESOURCE_BASE = "http://data.socialhistory.org/resource/"
+    _VOCAB_BASE = "http://data.socialhistory.org/vocab"
+    _RESOURCE_BASE = "http://data.socialhistory.org/resource"
 
-    def __init__(self, nocode=[], mappings={}, family=None):
+    def __init__(self, nocode=[], mappings={}, family=None, number_observations=True):
         self._nocode = nocode
         self._mappings = mappings
+        self._number_observations = number_observations
 
         if family is None:
-            self._VOCAB_URI_PATTERN = "{}/\{\}/\{\}".format(self._VOCAB_BASE)
-            self._RESOURCE_URI_PATTERN = "{}/\{\}/\{\}".format(self._RESOURCE_BASE)
+            self._VOCAB_URI_PATTERN = "{0}/{{}}/{{}}".format(self._VOCAB_BASE)
+            self._RESOURCE_URI_PATTERN = "{0}/{{}}/{{}}".format(self._RESOURCE_BASE)
         else:
-            self._VOCAB_URI_PATTERN = "{}/{}/\{\}/\{\}".format(self._VOCAB_BASE, family)
-            self._RESOURCE_URI_PATTERN = "{}/{}/\{\}/\{\}".format(self._RESOURCE_BASE, family)
+            self._VOCAB_URI_PATTERN = "{0}/{1}/{{}}/{{}}".format(self._VOCAB_BASE, family)
+            self._RESOURCE_URI_PATTERN = "{0}/{1}/{{}}/{{}}".format(self._RESOURCE_BASE, family)
 
         self.g = apply_default_namespaces(Graph())
 
-    def convert(self, infile, outfile, delimiter=',', quotechar='\"', dataset_name = None):
+    def convert(self, infile, outfile, delimiter=',', quotechar='\"', dataset_name=None, stop=None):
 
         if dataset_name is None:
             dataset_name = os.path.basename(infile).rstrip('.csv')
 
-        dataset_uri = self.resource('dataset',dataset_name)
+        dataset_uri = self.resource('dataset', dataset_name)
         self.g.add((dataset_uri, RDF.type, QB['Dataset']))
 
-        r = csv.reader(infile, delimiter=delimiter, quotechar=quotechar, strict=True)
 
-        headers = r.next()
+        with open(infile) as infile_file:
+            r = csv.reader(infile_file, delimiter=delimiter, quotechar=quotechar, strict=True)
 
-        for row in r:
-            index = 0
+            headers = r.next()
+            obs_count = 0
+            for row in r:
+                index = 0
+                obs_count += 1
+                logger.info(obs_count)
 
-            obs = self.resource('observation/{}'.format(dataset_name),
-                                ''.join(row))
-            self.g.add((obs, QB['dataset'], dataset_uri))
+                if self._number_observations:
+                    obs = self.resource('observation/{}'.format(dataset_name), obs_count)
+                else :
+                    obs = self.resource('observation/{}'.format(dataset_name),
+                                        ''.join(row))
 
-            for col in row:
-                if len(col) < 1:
+                self.g.add((obs, QB['dataset'], dataset_uri))
+
+                for col in row:
+                    if len(col) < 1:
+                        index += 1
+                        logger.debug('Col length < 1')
+                        continue
+                    elif headers[index] in self._mappings:
+                        value = self._mappings[headers[index]](col)
+                    else:
+                        value = col
+
+                    dimension_uri = self.vocab('dimension', headers[index])
+                    if headers[index] in self._nocode:
+                        self.g.add((obs, dimension_uri, Literal(value)))
+                    else:
+                        value_uri = self.resource(headers[index], value)
+                        self.g.add((obs, dimension_uri, value_uri))
+
                     index += 1
-                    continue
-                elif headers[index] in self._mappings:
-                    value = self._mappings[headers[index]](col)
-                else:
-                    value = col
 
-                dimension_uri = self.vocab('dimension', headers[index])
-                if headers[index] in self._nocode:
-                    self.g.add((obs, dimension_uri, Literal(value)))
-                else:
-                    value_uri = self.resource(headers['index'], value)
-                    self.g.add((obs, dimension_uri, value_uri))
+                if stop is not None and obs_count == stop:
+                    logger.info("Stopping at {}".format(obs_count))
+                    break
 
-                index += 1
-
-        with open(outfile, 'w') as f:
-            self.g.serialize(f, format='turtle')
+            with open(outfile, 'w') as f:
+                logger.info('Serializing to file...')
+                self.g.serialize(f, format='nt')
 
     def resource(self, resource_type, resource_name):
         raw_iri = self._RESOURCE_URI_PATTERN.format(resource_type, resource_name)
