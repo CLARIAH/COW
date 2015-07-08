@@ -4,6 +4,9 @@ import urllib
 import rfc3987
 import urlparse
 import logging
+import multiprocessing as mp
+from functools import partial
+import itertools
 from rdflib import Graph, Namespace, URIRef, RDF, Literal
 
 
@@ -54,8 +57,9 @@ def to_iri(iri):
         if not parts.scheme or not parts.netloc:
             # If there is no scheme (e.g. http) nor a net location (e.g.
             # example.com) then we cannot do anything
-            logger.error("The argument you provided does not comply with"
+            logger.error("The argument you provided does not comply with "
                          "RFC 3987 and is not parseable as a IRI")
+            logger.error(iri)
             raise Exception("""The argument you provided does not comply with
                             RFC 3987 and is not parseable as a IRI""")
 
@@ -89,15 +93,64 @@ def to_iri(iri):
         return quoted_iri
 
 
+from itertools import izip_longest
+
+def grouper(n, iterable, padvalue=None):
+    "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
+    return izip_longest(*[iter(iterable)]*n, fillvalue=padvalue)
+
+def convert(infile, outfile, delimiter=',', quotechar='\"', dataset_name=None, processes=4, chunksize=1000, config={}):
+    if dataset_name is None:
+        dataset_name = os.path.basename(infile).rstrip('.csv')
+
+    pool = mp.Pool(processes=processes)
+
+    with open(outfile, 'w') as outfile_file:
+        with open(infile, 'r') as infile_file:
+            r = csv.reader(infile_file,
+                           delimiter=delimiter,
+                           quotechar=quotechar,
+                           strict=True)
+
+            headers = r.next()
+
+            convert_rows_partial = partial(convert_rows,
+                                           dataset_name=dataset_name,
+                                           headers=headers,
+                                           config=config)
+
+            for out in pool.imap(convert_rows_partial,
+                                 grouper(chunksize, r)):
+                outfile_file.write(out)
+
+        pool.close()
+        pool.join()
+
+
+def convert_rows(rows, dataset_name, headers, config):
+    c = Converter(dataset_name, headers, config)
+    print mp.current_process().name, len(rows)
+    result = c.process(rows)
+    print mp.current_process().name, 'done'
+    return result
+
+
 class Converter(object):
 
     _VOCAB_BASE = "http://data.socialhistory.org/vocab"
     _RESOURCE_BASE = "http://data.socialhistory.org/resource"
 
-    def __init__(self, nocode=[], mappings={}, family=None, number_observations=True):
-        self._nocode = nocode
-        self._mappings = mappings
-        self._number_observations = number_observations
+    def __init__(self, dataset_name, headers, config):
+        self._headers = headers
+        self._nocode = config['nocode']
+        self._mappings = config['mappings']
+        if 'number_observations' in config:
+            self._number_observations = config['number_observations']
+        else :
+            self._number_observations = None
+
+        family = config['family']
+        stop = config['stop']
 
         if family is None:
             self._VOCAB_URI_PATTERN = "{0}/{{}}/{{}}".format(self._VOCAB_BASE)
@@ -108,59 +161,52 @@ class Converter(object):
 
         self.g = apply_default_namespaces(Graph())
 
-    def convert(self, infile, outfile, delimiter=',', quotechar='\"', dataset_name=None, stop=None):
+        self._dataset_name = dataset_name
+        self._dataset_uri = self.resource('dataset', dataset_name)
+        self.g.add((self._dataset_uri, RDF.type, QB['Dataset']))
 
-        if dataset_name is None:
-            dataset_name = os.path.basename(infile).rstrip('.csv')
+    def process(self, rows):
+        # if self._number_observations:
+        #     obs = self.resource('observation/{}'.format(dataset_name), obs_count)
+        # else :
+        #     obs = self.resource('observation/{}'.format(dataset_name),
+        #                         ''.join(row))
 
-        dataset_uri = self.resource('dataset', dataset_name)
-        self.g.add((dataset_uri, RDF.type, QB['Dataset']))
+        for row in rows:
+            # rows may be filled with None values (because of the izip_longest function)
+            if row is None:
+                continue
 
+            obs = self.resource('observation/{}'.format(self._dataset_name),
+                                ''.join(row))
 
-        with open(infile) as infile_file:
-            r = csv.reader(infile_file, delimiter=delimiter, quotechar=quotechar, strict=True)
+            self.g.add((obs, QB['dataset'], self._dataset_uri))
 
-            headers = r.next()
-            obs_count = 0
-            for row in r:
-                index = 0
-                obs_count += 1
-                logger.debug(obs_count)
-
-                if self._number_observations:
-                    obs = self.resource('observation/{}'.format(dataset_name), obs_count)
-                else :
-                    obs = self.resource('observation/{}'.format(dataset_name),
-                                        ''.join(row))
-
-                self.g.add((obs, QB['dataset'], dataset_uri))
-
-                for col in row:
-                    if len(col) < 1:
-                        index += 1
-                        logger.debug('Col length < 1')
-                        continue
-                    elif headers[index] in self._mappings:
-                        value = self._mappings[headers[index]](col)
-                    else:
-                        value = col
-
-                    dimension_uri = self.vocab('dimension', headers[index])
-                    if headers[index] in self._nocode:
-                        self.g.add((obs, dimension_uri, Literal(value)))
-                    else:
-                        value_uri = self.resource(headers[index], value)
-                        self.g.add((obs, dimension_uri, value_uri))
-
+            index = 0
+            for col in row:
+                if len(col) < 1:
                     index += 1
+                    logger.debug('Col length < 1')
+                    continue
+                elif self._headers[index] in self._mappings:
+                    value = self._mappings[self._headers[index]](col)
+                else:
+                    value = col
 
-                if stop is not None and obs_count == stop:
-                    logger.info("Stopping at {}".format(obs_count))
-                    break
+                dimension_uri = self.vocab('dimension', self._headers[index])
+                if self._headers[index] in self._nocode:
+                    self.g.add((obs, dimension_uri, Literal(value)))
+                else:
+                    value_uri = self.resource(self._headers[index], value)
+                    self.g.add((obs, dimension_uri, value_uri))
 
-            with open(outfile, 'w') as f:
-                logger.info('Serializing to file...')
-                self.g.serialize(f, format='nt')
+                index += 1
+
+            # if stop is not None and obs_count == stop:
+            #     logger.info("Stopping at {}".format(obs_count))
+            #     break
+
+        return self.g.serialize(format='nt')
 
     def resource(self, resource_type, resource_name):
         raw_iri = self._RESOURCE_URI_PATTERN.format(resource_type, resource_name)

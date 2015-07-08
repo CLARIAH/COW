@@ -1,4 +1,4 @@
-from converter import Converter
+from converter import convert
 import argparse
 
 # AGE: format to 3 positions
@@ -19,7 +19,9 @@ parser = argparse.ArgumentParser(description="Convert NAPP files")
 parser.add_argument('source_file', metavar='source_file', type=str)
 parser.add_argument('target_file', metavar='target_file', type=str)
 parser.add_argument('dataset_name', metavar='dataset_name', type=str)
-parser.add_argument('--stop', metavar='N', type=int, default=None, required=False)
+parser.add_argument('--step', metavar='N', type=int, default=None, required=False)
+parser.add_argument('--processes', metavar='N', type=int, default=4, required=False)
+parser.add_argument('--chunksize', metavar='N', type=int, default=1000, required=False)
 
 
 
@@ -31,6 +33,14 @@ if __name__ == '__main__':
     outfile = args.target_file
     dataset_name = args.dataset_name
     stop = args.stop
-    c = Converter(mappings=mappings, nocode=nocode, family='napp')
 
-    c.convert(infile, outfile, dataset_name=dataset_name, stop=stop)
+    processes = args.processes
+    chunksize = args.chunksize
+
+    config = {
+        'stop': stop,
+        'mappings': {},
+        'nocode': nocode,
+        'family': 'napp'
+    }
+    c = convert(infile, outfile, dataset_name=dataset_name, processes=processes, chunksize=chunksize, config=config)
