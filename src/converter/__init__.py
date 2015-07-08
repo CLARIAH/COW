@@ -106,6 +106,7 @@ def convert(infile, outfile, delimiter=',', quotechar='\"', dataset_name=None, p
     pool = mp.Pool(processes=processes)
 
     with open(outfile, 'w') as outfile_file:
+
         with open(infile, 'r') as infile_file:
             r = csv.reader(infile_file,
                            delimiter=delimiter,
@@ -113,6 +114,10 @@ def convert(infile, outfile, delimiter=',', quotechar='\"', dataset_name=None, p
                            strict=True)
 
             headers = r.next()
+
+            c = Converter(dataset_name, headers, config)
+            c.g.add((c._dataset_uri, RDF.type, QB['Dataset']))
+            outfile_file.write(c.g.serialize(format='nt'))
 
             convert_rows_partial = partial(convert_rows,
                                            dataset_name=dataset_name,
@@ -163,7 +168,7 @@ class Converter(object):
 
         self._dataset_name = dataset_name
         self._dataset_uri = self.resource('dataset', dataset_name)
-        self.g.add((self._dataset_uri, RDF.type, QB['Dataset']))
+
 
     def process(self, rows):
         # if self._number_observations:
