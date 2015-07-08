@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(description="Convert NAPP files")
 parser.add_argument('source_file', metavar='source_file', type=str)
 parser.add_argument('target_file', metavar='target_file', type=str)
 parser.add_argument('dataset_name', metavar='dataset_name', type=str)
-parser.add_argument('--step', metavar='N', type=int, default=None, required=False)
+parser.add_argument('--stop', metavar='N', type=int, default=None, required=False)
 parser.add_argument('--processes', metavar='N', type=int, default=4, required=False)
 parser.add_argument('--chunksize', metavar='N', type=int, default=1000, required=False)
 
