@@ -178,16 +178,14 @@ class Converter(object):
         self._dataset_name = dataset_name
         self._dataset_uri = self.resource('dataset', dataset_name)
 
-
     def process(self, count, rows, chunksize):
 
-
-        obs_count = count*chunksize
+        obs_count = count * chunksize
         for row in rows:
             # rows may be filled with None values (because of the izip_longest function)
             if row is None:
                 continue
-            print obs_count
+
             if self._number_observations:
                 obs = self.resource('observation/{}'.format(self._dataset_name), obs_count)
             else:
