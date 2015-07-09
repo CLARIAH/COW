@@ -123,20 +123,22 @@ def convert(infile, outfile, delimiter=',', quotechar='\"', dataset_name=None, p
             convert_rows_partial = partial(convert_rows,
                                            dataset_name=dataset_name,
                                            headers=headers,
+                                           chunksize=chunksize,
                                            config=config)
 
             for out in pool.imap(convert_rows_partial,
-                                 grouper(chunksize, r)):
+                                 enumerate(grouper(chunksize, r))):
                 outfile_file.write(out)
 
         pool.close()
         pool.join()
 
 
-def convert_rows(rows, dataset_name, headers, config):
+def convert_rows(enumerated_rows, dataset_name, headers, chunksize, config):
+    count, rows = enumerated_rows
     c = Converter(dataset_name, headers, config)
-    print mp.current_process().name, len(rows)
-    result = c.process(rows)
+    print mp.current_process().name, count, len(rows)
+    result = c.process(count, rows, chunksize)
     print mp.current_process().name, 'done'
     return result
 
@@ -177,20 +179,20 @@ class Converter(object):
         self._dataset_uri = self.resource('dataset', dataset_name)
 
 
-    def process(self, rows):
-        # if self._number_observations:
-        #     obs = self.resource('observation/{}'.format(dataset_name), obs_count)
-        # else :
-        #     obs = self.resource('observation/{}'.format(dataset_name),
-        #                         ''.join(row))
+    def process(self, count, rows, chunksize):
 
+
+        obs_count = count*chunksize
         for row in rows:
             # rows may be filled with None values (because of the izip_longest function)
             if row is None:
                 continue
-
-            obs = self.resource('observation/{}'.format(self._dataset_name),
-                                uuid.uuid4())
+            print obs_count
+            if self._number_observations:
+                obs = self.resource('observation/{}'.format(self._dataset_name), obs_count)
+            else:
+                obs = self.resource('observation/{}'.format(self._dataset_name),
+                                    uuid.uuid4())
 
             self.g.add((obs, QB['dataset'], self._dataset_uri))
 
@@ -214,6 +216,7 @@ class Converter(object):
 
                 index += 1
 
+            obs_count += 1
             # if stop is not None and obs_count == stop:
             #     logger.info("Stopping at {}".format(obs_count))
             #     break

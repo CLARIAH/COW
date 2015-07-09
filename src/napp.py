@@ -22,6 +22,7 @@ parser.add_argument('dataset_name', metavar='dataset_name', type=str)
 parser.add_argument('--stop', metavar='N', type=int, default=None, required=False)
 parser.add_argument('--processes', metavar='N', type=int, default=4, required=False)
 parser.add_argument('--chunksize', metavar='N', type=int, default=1000, required=False)
+parser.add_argument('--numberedobservations', type=bool, default=True, required=False)
 
 
 
@@ -33,6 +34,7 @@ if __name__ == '__main__':
     outfile = args.target_file
     dataset_name = args.dataset_name
     stop = args.stop
+    numberedobservations = args.numberedobservations
 
     processes = args.processes
     chunksize = args.chunksize
@@ -41,6 +43,7 @@ if __name__ == '__main__':
         'stop': stop,
         'mappings': {},
         'nocode': nocode,
-        'family': 'napp'
+        'family': 'napp',
+        'number_observations': numberedobservations
     }
     c = convert(infile, outfile, dataset_name=dataset_name, processes=processes, chunksize=chunksize, config=config)
