@@ -6,10 +6,10 @@ import urlparse
 import logging
 import multiprocessing as mp
 import uuid
+import mappings
 from functools import partial
 from itertools import izip_longest
 from rdflib import Graph, Namespace, URIRef, RDF, Literal
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -20,6 +20,7 @@ logger.addHandler(ch)
 
 SDH = Namespace("http://data.socialhistory.org/resource/")
 QB = Namespace("http://purl.org/linked-data/cube#")
+
 
 def apply_default_namespaces(graph):
     """
@@ -73,8 +74,8 @@ def to_iri(iri):
         no_invalid_characters = rfc3987.get_compiled_pattern("(?!%(iunreserved)s|%(pct_encoded)s|%(sub_delims)s|:|@|/)(.)")
 
         # Replace the invalid characters with an underscore (no need to roundtrip)
-        quoted_parts['path'] = no_invalid_characters.sub(u'_',parts.path)
-        quoted_parts['fragment'] = no_invalid_characters.sub(u'_',parts.fragment)
+        quoted_parts['path'] = no_invalid_characters.sub(u'_', parts.path)
+        quoted_parts['fragment'] = no_invalid_characters.sub(u'_', parts.fragment)
         quoted_parts['query'] = urllib.quote(parts.query.encode('utf-8'))
         # Leave these untouched
         quoted_parts['scheme'] = parts.scheme
@@ -94,11 +95,10 @@ def to_iri(iri):
         return quoted_iri
 
 
-
-
 def grouper(n, iterable, padvalue=None):
     "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
-    return izip_longest(*[iter(iterable)]*n, fillvalue=padvalue)
+    return izip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
+
 
 def convert(infile, outfile, delimiter=',', quotechar='\"', dataset_name=None, processes=4, chunksize=1000, config={}):
     if dataset_name is None:
@@ -150,28 +150,32 @@ class Converter(object):
 
     def __init__(self, dataset_name, headers, config):
         self._headers = headers
-        if 'nocode' in config:
-            self._nocode = config['nocode']
+        if 'family' in config:
+            self._family = config['family']
+            try:
+                family_def = getattr(mappings, config['family'])
+                self._nocode = family_def['nocode']
+                self._mappings = family_def['mappings']
+            except:
+                logger.warning('No family definition found')
+                self._nocode = []
+                self._mappings = {}
         else:
-            self._nocode = []
-        if 'mappings' in config:
-            self._mappings = config['mappings']
-        else :
-            self._mappings = {}
+            self._family = None
+
         if 'number_observations' in config:
             self._number_observations = config['number_observations']
-        else :
+        else:
             self._number_observations = None
 
-        family = config['family']
-        stop = config['stop']
+        self._stop = config['stop']
 
-        if family is None:
+        if self._family is None:
             self._VOCAB_URI_PATTERN = "{0}/{{}}/{{}}".format(self._VOCAB_BASE)
             self._RESOURCE_URI_PATTERN = "{0}/{{}}/{{}}".format(self._RESOURCE_BASE)
         else:
-            self._VOCAB_URI_PATTERN = "{0}/{1}/{{}}/{{}}".format(self._VOCAB_BASE, family)
-            self._RESOURCE_URI_PATTERN = "{0}/{1}/{{}}/{{}}".format(self._RESOURCE_BASE, family)
+            self._VOCAB_URI_PATTERN = "{0}/{1}/{{}}/{{}}".format(self._VOCAB_BASE, self._family)
+            self._RESOURCE_URI_PATTERN = "{0}/{1}/{{}}/{{}}".format(self._RESOURCE_BASE, self._family)
 
         self.g = apply_default_namespaces(Graph())
 
