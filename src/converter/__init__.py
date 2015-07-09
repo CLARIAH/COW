@@ -5,8 +5,9 @@ import rfc3987
 import urlparse
 import logging
 import multiprocessing as mp
+import uuid
 from functools import partial
-import itertools
+from itertools import izip_longest
 from rdflib import Graph, Namespace, URIRef, RDF, Literal
 
 
@@ -93,7 +94,7 @@ def to_iri(iri):
         return quoted_iri
 
 
-from itertools import izip_longest
+
 
 def grouper(n, iterable, padvalue=None):
     "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
@@ -147,8 +148,14 @@ class Converter(object):
 
     def __init__(self, dataset_name, headers, config):
         self._headers = headers
-        self._nocode = config['nocode']
-        self._mappings = config['mappings']
+        if 'nocode' in config:
+            self._nocode = config['nocode']
+        else:
+            self._nocode = []
+        if 'mappings' in config:
+            self._mappings = config['mappings']
+        else :
+            self._mappings = {}
         if 'number_observations' in config:
             self._number_observations = config['number_observations']
         else :
@@ -183,7 +190,7 @@ class Converter(object):
                 continue
 
             obs = self.resource('observation/{}'.format(self._dataset_name),
-                                ''.join(row))
+                                uuid.uuid4())
 
             self.g.add((obs, QB['dataset'], self._dataset_uri))
 
