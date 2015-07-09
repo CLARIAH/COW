@@ -4,16 +4,19 @@ from json import loads
 import re
 import rdflib as rdf
 
+
 def makesoup(url):
     html = get(url).text
     soup = BeautifulSoup(html)
     return(soup)
 
+
 def getlinks(soup, regex):
-    fill = soup.find_all('a', {'href' : re.compile(regex)})
+    fill = soup.find_all('a', {'href': re.compile(regex)})
     for i in range(len(fill)):
         fill[i] = str(fill[i].get('href'))
     return fill
+
 
 def getcodes(soup):
     scripts = []
@@ -25,13 +28,14 @@ def getcodes(soup):
     for line in str(scripts).splitlines():
         if re.search('categories:', line):
             codes.append(line)
-    
+
     return codes
 
-def makegraph(codes, vrb_lnk, description): 
+
+def makegraph(codes, vrb_lnk, description):
 
     base = 'http://data.socialhistory.org/vocab/napp/'
-    vrb_name =  re.sub('.*/', '', vrb_lnk)
+    vrb_name = re.sub('.*/', '', vrb_lnk)
     vrb_url_full = base + vrb_name + '/'
     NAPP = rdf.Namespace(vrb_url_full)
     SKOS = rdf.Namespace('http://www.w3.org/2004/02/skos/core#')
@@ -40,7 +44,7 @@ def makegraph(codes, vrb_lnk, description):
 
     g.bind('napp', NAPP)
     g.bind('skos', SKOS)
-    g.add((NAPP[vrb_name], rdf.RDF.type,       SKOS['Scheme']))
+    g.add((NAPP[vrb_name], rdf.RDF.type, SKOS['Scheme']))
     g.add((NAPP[vrb_name], SKOS['definition'], rdf.Literal(description)))
 
     indentlist = []
@@ -56,18 +60,18 @@ def makegraph(codes, vrb_lnk, description):
             cd = re.sub('[(),.''""]', '', cd)
         codelist.append(cd)
         indentlist.append(code['indent'])
-        
-        g.add((NAPP[cd], rdf.RDF.type,      SKOS['Concept']))
+
+        g.add((NAPP[cd], rdf.RDF.type, SKOS['Concept']))
         g.add((NAPP[cd], SKOS['prefLabel'], rdf.Literal(lbl)))
-        g.add((NAPP[cd], SKOS['inScheme'],  NAPP[vrb_name]))
+        g.add((NAPP[cd], SKOS['inScheme'], NAPP[vrb_name]))
 
         if len(set(indentlist)) > 1:
             if indentlist[i] > 0:
                 parentloc = indentlist[::-1].index(indentlist[i] - 1)
                 parent = codelist[::-1][parentloc]
 
-                g.add((NAPP[cd],     SKOS['broader'],   NAPP[parent]))
-                g.add((NAPP[parent], SKOS['narrower'],  NAPP[cd]))
+                g.add((NAPP[cd], SKOS['broader'], NAPP[parent]))
+                g.add((NAPP[parent], SKOS['narrower'], NAPP[cd]))
 
     return g
 
