@@ -4,7 +4,7 @@ import argparse
 parser = argparse.ArgumentParser(description="Convert CSV files to RDF Data Cube (in parallel)")
 parser.add_argument('source_file', metavar='source_file', type=str, help="The input CSV file")
 parser.add_argument('target_file', metavar='target_file', type=str, help="The filename to which the RDF will be written (NT-format)")
-parser.add_argument('dataset_name', metavar='dataset_name', type=str, required=False, help="A short name (slug) for the name of the dataset (will use input file name if not specified)")
+parser.add_argument('dataset_name', metavar='dataset_name', type=str, help="A short name (slug) for the name of the dataset (will use input file name if not specified)")
 parser.add_argument('--family', type=str, default=None, required=False, help="Determines which mapping specification to use, e.g. 'napp' (see converter/mappings.py)")
 parser.add_argument('--stop', metavar='N', type=int, default=None, required=False, help="Specifies at what iteration to stop (currently ignored)")
 parser.add_argument('--processes', metavar='N', type=int, default=4, required=False, help="Specifies the number of processes to spawn (default = 4)")
