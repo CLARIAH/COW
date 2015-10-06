@@ -1,5 +1,5 @@
 html5lib==0.999999
-iribaker==0.1
+-e git+git://github.com/CLARIAH-SDH/iribaker.git#egg=iribaker
 isodate==0.5.1
 pyparsing==2.0.3
 rdflib==4.2.0
