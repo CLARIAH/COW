@@ -41,6 +41,34 @@ def convert(infile, outfile, delimiter=',', quotechar='\"', dataset_name=None, p
     if dataset_name is None:
         dataset_name = os.path.basename(infile).rstrip('.csv')
 
+    if processes > 1 :
+        logger.info("Using "+processes+" parallel processes")
+        parallel_convert(infile, outfile, delimiter, quotechar, dataset_name, processes, chunksize, config)
+    else:
+        logger.info("Using a single process")
+        simple_convert(infile, outfile, delimiter, quotechar, dataset_name, config)
+    logger.info("Done")
+
+
+def simple_convert(infile, outfile, delimiter, quotechar, dataset_name, config):
+    with open(outfile, 'w') as outfile_file:
+        with open(infile, 'r') as infile_file:
+            r = csv.reader(infile_file,
+                           delimiter=delimiter,
+                           quotechar=quotechar,
+                           strict=True)
+
+            headers = r.next()
+
+            c = Converter(dataset_name, headers, config)
+            c.g.add((c._dataset_uri, RDF.type, QB['Dataset']))
+            outfile_file.write(c.g.serialize(format='nt'))
+
+            result = c.process(0, r, 1)
+            outfile_file.write(result)
+
+
+def parallel_convert(infile, outfile, delimiter, quotechar, dataset_name, processes, chunksize, config):
     pool = mp.Pool(processes=processes)
 
     with open(outfile, 'w') as outfile_file:
