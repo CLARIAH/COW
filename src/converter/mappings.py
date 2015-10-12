@@ -14,3 +14,12 @@ napp = {
                'REEL', 'RELATS', 'RESLSNO', 'SDSTCA', 'SEAUS', 'SEIUS', 'SERIAL', 'SERVANTS',
                'SPLOC', 'YEAR', 'YNGCH', 'YRSUSA1']
 }
+canfam = {
+    # 'mappings' : {
+    #     'relhead2' : lambda x: x.[0:3]
+    #     # keep first 4 digits of relhead2 to match IPUMS/NAPP
+    # },
+    'nocode': ['ageyr', 'occ', 'hhdid', 'moschool' 'urbpop', 'earnings', 
+               'exearn', 'indlnm', 'indfnm', 'dwellid', 'chknote', 
+               'indnote', 'location']
+}
