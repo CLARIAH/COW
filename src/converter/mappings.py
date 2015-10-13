@@ -4,16 +4,21 @@ napp = {
     'mappings': {
         # format AGE to 3 positions
         'AGE': lambda x: x.zfill(3)
+        # CITYPOP should be *1000
     },
     # Nocode is a list of variables whose values should not be coded (i.e. they should become literals)
-    'nocode': ['AGE', 'BPLPARSE', 'CFU', 'CFUSIZE', 'CITYPOP', 'CNTYAREA', 'COUNTYUS',
-               'ELDCH', 'ENUMDIST', 'FAMUNIT', 'HEADLOC', 'HHNBRNO', 'HHWT',
-               'LINENUM', 'MOMLOC', 'NAMEFRST', 'NAMELAST', 'NCOUPLES', 'NFAMS', 'NHGISJOIN',
-               'NMOTHERS', 'NUMPERHH', 'OCCSTRNG', 'OCSCORUS', 'PAGENUM', 'PARISHGB', 'PARSE', 'PERNUM',
-               'PERWT', 'POPLOC', 'PRMFAMSZ', 'QOCCGB', 'REALPROP', 'RECTYPE',
-               'REEL', 'RELATS', 'RESLSNO', 'SDSTCA', 'SEAUS', 'SEIUS', 'SERIAL', 'SERVANTS',
-               'SPLOC', 'YEAR', 'YNGCH', 'YRSUSA1'], 
-    'integer': []
+    'nocode': ['AGE', 'BPLPARSE', 'CFU', 'COUNTYUS',
+               'ENUMDIST', 'FAMUNIT', 'HEADLOC', 'HHNBRNO',
+               'LINENUM', 'MOMLOC', 'NAMEFRST', 'NAMELAST', 'NHGISJOIN',
+               'OCCSTRNG', 'PAGENUM', 'PARISHGB', 'PARSE', 'PERNUM',
+               'POPLOC', 'QOCCGB', 'RECTYPE', 'REEL', 'RESLSNO', 
+               'SDSTCA', 'SEAUS', 'SERVANTS', 'SPLOC'], 
+    'integer': ['CFUSIZE', 'CITYPOP', 'CNTYAREA', 'ELDCH', 'HHWT', 
+                'NCOUPLES', 'NFAMS', 'NMOTHERS', 'NUMPERHH', 'OCSCORUS', 
+                'PERWT','REALPROP', 'RELATS', 'SEIUS', 'SERIAL', 'YEAR',
+                'YNGCH', 'YRSUSA1']
+    # technically OCSCORUS is not int but pretending  for now
+    # should YEAR be an integer, a literal gYear or URI?
 }
 canfam = {
     'mappings' : {
