@@ -7,7 +7,7 @@ import mappings
 from iribaker import to_iri
 from functools import partial
 from itertools import izip_longest
-from rdflib import Graph, Namespace, URIRef, RDF, Literal
+from rdflib import Graph, Namespace, URIRef, RDF, Literal, XSD
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -42,7 +42,7 @@ def convert(infile, outfile, delimiter=',', quotechar='\"', dataset_name=None, p
         dataset_name = os.path.basename(infile).rstrip('.csv')
 
     if processes > 1 :
-        logger.info("Using "+processes+" parallel processes")
+        logger.info("Using "+ str(processes) +" parallel processes")
         parallel_convert(infile, outfile, delimiter, quotechar, dataset_name, processes, chunksize, config)
     else:
         logger.info("Using a single process")
@@ -120,10 +120,12 @@ class Converter(object):
             try:
                 family_def = getattr(mappings, config['family'])
                 self._nocode = family_def['nocode']
+                self._integer = family_def['integer']
                 self._mappings = family_def['mappings']
             except:
                 logger.warning('No family definition found')
                 self._nocode = []
+                self._integer = []
                 self._mappings = {}
         else:
             self._family = None
@@ -177,6 +179,8 @@ class Converter(object):
                 dimension_uri = self.vocab('dimension', self._headers[index])
                 if self._headers[index] in self._nocode:
                     self.g.add((obs, dimension_uri, Literal(value)))
+                elif self._headers[index] in self._integer:
+                    self.g.add((obs, dimension_uri, Literal(value, datatype=XSD.integer)))
                 else:
                     value_uri = self.resource(self._headers[index], value)
                     self.g.add((obs, dimension_uri, value_uri))
