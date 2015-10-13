@@ -24,7 +24,9 @@ def makegraph(codebook, variable, vocab_name):
         g.add((rdf.term.URIRef(iri), rdf.RDF.type, SKOS['Concept']))
         g.add((rdf.term.URIRef(iri), SKOS['inScheme'], VCB_NAMESPACE[variable]))
         g.add((rdf.term.URIRef(iri), SKOS['prefLabel'], rdf.Literal(codebook['label'][i])))
+    
     return g
+
 
 with open('canadacodes.json') as datafile:
     codebook = load(datafile)
@@ -32,11 +34,9 @@ with open('canadacodes.json') as datafile:
 graphs = {}
 
 for variable in codebook.keys():
-    print(variable)
     graphs[variable] = makegraph(codebook=codebook[variable],
         variable=variable, vocab_name='canfam')
 
 for variable, graph in graphs.items():
     with open(variable + '.ttl', 'w') as outfile:
-        print("writing variable %s" % variable)
         graph.serialize(outfile, format='turtle')
