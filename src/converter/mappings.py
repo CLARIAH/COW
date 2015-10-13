@@ -12,14 +12,15 @@ napp = {
                'NMOTHERS', 'NUMPERHH', 'OCCSTRNG', 'OCSCORUS', 'PAGENUM', 'PARISHGB', 'PARSE', 'PERNUM',
                'PERWT', 'POPLOC', 'PRMFAMSZ', 'QOCCGB', 'REALPROP', 'RECTYPE',
                'REEL', 'RELATS', 'RESLSNO', 'SDSTCA', 'SEAUS', 'SEIUS', 'SERIAL', 'SERVANTS',
-               'SPLOC', 'YEAR', 'YNGCH', 'YRSUSA1']
+               'SPLOC', 'YEAR', 'YNGCH', 'YRSUSA1'], 
+    'integer': []
 }
 canfam = {
-    # 'mappings' : {
-    #     'relhead2' : lambda x: x.[0:3]
-    #     # keep first 4 digits of relhead2 to match IPUMS/NAPP
-    # },
-    'nocode': ['ageyr', 'occ', 'hhdid', 'moschool' 'urbpop', 'earnings', 
-               'exearn', 'indlnm', 'indfnm', 'dwellid', 'chknote', 
-               'indnote', 'location']
+    'mappings' : {
+        'relhead2' : lambda x: x[0:3]
+        # keep first 4 digits of relhead2 to match IPUMS/NAPP
+    },
+    'nocode': ['occ', 'hhdid', 'indlnm', 'indfnm', 'dwellid', 'chknote', 
+               'indnote', 'location'], 
+    'integer':['ageyr', 'magemo', 'moschool', 'urbpop', 'earnings', 'earnper', 'exearn']
 }
