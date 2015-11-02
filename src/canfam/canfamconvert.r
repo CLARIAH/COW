@@ -1,7 +1,7 @@
 options(stringsAsFactors=FALSE)
 library(foreign)
 
-setwd('~/downloads/data/qqt/') # location canfam spss file
+setwd('~/downloads/data/qqt/')
 
 ca <- read.spss('canada 1901/1901.sav')
 ca <- as.data.frame(ca)
