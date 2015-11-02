@@ -27,5 +27,5 @@ canfam = {
     },
     'nocode': ['occ', 'hhdid', 'indlnm', 'indfnm', 'dwellid', 'chknote', 
                'indnote', 'location'], 
-    'integer':['ageyr', 'magemo', 'moschool', 'urbpop', 'earnings', 'earnper', 'exearn']
+    'integer':['ageyr', 'magemo', 'moschool', 'religio2', 'urbpop', 'earnings', 'earnper', 'exearn']
 }

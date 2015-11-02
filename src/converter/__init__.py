@@ -61,7 +61,7 @@ def simple_convert(infile, outfile, delimiter, quotechar, dataset_name, config):
             headers = r.next()
 
             c = Converter(dataset_name, headers, config)
-            c.g.add((c._dataset_uri, RDF.type, QB['Dataset']))
+            c.g.add((c._dataset_uri, RDF.type, QB['DataSet']))
             outfile_file.write(c.g.serialize(format='nt'))
 
             result = c.process(0, r, 1)
@@ -82,7 +82,7 @@ def parallel_convert(infile, outfile, delimiter, quotechar, dataset_name, proces
             headers = r.next()
 
             c = Converter(dataset_name, headers, config)
-            c.g.add((c._dataset_uri, RDF.type, QB['Dataset']))
+            c.g.add((c._dataset_uri, RDF.type, QB['DataSet']))
             outfile_file.write(c.g.serialize(format='nt'))
 
             convert_rows_partial = partial(convert_rows,
@@ -163,7 +163,7 @@ class Converter(object):
                 obs = self.resource('observation/{}'.format(self._dataset_name),
                                     uuid.uuid4())
 
-            self.g.add((obs, QB['dataset'], self._dataset_uri))
+            self.g.add((obs, QB['dataSet'], self._dataset_uri))
 
             index = 0
             for col in row:
