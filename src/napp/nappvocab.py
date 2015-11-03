@@ -1,13 +1,12 @@
 from requests import get
 from bs4 import BeautifulSoup
-from json import loads
-import re
 import rdflib as rdf
+import re, os, json
 
 
 def makesoup(url):
     html = get(url).text
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, 'html5lib')
     return(soup)
 
 
@@ -25,9 +24,11 @@ def getcodes(soup):
             scripts.append(script)
 
     codes = []
-    for line in str(scripts).splitlines():
-        if re.search('categories:', line):
-            codes.append(line)
+    for script in scripts:
+        for line in str(script).splitlines():
+            if re.search('categories:', line):
+                codes.append(line)
+        
 
     return codes
 
@@ -89,11 +90,12 @@ for group in groups:
 
     for vrb in vrbs:
         soup = makesoup(baseurl + vrb)
+        print(baseurl + vrb)
         codes = getcodes(soup)
 
         if len(codes) > 0:
             ptrn = re.search('\[.*\]', codes[0])
-            codes = loads(ptrn.group(0))
+            codes = json.loads(ptrn.group(0))
 
         codelist.append(codes)
         vrblist.append(vrb)
@@ -106,6 +108,12 @@ for i, codes in enumerate(codelist):
     vrbname = re.sub('/.*/', '', vrblist[i])
     graphs[vrbname] = makegraph(codes, vrblist[i], desclist[i])
 
+
+basepath = '/users/auke/dropbox/files attached directly to project/rdf/napp/'
+
+# with open(basepath + 'nappcodebook.json', 'w') as out:
+#     json.dump(codelist, out)
+
 for vrb_name, graph in graphs.items():
-    with open(vrb_name + '.ttl', 'w') as out:
+    with open(basepath + vrb_name + '.ttl', 'w') as out:
         graph.serialize(out, format='turtle')
