@@ -17,7 +17,7 @@ def RepresentsInt(s):
     
 def makegraph(codebook, variable, vocab_name):
 
-    base = 'http://data.socialhistory.org/vocab/' + vocab_name + '/'
+    base = 'http://data.socialhistory.org/resource/' + vocab_name + '/'
     vrb_iri = to_iri(base + variable + '/')
     VCB_NAMESPACE = Namespace(vrb_iri)
     SKOS = Namespace('http://www.w3.org/2004/02/skos/core#')
