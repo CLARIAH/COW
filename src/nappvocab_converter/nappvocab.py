@@ -46,7 +46,7 @@ def getcodes(soup):
 
 def makegraph(codes, vrb_lnk, description):
 
-    base = 'http://data.socialhistory.org/vocab/napp/'
+    base = 'http://data.socialhistory.org/resource/napp/'
     vrb_name = re.sub('.*/', '', vrb_lnk)
     vrb_url_full = base + vrb_name + '/'
     NAPP = Namespace(vrb_url_full)
