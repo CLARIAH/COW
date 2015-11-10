@@ -1,9 +1,17 @@
 from requests import get
 from bs4 import BeautifulSoup
-import rdflib as rdf
-import re, os, json
+from rdflib import Namespace, Graph, Literal, XSD, RDF
+import re, json
 
-
+def RepresentsInt(s):
+    if s != None: 
+        try: 
+            int(s)
+            return True
+        except ValueError:
+            return False
+        
+        
 def makesoup(url):
     html = get(url).text
     soup = BeautifulSoup(html, 'html5lib')
@@ -38,15 +46,15 @@ def makegraph(codes, vrb_lnk, description):
     base = 'http://data.socialhistory.org/vocab/napp/'
     vrb_name = re.sub('.*/', '', vrb_lnk)
     vrb_url_full = base + vrb_name + '/'
-    NAPP = rdf.Namespace(vrb_url_full)
-    SKOS = rdf.Namespace('http://www.w3.org/2004/02/skos/core#')
+    NAPP = Namespace(vrb_url_full)
+    SKOS = Namespace('http://www.w3.org/2004/02/skos/core#')
 
-    g = rdf.Graph()
+    g = Graph()
 
     g.bind('napp', NAPP)
     g.bind('skos', SKOS)
-    g.add((NAPP[vrb_name], rdf.RDF.type, SKOS['Scheme']))
-    g.add((NAPP[vrb_name], SKOS['definition'], rdf.Literal(description)))
+    g.add((NAPP[vrb_name], RDF.type, SKOS['Scheme']))
+    g.add((NAPP[vrb_name], SKOS['definition'], Literal(description)))
 
     indentlist = []
     codelist = []
@@ -55,25 +63,34 @@ def makegraph(codes, vrb_lnk, description):
         code = codes[i]
         cd = code['code']
         lbl = code['label']
+        
         if cd is None:
             cd = re.sub('\s|:', '_', lbl)
             cd = re.sub('/', '_or_', cd)
             cd = re.sub('[(),.''""]', '', cd)
+            
         codelist.append(cd)
         indentlist.append(code['indent'])
 
-        g.add((NAPP[cd], rdf.RDF.type, SKOS['Concept']))
-        g.add((NAPP[cd], SKOS['prefLabel'], rdf.Literal(lbl)))
+        g.add((NAPP[cd], RDF.type, SKOS['Concept']))
+        g.add((NAPP[cd], SKOS['prefLabel'], Literal(lbl)))
         g.add((NAPP[cd], SKOS['inScheme'], NAPP[vrb_name]))
 
-        if len(set(indentlist)) > 1:
-            if indentlist[i] > 0:
-                parentloc = indentlist[::-1].index(indentlist[i] - 1)
-                parent = codelist[::-1][parentloc]
 
-                g.add((NAPP[cd], SKOS['broader'], NAPP[parent]))
-                g.add((NAPP[parent], SKOS['narrower'], NAPP[cd]))
+        if RepresentsInt(lbl):
+            g.add((NAPP[cd], RDF.value, Literal(lbl, datatype=XSD.int)))
+            
+        elif RepresentsInt(cd): 
+            g.add((NAPP[cd], RDF.value, Literal(cd, datatype=XSD.int)))   
+            
+                  
+        if ((len(set(indentlist)) > 1) and (indentlist[i] > 0)):
+            parentloc = indentlist[::-1].index(indentlist[i] - 1)
+            parent = codelist[::-1][parentloc]
 
+            g.add((NAPP[cd], SKOS['broader'], NAPP[parent]))
+            g.add((NAPP[parent], SKOS['narrower'], NAPP[cd]))
+               
     return g
 
 baseurl = 'https://www.nappdata.org/'
@@ -109,10 +126,12 @@ for i, codes in enumerate(codelist):
     graphs[vrbname] = makegraph(codes, vrblist[i], desclist[i])
 
 
-basepath = '/users/auke/dropbox/files attached directly to project/rdf/napp/'
+basepath = 'napp/'
 
-# with open(basepath + 'nappcodebook.json', 'w') as out:
-#     json.dump(codelist, out)
+
+# save json as backup
+with open('nappcodebook.json', 'w') as out:
+    json.dump(codelist, out)
 
 for vrb_name, graph in graphs.items():
     with open(basepath + vrb_name + '.ttl', 'w') as out:

@@ -43,9 +43,8 @@ def makegraph(codebook, variable, vocab_name):
 
 
         if RepresentsInt(codebook['code'][i]): 
-            print Literal(codebook['code'][i], datatype=XSD.integer)
-            g.add((term.URIRef(iri), RDF.value, Literal(codebook['code'][i], datatype=XSD.int)))            
-            
+            g.add((term.URIRef(iri), RDF.value, Literal(codebook['code'][i], datatype=XSD.int)))
+    
     return g
 
 
