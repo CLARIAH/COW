@@ -1,3 +1,6 @@
 python csv2qb.py ../data/englandwales1881_small.csv /scratch/clariah-sdh/englandwales1881_enumerated.nt englandwales1881 --family napp --processes 20 --chunksize 10000
 
+python csv2qb.py ../data/scotland1881_5pc.csv /scratch/clariah-sdh/rdf/napp/scotland1881_5pc.nt scotland1881_5pc --family napp --processes 4 --chunksize 10000
+
+
 NB: don't forget to intialize the virtualenv first (source bin/activate) and preferably run this in a 'screen' environment, because things may take a while. 

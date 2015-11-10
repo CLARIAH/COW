@@ -7,13 +7,13 @@ napp = {
         # CITYPOP should be *1000
     },
     # Nocode is a list of variables whose values should not be coded (i.e. they should become literals)
-    'nocode': ['AGE', 'BPLPARSE', 'CFU', 'COUNTYUS',
+    'nocode': ['BPLPARSE', 'CFU', 'COUNTYUS',
                'ENUMDIST', 'FAMUNIT', 'HEADLOC', 'HHNBRNO',
                'LINENUM', 'MOMLOC', 'NAMEFRST', 'NAMELAST', 'NHGISJOIN',
                'OCCSTRNG', 'PAGENUM', 'PARISHGB', 'PARSE', 'PERNUM',
                'POPLOC', 'QOCCGB', 'RECTYPE', 'REEL', 'RESLSNO', 
                'SDSTCA', 'SEAUS', 'SERVANTS', 'SPLOC'], 
-    'integer': ['CFUSIZE', 'CITYPOP', 'CNTYAREA', 'ELDCH', 'HHWT', 
+    'integer': ['AGE', 'CFUSIZE', 'CITYPOP', 'CNTYAREA', 'ELDCH', 'HHWT', 
                 'NCOUPLES', 'NFAMS', 'NMOTHERS', 'NUMPERHH', 'OCSCORUS', 
                 'PERWT','REALPROP', 'RELATS', 'SEIUS', 'SERIAL', 'YEAR',
                 'YNGCH', 'YRSUSA1']
