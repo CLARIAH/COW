@@ -2,6 +2,9 @@ from requests import get
 from bs4 import BeautifulSoup
 from rdflib import Namespace, Graph, Literal, XSD, RDF
 import re, json
+import argparse
+import os 
+
 
 def RepresentsInt(s):
     if s != None: 
@@ -101,6 +104,21 @@ codelist = []
 vrblist = []
 desclist = []
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument('path', nargs='?', default="napp/", help='Path to store converted data')
+args = parser.parse_args()
+
+
+path = args.path
+if not path.endswith('/'):
+    path += '/'
+
+
+if not os.path.exists(path):
+        os.makedirs(path)
+        
+    
 for group in groups:
     soup = makesoup(baseurl + group)
     vrbs = getlinks(soup, 'variables/[A-Z]')
@@ -126,13 +144,10 @@ for i, codes in enumerate(codelist):
     graphs[vrbname] = makegraph(codes, vrblist[i], desclist[i])
 
 
-basepath = 'napp/'
-
-
 # save json as backup
 with open('nappcodebook.json', 'w') as out:
     json.dump(codelist, out)
 
 for vrb_name, graph in graphs.items():
-    with open(basepath + vrb_name + '.ttl', 'w') as out:
+    with open(path + vrb_name + '.ttl', 'w') as out:
         graph.serialize(out, format='turtle')
