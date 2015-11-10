@@ -7,7 +7,7 @@ delete from DB.DBA.load_list;
 -- see http://www.openlinksw.com/dataspace/dav/wiki/Main/VirtBulkRDFLoader
 select 'Loading data...';
 --      <folder with data>  <pattern>    <default graph if no graph file specified>
-ld_dir ('/scratch/clariah-sdh/rdf/napp', '*.ttl', 'http://data.socialhistory.org/vocab/napp/');
+ld_dir ('/scratch/clariah-sdh/rdf/napp', '*.ttl', 'http://data.socialhistory.org/resource/napp/');
 
 rdf_loader_run();
 
