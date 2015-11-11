@@ -17,8 +17,9 @@ napp = {
                 'NCOUPLES', 'NFAMS', 'NMOTHERS', 'NUMPERHH', 'OCSCORUS', 
                 'PERWT','REALPROP', 'RELATS', 'SEIUS', 'SERIAL', 'YEAR',
                 'YNGCH', 'YRSUSA1']
+        
     # technically OCSCORUS is not int but pretending  for now
-    # should YEAR be an integer, a literal gYear or URI?
+    # should YEAR be an integer, a literal gYear or URI? => integer for now
 }
 canfam = {
     'mappings' : {
