@@ -203,7 +203,6 @@ class Converter(object):
             if self._family in f and f.endswith("rq"): 
                 query = file("update-queries/" + f).read()
                 self.g.update(query)
-                
 
         return self.g.serialize(format='nt')
 
