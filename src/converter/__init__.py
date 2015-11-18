@@ -1,4 +1,6 @@
 import os
+from os import listdir
+from os.path import isfile, join
 import csv
 import logging
 import multiprocessing as mp
@@ -7,6 +9,7 @@ import mappings
 from iribaker import to_iri
 from functools import partial
 from itertools import izip_longest
+
 from rdflib import Graph, Namespace, URIRef, RDF, Literal, XSD
 
 logger = logging.getLogger(__name__)
@@ -65,6 +68,7 @@ def simple_convert(infile, outfile, delimiter, quotechar, dataset_name, config):
             outfile_file.write(c.g.serialize(format='nt'))
 
             result = c.process(0, r, 1)
+            
             outfile_file.write(result)
 
 
@@ -191,6 +195,15 @@ class Converter(object):
             # if stop is not None and obs_count == stop:
             #     logger.info("Stopping at {}".format(obs_count))
             #     break
+        
+        
+
+        files = [f for f in listdir("update-queries/") if os.path.isfile(os.path.join("update-queries/", f))]
+        for f in files: 
+            if self._family in f and f.endswith("rq"): 
+                query = file("update-queries/" + f).read()
+                self.g.update(query)
+                
 
         return self.g.serialize(format='nt')
 
