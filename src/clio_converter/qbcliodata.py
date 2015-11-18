@@ -30,7 +30,7 @@ g.add((CLIO['dsd'], QB['component'], bn))
 g.add((bn, QB['dimension'], CLIO['refArea']))
 g.add((bn, QB['dimension'], CLIO['refPeriod']))
 # g.add((bn, QB['measure'], CLIO['gdppc']))
-# cube:order->int 
+# also cube:order->int 
 # and rdf:type->cube:ComponentSpecification
 
 g.add((CLIO['gdppc'], rdf.RDF.type, QB['DataSet']))
@@ -44,7 +44,7 @@ g.add((CLIOIND['GDPPC1990GKD'], rdf.RDF.type, SDMX['ConceptRole']))
 # followed by CLIO['classification/indicators'], a, Concept Scheme and list of all clio indicators
 g.add((CLIOIND['GDPPC1990GKD'], rdf.RDF.type, SKOS['Concept']))
 
-with open('allcliodata_raw.csv', 'rb') as infile:
+with open('../../data/allcliodata_raw.csv', 'rb') as infile:
     lines = csv.reader(infile)
     header = next(lines)
     for row in lines:
@@ -60,5 +60,5 @@ with open('allcliodata_raw.csv', 'rb') as infile:
         g.add((CLIO[obsid], SDMXMSR['obsValue'], rdf.Literal(float(row[3]))))
         g.add((CLIO[obsid], CLIOPROP['indicator'], CLIOIND['GDPPC1990GKD']))
 
-with open('qbcliogdp.ttl', 'w') as outfile:
+with open('clio/qbcliogdp.ttl', 'w') as outfile:
     g.serialize(outfile, format='turtle')
