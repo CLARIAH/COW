@@ -1,0 +1,14 @@
+{
+    "U1": "All countries, Male and female, 1800-1938",
+    "U2": "All countries, Male only, 1800-1938",
+    "U3": "All countries, Female only, 1800-1938",
+    "E":  "All countries, Early period,, 1800-c1890",
+    "L":  "All countries, Later period, c1890-1938",
+    "NL": "Netherlands, males only, 1800-1938",
+    "DE": "Germany (small sample), males only, 1800-1938",
+    "FR": "France, males only, 1800-1938",
+    "SE": "Sweden (small sample), males only, 1800-1938",
+    "GB": "Britain, males only, 1800-1938",
+    "CA": "Canada, males only, 1800-1938",
+    "BE": "Belgium, males only, 1800-1938"
+}
