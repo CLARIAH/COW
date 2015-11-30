@@ -4,7 +4,7 @@
     "rdfs": "http://www.w3.org/2000/01/rdf-schema#", 
     "qb": "http://purl.org/linked-data/cube#", 
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#", 
-    "prov": "http://www.w3.org/ns/prov: prov#",
+    "prov": "http://www.w3.org/ns/prov#",
     "xml": "http://www.w3.org/XML/1998/namespace/",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
 
