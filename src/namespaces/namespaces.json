@@ -1,0 +1,33 @@
+{
+    "ldp": "http://www.w3.org/ns/ldp#",
+    "owl": "http://www.w3.org/2002/07/owl#", 
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema", 
+    "qb": "http://purl.org/linked-data/cube", 
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns", 
+    "prov": "http://www.w3.org/ns/prov: prov/",
+    "xml": "http://www.w3.org/XML/1998/namespace",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "sdmx-concept": "http://purl.org/linked-data/sdmx/2009/concept", 
+    "sdmx-code": "http://purl.org/linked-data/sdmx/2009/code", 
+    "sdmx-dimension": "http://purl.org/linked-data/sdmx/2009/dimension", 
+    "sdmx-measure": "http://purl.org/linked-data/sdmx/2009/measure#",
+    
+    "clio": "http://data.socialhistory.org/resource/clio/", 
+    "clioind": "http://data.socialhistory.org/resource/clio/indicator/",
+    "clioprop": "http://data.socialhistory.org/resource/clio/property/",
+    "clioctr": "http://data.socialhistory.org/resource/clio/country/",
+    
+    "hisco": "http://qber.data2semantics.org/vocab/ocs/hisco/",
+    "hiscocat": "http://qber.data2semantics.org/vocab/ocs/hisco/category/",
+    "hiscam": "http://qber.data2semantics.org/vocab/ocs/hiscam/",
+    "occhisco": "http://data.socialhistory.org/resource/napp/OCCHISCO/",
+    
+    "canfam": "http://data.socialhistory.org/resource/canfam/dataset/canada1901", 
+    "canfam-auke": "http://data.socialhistory.org/resource/canfam/auke", 
+    
+    "napp": "http://data.socialhistory.org/resource/napp/", 
+    "napp-can91": "http://data.socialhistory.org/resource/napp/dataset/canada1891",
+    "napp-sct81": "http://data.socialhistory.org/resource/napp/dataset/scotland1881", 
+    "napp-eng81": "http://data.socialhistory.org/resource/napp/dataset/englandwales1881"
+}
