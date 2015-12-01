@@ -136,6 +136,7 @@ structure_uri = BASE['structure']
 assertion_graph.add((dataset_uri, RDF.type, QB['DataSet']))
 assertion_graph.add((dataset_uri, RDFS.label, Literal('GDP per capita in 1990 $GK')))
 assertion_graph.add((dataset_uri, QB['structure'], structure_uri))
+assertion_graph.add((dataset_uri, PROV['wasDerivedFrom'], dataset_version_uri))
 
 assertion_graph.add((structure_uri, RDF.type, QB['DataStructureDefinition']))
 
