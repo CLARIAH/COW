@@ -1,7 +1,39 @@
 from rdflib import Dataset, Namespace, Literal, BNode, RDF, RDFS, XSD, URIRef
 import datetime
 import csv
-from src import util
+from rdflib import URIRef
+from hashlib import sha1
+import string
+
+
+def reindent(s, numSpaces):
+    s = s.split('\n')
+    s = [(numSpaces * ' ') + string.lstrip(line) for line in s]
+    s = "\n".join(s)
+    return s
+
+def serializeTrig(rdf_dataset):
+    turtles = []
+    for c in rdf_dataset.contexts():
+        if c.identifier != URIRef('urn:x-rdflib:default'):
+            turtle = "<{id}> {{\n".format(id=c.identifier)
+            turtle += reindent(c.serialize(format='turtle'), 4)
+            turtle += "}\n\n"
+        else :
+            turtle = c.serialize(format='turtle')
+            turtle += "\n\n"
+
+        turtles.append(turtle)
+
+    return "\n".join(turtles)
+
+def githash(data):
+    s = sha1()
+    s.update("blob %u\0" % len(data))
+    s.update(data)
+    return s.hexdigest()
+
+
 
 
 CLIOIND = Namespace('http://data.socialhistory.org/resource/clio/indicator/')
@@ -55,7 +87,7 @@ rdf_dataset.bind('sdmx-measure', SDMXMSR)
 # Initialize the graphs needed for the nanopublication
 timestamp = datetime.datetime.now().isoformat()
 
-source_hash = util.githash(file(pathtofile).read())
+source_hash = githash(file(pathtofile).read())
 hash_part = source_hash + '/' + timestamp
 
 
@@ -170,5 +202,6 @@ with open(pathtofile, 'rb') as infile:
 
 
 with open('clio/qbcliogdp.ttl', 'w') as outfile:
-    outfile.write(util.serializeTrig(rdf_dataset))
+    outfile.write(serializeTrig(rdf_dataset))
+
 
