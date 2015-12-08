@@ -1,16 +1,16 @@
 
 # coding: utf-8
 
-# In[6]:
+# In[1]:
 
 from rdflib import Graph, Namespace, RDF, Literal, RDFS, XSD
 import csv, datetime, os
 
 g = Graph()
 
-HISCO   = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/')
-HSRC    = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/resource/')
-STAFF   = Namespace('http://qber.data2semantics.org/vocab/staff/')
+HISCO   = Namespace('http://data.socialhistory.org/vocab/hisco/')
+HSRC    = Namespace('http://data.socialhistory.org/vocab/hisco/resource/')
+STAFF   = Namespace('http://data.socialhistory.org/staff/csdh/')
 SKOS    = Namespace('http://www.w3.org/2004/02/skos/core#')
 PROV    = Namespace('http://www.w3.org/ns/prov/')
 DC      = Namespace('http://purl.org/dc/elements/1.1/')
@@ -30,12 +30,12 @@ g.bind('dcterms', DCTERMS)
 g.bind('fabio', FABIO)
 g.bind('foaf', FOAF)
 
-g.add((HISCO[''], RDF.type, SKOS['Collection']))
-g.add((HISCO[''], RDF.type, PROV['Entity']))
-g.add((HISCO[''], PROV.wasAttributedTo, STAFF['rlzijdeman']))
-g.add((HISCO[''], DCTERMS.title, Literal('Historical International Standard Classification of Occupations', 'en')))
-g.add((HISCO[''], PROV.wasDerivedFrom, HSRC['hiscoBook']))
-g.add((HISCO[''], PROV.wasDerivedFrom, HSRC['hiscoWebsite']))
+g.add((HISCO['hiscoScheme'], RDF.type, SKOS['ConceptScheme']))
+g.add((HISCO['hiscoScheme'], RDF.type, PROV['Entity']))
+g.add((HISCO['hiscoScheme'], PROV.wasAttributedTo, STAFF['rlzijdeman']))
+g.add((HISCO['hiscoScheme'], DCTERMS.title, Literal('Historical International Standard Classification of Occupations', 'en')))
+g.add((HISCO['hiscoScheme'], PROV.wasDerivedFrom, HSRC['hiscoBook']))
+g.add((HISCO['hiscoScheme'], PROV.wasDerivedFrom, HSRC['hiscoWebsite']))
 g.add((HSRC['hiscoBook'], RDF.type, FABIO['Book']))
 g.add((HSRC['hiscoBook'], FABIO.has_ISBN, Literal('9789058671967')))
 g.add((HSRC['hiscoWebsite'], RDF.type, FABIO['Website']))
@@ -51,7 +51,6 @@ g.add((STAFF['rlzijdeman'], RDF.type, FOAF['Person']))
 g.add((STAFF['rlzijdeman'], RDF.type, FOAF['Agent']))
 g.add((STAFF['rlzijdeman'], FOAF.givenName, Literal('Richard')))
 g.add((STAFF['rlzijdeman'], FOAF.familyName, Literal('Zijdeman')))
-g.add((STAFF['rlzijdeman'], FOAF.nick, Literal('silkman')))
 g.add((STAFF['rlzijdeman'], FOAF.mbox, Literal('mailto:richard.zijdeman@iisg.nl')))
 
 g.add((HSRC['hisco2rdf_01'], RDF.type, PROV.Activity))

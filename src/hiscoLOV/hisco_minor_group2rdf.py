@@ -1,16 +1,16 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 from rdflib import Graph, Namespace, RDF, Literal, RDFS
 import csv, os
 
 g = Graph()
 
-HISCO = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/')
-MAJOR = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/majorGroup/')
-MINOR = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/minorGroup/')
+HISCO = Namespace('http://data.socialhistory.org/vocab/hisco/')
+MAJOR = Namespace('http://data.socialhistory.org/vocab/majorGroup/')
+MINOR = Namespace('http://data.socialhistory.org/vocab/minorGroup/')
 SKOS  = Namespace('http://www.w3.org/2004/02/skos/core#')
 
 
@@ -29,7 +29,7 @@ next(hisco)
 
 
 variable_name = 'minorGroup'
-g.add((HISCO[variable_name], RDF.type, SKOS['ConceptScheme']))
+g.add((HISCO[variable_name], RDF.type, SKOS['Collection']))
 g.add((HISCO[variable_name], SKOS.prefLabel, Literal('minor group')))
 g.add((HISCO[variable_name], SKOS.member, HISCO[''])) 
 
@@ -40,11 +40,12 @@ for row in hisco: # define and columns and names for columns
     hisco_minor_group_label = row[3].decode('latin-1')
     hisco_minor_group_description = row[4]
 
-    g.add((MINOR[hisco_minor_group], RDF.type, SKOS['Concept']))
-    g.add((MINOR[hisco_minor_group], SKOS['inScheme'], HISCO[variable_name]))
+    g.add((MINOR[hisco_minor_group], RDF.type, SKOS['Collection']))
+    g.add((MINOR[hisco_minor_group], SKOS['member'], HISCO[variable_name]))
     g.add((MINOR[hisco_minor_group], SKOS['prefLabel'], Literal(hisco_minor_group_label,'en')))
     g.add((MINOR[hisco_minor_group], SKOS['definition'], Literal(hisco_minor_group_description,'en')))
-
+    g.add((MINOR[hisco_minor_group], SKOS.inScheme, HISCO[''])) 
+    
     g.add((MINOR[hisco_minor_group],SKOS['broaderTransitive'], MAJOR[hisco_major_group]))
 
 print g.serialize(format='turtle')

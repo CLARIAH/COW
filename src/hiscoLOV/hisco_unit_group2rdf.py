@@ -1,17 +1,17 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[3]:
 
 from rdflib import Graph, Namespace, RDF, Literal, RDFS
 import csv, os
 
 g = Graph()
 
-HISCO = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/')
-MAJOR = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/majorGroup/')
-MINOR = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/minorGroup/')
-UNIT  = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/unitGroup/')
+HISCO = Namespace('http://data.socialhistory.org/vocab/hisco/')
+MAJOR = Namespace('http://data.socialhistory.org/vocab/hisco/majorGroup/')
+MINOR = Namespace('http://data.socialhistory.org/vocab/hisco/minorGroup/')
+UNIT  = Namespace('http://data.socialhistory.org/vocab/hisco/unitGroup/')
 SKOS  = Namespace('http://www.w3.org/2004/02/skos/core#')
 
 g.bind('hisco', HISCO)
@@ -28,9 +28,9 @@ hisco = csv.reader(hdf)
 next(hisco)
 
 variable_name = 'unitGroup'
-g.add((HISCO[variable_name], RDF.type, SKOS['ConceptScheme']))
+g.add((HISCO[variable_name], RDF.type, SKOS['Collection']))
 g.add((HISCO[variable_name], SKOS.preflabel, Literal('unit group')))
-g.add((HISCO[variable_name], SKOS.member, HISCO[''])) 
+g.add((HISCO[variable_name], SKOS.member, HISCO['conceptScheme'])) 
 
 for row in hisco: # define and columns and names for columns
     hisco_major_group = row[3]
@@ -44,6 +44,7 @@ for row in hisco: # define and columns and names for columns
     g.add((UNIT[hisco_unit_group], SKOS['inScheme'], HISCO[variable_name]))
     g.add((UNIT[hisco_unit_group], SKOS['prefLabel'], Literal(hisco_unit_group_label,'en')))
     g.add((UNIT[hisco_unit_group], SKOS['definition'], Literal(hisco_unit_group_description,'en')))
+    g.add((UNIT[hisco_unit_group], SKOS.inScheme, HISCO['conceptScheme']))
 
     g.add((UNIT[hisco_unit_group],SKOS['broaderTransitive'], MAJOR[hisco_major_group]))
     g.add((UNIT[hisco_unit_group],SKOS['broaderTransitive'], MINOR[hisco_minor_group]))

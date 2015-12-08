@@ -1,20 +1,25 @@
 
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 from rdflib import Graph, Namespace, RDF, Literal, RDFS
 import csv, os
 
 g = Graph()
 
-HISCO = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/')
-PRODUCT = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/product/')
+HISCO = Namespace('http://data.socialhistory.org/vocab/hisco/')
+PRODUCT = Namespace('http://data.socialhistory.org/vocab/hisco/product/')
 SKOS  = Namespace('http://www.w3.org/2004/02/skos/core#')
 
-variable_name = 'PRODUCT'
-g.add((HISCO[variable_name], RDF.type, SKOS['Scheme']))
-g.add((HISCO[variable_name], RDFS.label, Literal('PRODUCT')))
+variable_name = 'productCollection'
+g.add((PRODUCT[variable_name], RDF.type, SKOS['Collection']))
+g.add((PRODUCT[variable_name], RDFS.label, Literal('PRODUCT')))
+g.add((PRODUCT[variable_name], SKOS.definition, Literal('PRODUCT is a subsidiary classification designed to reduce the loss '+
+                                                            'of information caused by ISCO68\'s failure in some cases ' +
+                                                            '(especially in relation to major group 4) to accomodate ' + 
+                                                            'information on products traded by those in particular occupational '+
+                                                            'categories.')))
 
 g.bind('hisco', HISCO)
 g.bind('product', PRODUCT)
@@ -32,9 +37,10 @@ for row in hisco:
     hisco_product_label = row[1]
 
     g.add((PRODUCT[hisco_product], RDF.type, SKOS['Concept']))
-    g.add((PRODUCT[hisco_product], SKOS['inScheme'], HISCO[variable_name]))
+    g.add((PRODUCT[hisco_product], SKOS['inScheme'], HISCO['hiscoScheme']))
+    g.add((PRODUCT[hisco_product], SKOS['member'], HISCO[variable_name]))  
     g.add((PRODUCT[hisco_product], SKOS['prefLabel'], Literal(hisco_product_label,'en')))
-
+    
 print g.serialize(format='turtle')
 
 with open('./rdf/hisco/hisco_product.ttl','w') as out:

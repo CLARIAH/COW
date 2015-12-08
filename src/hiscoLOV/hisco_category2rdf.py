@@ -1,18 +1,18 @@
 
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 from rdflib import Graph, Namespace, RDF, Literal, RDFS
 import os, csv
 
 g = Graph()
 
-HISCO = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/')
-MAJOR = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/majorGroup/')
-MINOR = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/minorGroup/')
-UNIT  = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/unitGroup/')
-CATEGORY = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/category/')
+HISCO = Namespace('http://data.socialhistory.org/vocab/hisco/')
+MAJOR = Namespace('http://data.socialhistory.org/vocab/hisco/majorGroup/')
+MINOR = Namespace('http://data.socialhistory.org/vocab/hisco/minorGroup/')
+UNIT  = Namespace('http://data.socialhistory.org/vocab/hisco/unitGroup/')
+CATEGORY = Namespace('http://data.socialhistory.org/vocab/hisco/category/')
 SKOS  = Namespace('http://www.w3.org/2004/02/skos/core#')
 
 g.bind('hisco', HISCO)
@@ -29,9 +29,9 @@ hisco = csv.reader(hdf)
 next(hisco)
 
 variable_name = 'category'
-g.add((HISCO[variable_name], RDF.type, SKOS['ConceptScheme']))
+g.add((HISCO[variable_name], RDF.type, SKOS['Collection']))
 g.add((HISCO[variable_name], RDFS.label, Literal('occupational category')))
-g.add((HISCO[variable_name], SKOS.member, HISCO[''])) 
+g.add((HISCO[variable_name], SKOS.member, HISCO['hiscoScheme'])) 
 
 
 for row in hisco: # define and columns and names for columns
@@ -57,7 +57,7 @@ for row in hisco: # define and columns and names for columns
     
 print g.serialize(format='turtle')
 
-with open('./rdf/hisco_category.ttl','w') as out:
+with open('./rdf/hisco/hisco_category.ttl','w') as out:
     g.serialize(out, format='turtle')
 
 

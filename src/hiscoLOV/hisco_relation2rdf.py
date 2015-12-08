@@ -1,20 +1,25 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 from rdflib import Graph, Namespace, RDF, Literal, RDFS
 import csv, os
 
 g = Graph()
 
-HISCO = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/')
-RELATION  = Namespace('http://qber.data2semantics.org/vocab/ocs/hisco/relation/')
+HISCO = Namespace('http://data.socialhistory.org/vocab/hisco/')
+RELATION  = Namespace('http://data.socialhistory.org/vocab/hisco/relation/')
 SKOS  = Namespace('http://www.w3.org/2004/02/skos/core#')
 
-variable_name = 'RELATION'
-g.add((HISCO[variable_name], RDF.type, SKOS['Scheme']))
-g.add((HISCO[variable_name], RDFS.label, Literal('RELATION')))
+variable_name = 'relationCollection'
+g.add((RELATION[variable_name], RDF.type, SKOS['Collection']))
+g.add((RELATION[variable_name], RDFS.label, Literal('RELATION')))
+g.add((RELATION[variable_name], SKOS.definition, Literal('RELATION is a subsidiary classification designed to reduce the loss '+
+                                                            'of information caused by ISCO68\'s failure to accomodate residual ' +
+                                                            'information about people who do not give a current occupational ' + 
+                                                            'title, but who nevertheless indicate a relationship to the formal' +
+                                                            'labour market.')))
 
 g.bind('hisco', HISCO)
 g.bind('relation', RELATION)
@@ -32,7 +37,8 @@ for row in hisco:
     hisco_relation_label = row[1]
 
     g.add((RELATION[hisco_relation], RDF.type, SKOS['Concept']))
-    g.add((RELATION[hisco_relation], SKOS['inScheme'], HISCO[variable_name]))
+    g.add((RELATION[hisco_relation], SKOS['inScheme'], HISCO['hiscoScheme']))
+    g.add((RELATION[hisco_relation], SKOS['member'], HISCO[variable_name]))  
     g.add((RELATION[hisco_relation], SKOS['prefLabel'], Literal(hisco_relation_label,'en')))
 
 print g.serialize(format='turtle')
