@@ -27,6 +27,7 @@
     
     "canfam": "http://data.socialhistory.org/resource/canfam/dataset/canada1901/", 
     "canfam-auke": "http://data.socialhistory.org/resource/canfam/auke/", 
+    "canfam-dimension": "http://data.socialhistory.org/vocab/canfam/dimension/",
     
     "napp": "http://data.socialhistory.org/resource/napp/", 
     "napp-dimension": "http://data.socialhistory.org/vocab/napp/dimension/", 
