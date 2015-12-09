@@ -9,9 +9,9 @@ SKOS = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
 SDMXMSR = rdflib.Namespace('http://purl.org/linked-data/sdmx/2009/measure#')
 QB = rdflib.Namespace('http://purl.org/linked-data/cube#')
 
-HISCOCAT = rdflib.Namespace("http://qber.data2semantics.org/vocab/ocs/hisco/category/")
-HISCO = rdflib.Namespace("http://qber.data2semantics.org/vocab/ocs/hisco/")
-HISCAM = rdflib.Namespace("http://qber.data2semantics.org/vocab/ocs/hiscam/")
+HISCOCAT = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/category/")
+HISCO = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/")
+HISCAM = rdflib.Namespace("http://data.socialhistory.org/vocab/hiscam/")
 OCCHISCO = rdflib.Namespace("http://data.socialhistory.org/resource/napp/OCCHISCO/")
 # TD: enforce common namespaces everywhere somehow?
 
@@ -43,5 +43,5 @@ for row in h2n:
     if row[7]!="":
         g.add((OCCHISCO[occhisco_code], SKOS['note'], rdflib.Literal(row[7])))
 
-with open('occhisco2hisco.ttl', 'w') as outfile:
+with open('rdf/occhisco2hisco.ttl', 'w') as outfile:
     g.serialize(outfile, format='turtle')

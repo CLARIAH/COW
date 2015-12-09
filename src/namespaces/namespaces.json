@@ -20,9 +20,9 @@
     "clioprop": "http://data.socialhistory.org/resource/clio/property/",
     "clioctr": "http://data.socialhistory.org/resource/clio/country/",
     
-    "hisco": "http://qber.data2semantics.org/vocab/ocs/hisco/",
-    "hiscocat": "http://qber.data2semantics.org/vocab/ocs/hisco/category/",
-    "hiscam": "http://qber.data2semantics.org/vocab/ocs/hiscam/",
+    "hisco": "http://data.socialhistory.org/vocab/hisco/",
+    "hiscocat": "http://data.socialhistory.org/vocab/hisco/category/",
+    "hiscam": "http://data.socialhistory.org/vocab/hisco/category/",
     "occhisco": "http://data.socialhistory.org/resource/napp/OCCHISCO/",
     
     "canfam": "http://data.socialhistory.org/resource/canfam/dataset/canada1901/", 
