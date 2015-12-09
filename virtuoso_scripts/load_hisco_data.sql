@@ -5,7 +5,7 @@
 delete from DB.DBA.load_list;
 
 --      <folder with data>  <pattern>    <default graph if no graph file specified>
-ld_dir ('/scratch/clariah-sdh/converters/src/hiscoLOV/rdf', '*.ttl', 'http://data.socialhistory.org/vocab/hisco/');
+ld_dir ('/scratch/clariah-sdh/converters/src/hisco_converter/rdf', '*.ttl', 'http://data.socialhistory.org/vocab/hisco/');
 
 rdf_loader_run();
 
