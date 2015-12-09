@@ -2,7 +2,7 @@ import rdflib
 import csv
 import urllib2
 
-h2n = csv.reader(open('occhisco2hisco.csv'))
+h2n = csv.reader(open('../../datasets/hisco/occhisco2hisco.csv'))
 # original at https://github.com/rlzijdeman/o-clack 
 
 SKOS = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")

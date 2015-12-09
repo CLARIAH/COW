@@ -12,7 +12,7 @@ soup = bs4.BeautifulSoup(requests.get(baseurl).text, "html5lib")
 
 csvs = {}
 for lnk in soup.find_all('a', {'href': re.compile("dat")}):
-    print(baseurl + lnk['href'])
+#     print(baseurl + lnk['href'])
     dat = csv.reader(urllib2.urlopen(baseurl + lnk['href'], 'rU'), delimiter='\t')
     csvs[re.sub('.*_|.dat', '', lnk['href'])] = dat
 
