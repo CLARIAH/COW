@@ -5,3 +5,7 @@ commands.txt
 .DS_Store
 rdf/
 datasets/
+bin/
+lib/
+local/
+scr/iribaker
