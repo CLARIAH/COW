@@ -5,7 +5,7 @@ source /scratch/clariah-sdh/converters/scripts/virtuoso-run-script.sh /scratch/c
 
 # convert data 
 python qbcliodata.py
-gzip rdf/qbcliogdp.ttl
+gzip -f rdf/qbcliogdp.ttl
 
 # load new data
 source /scratch/clariah-sdh/converters/scripts/virtuoso-run-script.sh /scratch/clariah-sdh/converters/scripts/load_clio_data.sql &> /dev/null
