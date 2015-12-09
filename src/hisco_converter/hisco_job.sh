@@ -13,7 +13,8 @@ python hisco_product2rdf.py
 python hisco_relation2rdf.py
 python hisco_status2rdf.py
 python hisco_unit_group2rdf.py
-
+python hisco2cam.py
+python occhisco2hisco.py
 
 # load new data
 source /scratch/clariah-sdh/converters/virtuoso_scripts/virtuoso-run-script.sh /scratch/clariah-sdh/converters/virtuoso_scripts/load_hisco_data.sql &> /dev/null
