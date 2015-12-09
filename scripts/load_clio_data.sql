@@ -5,7 +5,7 @@
 delete from DB.DBA.load_list;
 
 --      <folder with data>  <pattern>    <default graph if no graph file specified>
-ld_dir ('/scratch/clariah-sdh/converters/src/clio_converter/rdf', '*.ttl', 'http://data.socialhistory.org/resource/gdppc/5343176a06654392f04b0dcf163d1f1f0f65ffce');
+ld_dir ('/scratch/clariah-sdh/converters/src/clio_converter/rdf', '*.ttl', 'http://data.socialhistory.org/resource/gdppc/5343176a06654392f04b0dcf163d1f1f0f65ffce/');
 
 rdf_loader_run();
 
