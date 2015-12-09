@@ -201,7 +201,7 @@ with open(pathtofile, 'rb') as infile:
         assertion_graph.add((CLIO[obsid], CLIOPROP['indicator'], CLIOIND['GDPPC1990GKD']))
 
 
-with open('clio/qbcliogdp.ttl', 'w') as outfile:
+with open('rdf/qbcliogdp.ttl', 'w') as outfile:
     outfile.write(serializeTrig(rdf_dataset))
 
 

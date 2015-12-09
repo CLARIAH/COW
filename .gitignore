@@ -1,0 +1,6 @@
+.project
+.pydevproject
+commands.txt
+*.pyc
+.DS_Store
+rdf/

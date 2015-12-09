@@ -25,9 +25,9 @@ g.bind('hisco', HISCO)
 g.bind('relation', RELATION)
 g.bind('skos', SKOS)
 
-default_path = "/Users/RichardZ/Dropbox/II/projects/clariah/sdh/basecamp/Files/Files attached directly to project/Files attached directly to project (1)/"
-os.chdir(default_path)
-hdf = open('./data2rdf/hisco/relation.csv')
+# default_path = "/Users/RichardZ/Dropbox/II/projects/clariah/sdh/basecamp/Files/Files attached directly to project/Files attached directly to project (1)/"
+# os.chdir(default_path)
+hdf = open('../../datasets/hisco/relation.csv')
 hisco = csv.reader(hdf)
 
 next(hisco)
@@ -41,9 +41,9 @@ for row in hisco:
     g.add((RELATION[hisco_relation], SKOS['member'], HISCO[variable_name]))  
     g.add((RELATION[hisco_relation], SKOS['prefLabel'], Literal(hisco_relation_label,'en')))
 
-print g.serialize(format='turtle')
+# print g.serialize(format='turtle')
 
-with open('./rdf/hisco/hisco_relation.ttl','w') as out:
+with open('rdf/hisco_relation.ttl','w') as out:
     g.serialize(out, format='turtle')
 
 

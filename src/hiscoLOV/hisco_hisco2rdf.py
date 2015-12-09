@@ -3,7 +3,7 @@
 
 # In[1]:
 
-from rdflib import Graph, Namespace, RDF, Literal, RDFS, XSD
+from rdflib import Graph, Namespace, RDF, Literal, XSD
 import csv, datetime, os
 
 g = Graph()
@@ -18,8 +18,8 @@ DCTERMS = Namespace('http://purl.org/dc/terms/')
 FABIO   = Namespace('http://purl.org/spar/fabio/')
 FOAF    = Namespace('http://xmlns.com/foaf/0.1/')
 
-default_path = "/Users/RichardZ/Dropbox/II/projects/clariah/sdh/basecamp/Files/Files attached directly to project/Files attached directly to project (1)/"
-os.chdir(default_path)
+# default_path = "/Users/RichardZ/Dropbox/II/projects/clariah/sdh/basecamp/Files/Files attached directly to project/Files attached directly to project (1)/"
+# os.chdir(default_path)
 
 g.bind('hisco', HISCO)
 g.bind('hsrc', HSRC)
@@ -57,10 +57,10 @@ g.add((HSRC['hisco2rdf_01'], RDF.type, PROV.Activity))
 g.add((HSRC['hisco2rdf_01'], PROV.startedAtTime, Literal('2015-06-10T12:05:00+02:00', datatype = XSD.dateTime)))
 g.add((HSRC['hisco2rdf_01'], PROV.endedAtTime, 
        Literal(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%dT%H:%M:%S+02:00'),datatype = XSD.dateTime)))
-fileout = './rdf/hisco/hisco_hisco.ttl'
+fileout = 'rdf/hisco_hisco.ttl'
 g.add((HSRC['hisco2rdf_01'], PROV.generated, Literal(fileout)))
 
-print g.serialize(format='turtle')
+# print g.serialize(format='turtle')
 
 with open(fileout,'w') as out:
     g.serialize(out, format='turtle')

@@ -58,5 +58,5 @@ for variable in codebook.keys():
         variable=variable, vocab_name='canfam')
 
 for variable, graph in graphs.items():
-    with open('canfam/' + variable + '.ttl', 'w') as outfile:
+    with open('rdf/' + variable + '.ttl', 'w') as outfile:
         graph.serialize(outfile, format='turtle')

@@ -3,7 +3,7 @@
 
 # In[3]:
 
-from rdflib import Graph, Namespace, RDF, Literal, RDFS, URIRef
+from rdflib import Graph, Namespace, RDF, Literal, URIRef
 import csv, os, iribaker
 
 g = Graph()
@@ -20,7 +20,6 @@ ENTRY = Namespace('http://data.socialhistory.org/hisco/entry/')
 SKOS  = Namespace('http://www.w3.org/2004/02/skos/core#')
 HSRC    = Namespace('http://data.socialhistory.org/vocab/hisco/resource/')
 PROV    = Namespace('http://www.w3.org/ns/prov/')
-# BIBO    = Namespace('http://purl.org/ontology/bibo/')
 FABIO = Namespace('http://purl.org/spar/fabio/')
 
 g.bind('hisco', HISCO)
@@ -53,10 +52,10 @@ g.add((ENTRY['entryCollection'], SKOS.scopeNote, Literal('''While some hisco:ent
                                           entries are instances of skos:hiddenLabel''')))
 
 
-default_path = "/Users/RichardZ/Dropbox/II/projects/clariah/sdh/basecamp/Files/Files attached directly to project/Files attached directly to project (1)/"
-os.chdir(default_path)
+# default_path = "/Users/RichardZ/Dropbox/II/projects/clariah/sdh/basecamp/Files/Files attached directly to project/Files attached directly to project (1)/"
+# os.chdir(default_path)
 
-hdf = open('./data2rdf/hisco/occupation_link.csv')
+hdf = open('../../datasets/hisco/occupation_link.csv')
 hisco = csv.reader(hdf)
 
 next(hisco)
@@ -110,10 +109,11 @@ for row in hisco: # define and columns and names for columns
     
 
 # This takes some time...
-print g.serialize(format='turtle')
+# print g.serialize(format='turtle')
 
-with open('./rdf/hisco/hisco_entry_book.ttl','w') as out:
+with open('rdf/hisco_entry_book.ttl','w') as out:
     g.serialize(out, format='turtle')
+
 
 
 # In[ ]:

@@ -4,7 +4,7 @@
 # In[1]:
 
 from rdflib import Graph, Namespace, RDF, Literal, RDFS
-import os, csv
+import csv
 
 g = Graph()
 
@@ -22,9 +22,10 @@ g.bind('unit',  UNIT)
 g.bind('category', CATEGORY)
 g.bind('skos',  SKOS)
 
-default_path = "/Users/RichardZ/Dropbox/II/projects/clariah/sdh/basecamp/Files/Files attached directly to project/Files attached directly to project (1)/"
-os.chdir(default_path)
-hdf = open('./data2rdf/hisco/hisco_45.csv')
+# default_path = "/Users/RichardZ/Dropbox/II/projects/clariah/sdh/basecamp/Files/Files attached directly to project/Files attached directly to project (1)/"
+# os.chdir(default_path)
+hdf = open('../../datasets/hisco/hisco_45.csv')
+
 hisco = csv.reader(hdf)
 next(hisco)
 
@@ -55,13 +56,10 @@ for row in hisco: # define and columns and names for columns
     g.add((CATEGORY[hisco_occupational_category], SKOS['broaderTransitive'], MINOR[hisco_minor_group]))
     g.add((CATEGORY[hisco_occupational_category], SKOS['broaderTransitive'], UNIT[hisco_unit_group]))
     
-print g.serialize(format='turtle')
+# print g.serialize(format='turtle')
 
-with open('./rdf/hisco/hisco_category.ttl','w') as out:
+with open('rdf/hisco_category.ttl','w') as out:
     g.serialize(out, format='turtle')
-
-
-
 
 
 
