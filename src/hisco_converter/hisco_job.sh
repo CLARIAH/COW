@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # clear old graph 
-source /scratch/clariah-sdh/converters/virtuoso_scripts/virtuoso-run-script.sh /scratch/clariah-sdh/converters/virtuoso_scripts/clear_hisco_graph.sql
+source /scratch/clariah-sdh/converters/virtuoso_scripts/virtuoso-run-script.sh /scratch/clariah-sdh/converters/scripts/clear_hisco_graph.sql
 
 #  &> /dev/null
 
@@ -19,5 +19,5 @@ python hisco2cam.py
 python occhisco2hisco.py
 
 # load new data
-source /scratch/clariah-sdh/converters/virtuoso_scripts/virtuoso-run-script.sh /scratch/clariah-sdh/converters/virtuoso_scripts/load_hisco_data.sql
+source /scratch/clariah-sdh/converters/virtuoso_scripts/virtuoso-run-script.sh /scratch/clariah-sdh/converters/scripts/load_hisco_data.sql
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # clear old graph 
-source /scratch/clariah-sdh/converters/virtuoso_scripts/virtuoso-run-script.sh /scratch/clariah-sdh/converters/virtuoso_scripts/clear_clio_graph.sql
+source /scratch/clariah-sdh/converters/scripts/virtuoso-run-script.sh /scratch/clariah-sdh/converters/scripts/clear_clio_graph.sql
 
 #  &> /dev/null
 
@@ -9,5 +9,5 @@ source /scratch/clariah-sdh/converters/virtuoso_scripts/virtuoso-run-script.sh /
 python qbcliodata.py
 
 # load new data
-source /scratch/clariah-sdh/converters/virtuoso_scripts/virtuoso-run-script.sh /scratch/clariah-sdh/converters/virtuoso_scripts/load_clio_data.sql
+source /scratch/clariah-sdh/converters/scripts/virtuoso-run-script.sh /scratch/clariah-sdh/converters/scripts/load_clio_data.sql
 
