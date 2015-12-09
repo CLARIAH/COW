@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# cleara old graph 
+# clear old graph 
 source /scratch/clariah-sdh/converters/virtuoso_scripts/virtuoso-run-script.sh /scratch/clariah-sdh/converters/virtuoso_scripts/clear_hisco_graph.sql
 
 #  &> /dev/null
