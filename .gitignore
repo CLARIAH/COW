@@ -9,3 +9,4 @@ bin/
 lib/
 local/
 scr/iribaker
+*.ttl
