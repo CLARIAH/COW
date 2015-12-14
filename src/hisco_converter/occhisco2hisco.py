@@ -2,7 +2,7 @@ import rdflib
 import csv
 import urllib2
 
-h2n = csv.reader(open('../../datasets/hisco/occhisco2hisco.csv'))
+h2n = csv.reader(open('../../sdh-private-hisco-datasets/occhisco2hisco.csv'))
 
 SKOS = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
 SDMXMSR = rdflib.Namespace('http://purl.org/linked-data/sdmx/2009/measure#')

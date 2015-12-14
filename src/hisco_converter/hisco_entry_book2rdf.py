@@ -55,7 +55,7 @@ g.add((ENTRY['entryCollection'], SKOS.scopeNote, Literal('''While some hisco:ent
 # default_path = "/Users/RichardZ/Dropbox/II/projects/clariah/sdh/basecamp/Files/Files attached directly to project/Files attached directly to project (1)/"
 # os.chdir(default_path)
 
-hdf = open('../../datasets/hisco/occupation_link.csv')
+hdf = open('../../sdh-private-hisco-datasets/occupation_link.csv')
 hisco = csv.reader(hdf)
 
 next(hisco)

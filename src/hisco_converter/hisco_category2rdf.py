@@ -24,7 +24,7 @@ g.bind('skos',  SKOS)
 
 # default_path = "/Users/RichardZ/Dropbox/II/projects/clariah/sdh/basecamp/Files/Files attached directly to project/Files attached directly to project (1)/"
 # os.chdir(default_path)
-hdf = open('../../datasets/hisco/hisco_45.csv')
+hdf = open('../../sdh-private-hisco-datasets/hisco_45.csv')
 
 hisco = csv.reader(hdf)
 next(hisco)

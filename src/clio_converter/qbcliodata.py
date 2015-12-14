@@ -58,7 +58,7 @@ FOAF = Namespace('http://xmlns.com/foaf/0.1/')
 
 
 dataset = "gdppc"
-pathtofile = '../../datasets/allcliodata_raw.csv'
+pathtofile = '../../sdh-public-datasets/allcliodata_raw.csv'
 
 
 BASE = Namespace('http://data.socialhistory.org/resource/{}/'.format(dataset))
