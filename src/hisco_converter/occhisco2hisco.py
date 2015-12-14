@@ -2,7 +2,7 @@ import rdflib
 import csv
 import urllib2
 
-h2n = csv.reader(open('occhisco2hisco.csv'))
+h2n = open('../../datasets/hisco/occhisco2hisco.csv')
 # original at https://github.com/rlzijdeman/o-clack 
 
 SKOS = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
@@ -41,5 +41,5 @@ for row in h2n:
     if row[7]!="":
         g.add((OCCHISCO[occhisco_code], SKOS['note'], rdflib.Literal(row[7])))
 
-with open('occhisco2hisco.ttl', 'w') as outfile:
+with open('rdf/occhisco2hisco.ttl', 'w') as outfile:
     g.serialize(outfile, format='turtle')
