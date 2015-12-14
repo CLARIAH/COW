@@ -2,8 +2,7 @@ import rdflib
 import csv
 import urllib2
 
-h2n = open('../../datasets/hisco/occhisco2hisco.csv')
-# original at https://github.com/rlzijdeman/o-clack 
+h2n = csv.reader(open('../../datasets/hisco/occhisco2hisco.csv'))
 
 SKOS = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
 SDMXMSR = rdflib.Namespace('http://purl.org/linked-data/sdmx/2009/measure#')
@@ -12,7 +11,6 @@ QB = rdflib.Namespace('http://purl.org/linked-data/cube#')
 HISCO = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/")
 HISCAM = rdflib.Namespace("http://data.socialhistory.org/vocab/hiscam/")
 OCCHISCO = rdflib.Namespace("http://data.socialhistory.org/resource/napp/OCCHISCO/")
-# TD: enforce common namespaces everywhere somehow?
 
 g = rdflib.Graph()
 
