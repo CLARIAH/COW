@@ -197,6 +197,7 @@ with open(pathtofile, 'rb') as infile:
         assertion_graph.add((CLIO[obsid], QB['dataSet'], dataset_uri))
         assertion_graph.add((CLIO[obsid], SDMXDIM['refArea'], CLIOCTR[row[0]]))
         assertion_graph.add((CLIO[obsid], SDMXDIM['refPeriod'], Literal(row[1], datatype=XSD.gYear)))
+        assertion_graph.add((CLIO[obsid], SDMXDIM['refPeriodInt'], Literal(row[1], datatype=XSD.int)))
         assertion_graph.add((CLIO[obsid], SDMXMSR['obsValue'], Literal(float(row[3]))))
         assertion_graph.add((CLIO[obsid], CLIOPROP['indicator'], CLIOIND['GDPPC1990GKD']))
 
