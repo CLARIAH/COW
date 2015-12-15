@@ -21,7 +21,7 @@
     "clioctr": "http://data.socialhistory.org/resource/clio/country/",
     
     "hisco": "http://data.socialhistory.org/vocab/hisco/",
-    "hiscam": "http://data.socialhistory.org/vocab/hisco/category/",
+    "hiscam": "http://data.socialhistory.org/vocab/hiscam/",
     "occhisco": "http://data.socialhistory.org/resource/napp/OCCHISCO/",
     
     "canfam": "http://data.socialhistory.org/resource/canfam/dataset/canada1901/", 
