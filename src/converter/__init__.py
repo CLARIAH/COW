@@ -10,7 +10,9 @@ from iribaker import to_iri
 from functools import partial
 from itertools import izip_longest
 
-from rdflib import Graph, Namespace, URIRef, RDF, Literal, XSD
+from rdflib import Graph, URIRef, Literal
+
+from util import apply_default_namespaces, QB, RDF, XSD, SDV, SDR
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -18,21 +20,6 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
 logger.addHandler(ch)
 
-
-SDH = Namespace("http://data.socialhistory.org/resource/")
-QB = Namespace("http://purl.org/linked-data/cube#")
-
-
-def apply_default_namespaces(graph):
-    """
-    Applies a set of default namespaces to the RDFLib graph
-    provided as argument and returns the graph.
-    """
-
-    graph.bind('sdh', SDH)
-    graph.bind('qb', QB)
-
-    return graph
 
 
 def grouper(n, iterable, padvalue=None):
@@ -44,8 +31,8 @@ def convert(infile, outfile, delimiter=',', quotechar='\"', dataset_name=None, p
     if dataset_name is None:
         dataset_name = os.path.basename(infile).rstrip('.csv')
 
-    if processes > 1 :
-        logger.info("Using "+ str(processes) +" parallel processes")
+    if processes > 1:
+        logger.info("Using " + str(processes) + " parallel processes")
         parallel_convert(infile, outfile, delimiter, quotechar, dataset_name, processes, chunksize, config)
     else:
         logger.info("Using a single process")
@@ -68,7 +55,7 @@ def simple_convert(infile, outfile, delimiter, quotechar, dataset_name, config):
             outfile_file.write(c.g.serialize(format='nt'))
 
             result = c.process(0, r, 1)
-            
+
             outfile_file.write(result)
 
 
@@ -114,8 +101,8 @@ def convert_rows(enumerated_rows, dataset_name, headers, chunksize, config):
 
 class Converter(object):
 
-    _VOCAB_BASE = "http://data.socialhistory.org/vocab"
-    _RESOURCE_BASE = "http://data.socialhistory.org/resource"
+    _VOCAB_BASE = str(SDV)
+    _RESOURCE_BASE = str(SDR)
 
     def __init__(self, dataset_name, headers, config):
         self._headers = headers
@@ -142,11 +129,11 @@ class Converter(object):
         self._stop = config['stop']
 
         if self._family is None:
-            self._VOCAB_URI_PATTERN = "{0}/{{}}/{{}}".format(self._VOCAB_BASE)
-            self._RESOURCE_URI_PATTERN = "{0}/{{}}/{{}}".format(self._RESOURCE_BASE)
+            self._VOCAB_URI_PATTERN = "{0}{{}}/{{}}".format(self._VOCAB_BASE)
+            self._RESOURCE_URI_PATTERN = "{0}{{}}/{{}}".format(self._RESOURCE_BASE)
         else:
-            self._VOCAB_URI_PATTERN = "{0}/{1}/{{}}/{{}}".format(self._VOCAB_BASE, self._family)
-            self._RESOURCE_URI_PATTERN = "{0}/{1}/{{}}/{{}}".format(self._RESOURCE_BASE, self._family)
+            self._VOCAB_URI_PATTERN = "{0}{1}/{{}}/{{}}".format(self._VOCAB_BASE, self._family)
+            self._RESOURCE_URI_PATTERN = "{0}{1}/{{}}/{{}}".format(self._RESOURCE_BASE, self._family)
 
         self.g = apply_default_namespaces(Graph())
 
@@ -154,7 +141,6 @@ class Converter(object):
         self._dataset_uri = self.resource('dataset', dataset_name)
 
     def process(self, count, rows, chunksize):
-
         obs_count = count * chunksize
         for row in rows:
             # rows may be filled with None values (because of the izip_longest function)
@@ -195,12 +181,10 @@ class Converter(object):
             # if stop is not None and obs_count == stop:
             #     logger.info("Stopping at {}".format(obs_count))
             #     break
-        
-        
 
         files = [f for f in listdir("update-queries/") if os.path.isfile(os.path.join("update-queries/", f))]
-        for f in files: 
-            if self._family in f and f.endswith("rq"): 
+        for f in files:
+            if self._family in f and f.endswith("rq"):
                 query = file("update-queries/" + f).read()
                 self.g.update(query)
 
