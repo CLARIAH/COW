@@ -35,6 +35,8 @@ def init():
     for prefix, namespace in namespaces.items():
         globals()[prefix.upper()] = namespace
 
+# Make sure the namespaces are initialized when the module is imported
+init()
 
 def git_hash(data):
     """
@@ -57,8 +59,8 @@ def apply_default_namespaces(graph):
 
     return graph
 
-# Make sure the namespaces are initialized when the module is imported
-init()
+def get_namespaces():
+    return namespaces
 
 class Nanopublication(Dataset):
     """
