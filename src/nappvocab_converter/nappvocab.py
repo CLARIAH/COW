@@ -3,18 +3,18 @@ from bs4 import BeautifulSoup
 from rdflib import Namespace, Graph, Literal, XSD, RDF
 import re, json
 import argparse
-import os 
+import os
 
 
 def RepresentsInt(s):
-    if s != None: 
-        try: 
+    if s != None:
+        try:
             int(s)
             return True
         except ValueError:
             return False
-        
-        
+
+
 def makesoup(url):
     html = get(url).text
     soup = BeautifulSoup(html, 'html5lib')
@@ -39,7 +39,7 @@ def getcodes(soup):
         for line in str(script).splitlines():
             if re.search('categories:', line):
                 codes.append(line)
-        
+
 
     return codes
 
@@ -62,16 +62,15 @@ def makegraph(codes, vrb_lnk, description):
     indentlist = []
     codelist = []
 
-    for i in range(len(codes)):
-        code = codes[i]
+    for code in codes:
         cd = code['code']
         lbl = code['label']
-        
+
         if cd is None:
             cd = re.sub('\s|:', '_', lbl)
             cd = re.sub('/', '_or_', cd)
             cd = re.sub('[(),.''""]', '', cd)
-            
+
         codelist.append(cd)
         indentlist.append(code['indent'])
 
@@ -79,21 +78,20 @@ def makegraph(codes, vrb_lnk, description):
         g.add((NAPP[cd], SKOS['prefLabel'], Literal(lbl)))
         g.add((NAPP[cd], SKOS['inScheme'], NAPP[vrb_name]))
 
-
         if RepresentsInt(lbl):
             g.add((NAPP[cd], RDF.value, Literal(lbl, datatype=XSD.int)))
-            
-        elif RepresentsInt(cd): 
-            g.add((NAPP[cd], RDF.value, Literal(cd, datatype=XSD.int)))   
-            
-                  
+
+        elif RepresentsInt(cd):
+            g.add((NAPP[cd], RDF.value, Literal(cd, datatype=XSD.int)))
+
+
         if ((len(set(indentlist)) > 1) and (indentlist[i] > 0)):
             parentloc = indentlist[::-1].index(indentlist[i] - 1)
             parent = codelist[::-1][parentloc]
 
             g.add((NAPP[cd], SKOS['broader'], NAPP[parent]))
             g.add((NAPP[parent], SKOS['narrower'], NAPP[cd]))
-               
+
     return g
 
 baseurl = 'https://www.nappdata.org/'
@@ -117,8 +115,8 @@ if not path.endswith('/'):
 
 if not os.path.exists(path):
         os.makedirs(path)
-        
-    
+
+
 for group in groups:
     soup = makesoup(baseurl + group)
     vrbs = getlinks(soup, 'variables/[A-Z]')
