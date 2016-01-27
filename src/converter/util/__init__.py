@@ -2,13 +2,15 @@ from rdflib import Dataset, Namespace, RDF, RDFS, OWL, XSD, Literal, URIRef
 import os
 import yaml
 import datetime
+import string 
+
 from hashlib import sha1
 
 
 """
 Initialize a set of default namespaces from a configuration file (namespaces.yaml)
 """
-global namespaces
+# global namespaces
 namespaces = {}
 YAML_NAMESPACE_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'namespaces.yaml')
 
@@ -19,18 +21,13 @@ def init():
     """
     # Read the file into a dictionary
     with open(YAML_NAMESPACE_FILE, 'r') as nsfile:
+        global namespaces 
         namespaces = yaml.load(nsfile)
 
     # Replace each value with a Namespace object for that value
     for prefix, uri in namespaces.items():
         if isinstance(prefix, str) and isinstance(uri, str):
             namespaces[prefix] = Namespace(uri)
-
-    # Add a number of standard namespaces (if not already present in namespaces.yaml)
-    namespaces['owl'] = OWL
-    namespaces['rdf'] = RDF
-    namespaces['rdfs'] = RDFS
-    namespaces['xsd'] = XSD
 
     # Add all namespace prefixes to the globals dictionary (for exporting)
     for prefix, namespace in namespaces.items():
@@ -39,6 +36,28 @@ def init():
 # Make sure the namespaces are initialized when the module is imported
 init()
 
+
+def reindent(s, numSpaces):
+    s = s.split('\n')
+    s = [(numSpaces * ' ') + string.lstrip(line) for line in s]
+    s = "\n".join(s)
+    return s
+
+
+def serializeTrig(rdf_dataset):
+    turtles = []
+    for c in rdf_dataset.contexts():
+        if c.identifier != URIRef('urn:x-rdflib:default'):
+            turtle = "<{id}> {{\n".format(id=c.identifier)
+            turtle += reindent(c.serialize(format='turtle'), 4)
+            turtle += "}\n\n"
+        else :
+            turtle = c.serialize(format='turtle')
+            turtle += "\n\n"
+
+        turtles.append(turtle)
+
+    return "\n".join(turtles)
 
 
 def git_hash(data):
@@ -78,13 +97,16 @@ class Nanopublication(Dataset):
     """
 
     def __init__(self, file_name, author_email):
+        
+        
         """
         Initialize the graphs needed for the nanopublication
         """
         super(Dataset, self).__init__()
 
+        
         # Assign default namespace prefixes
-        for prefix, namespace in namespaces:
+        for prefix, namespace in namespaces.items():
             self.bind(prefix, namespace)
 
         # Get the current date and time (UTC)
