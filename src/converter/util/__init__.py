@@ -38,6 +38,8 @@ def init():
 # Make sure the namespaces are initialized when the module is imported
 init()
 
+
+
 def git_hash(data):
     """
     Generates a Git-compatible hash for identifying (the current version of) the data
@@ -59,14 +61,19 @@ def apply_default_namespaces(graph):
 
     return graph
 
+
 def get_namespaces():
     return namespaces
+
 
 class Nanopublication(Dataset):
     """
     A subclass of the rdflib Dataset class that comes pre-initialized with
     required Nanopublication graphs: np, pg, ag, pig, for nanopublication, provenance,
     assertion and publication info, respectively.
+
+    NOTE: Will only work if the required namespaces are specified in namespaces.yaml and the init()
+          function has been called
     """
 
     def __init__(self, file_name, author_email):
@@ -83,7 +90,9 @@ class Nanopublication(Dataset):
         timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M")
 
         # Obtain a hash of the source file used for the conversion.
+        # TODO: Get this directly from GitLab
         source_hash = git_hash(file(file_name).read())
+
         # Shorten the source hash to 8 digits (similar to Github)
         short_hash = source_hash[:8]
 
@@ -134,7 +143,7 @@ class Nanopublication(Dataset):
         self.pg.add((assertion_graph_uri, PROV['wasDerivedFrom'], dataset_version_uri))
         self.pg.add((dataset_uri, PROV['wasDerivedFrom'], dataset_version_uri))
         self.pg.add((assertion_graph_uri, PROV['generatedAtTime'],
-                    Literal(timestamp, datatype=XSD.datetime)))
+                     Literal(timestamp, datatype=XSD.datetime)))
         self.pg.add((assertion_graph_uri, PROV['wasAttributedTo'], author_uri))
 
         # ----
@@ -147,6 +156,6 @@ class Nanopublication(Dataset):
         qber_uri = URIRef('https://github.com/CLARIAH/qber.git')
 
         self.pig.add((nanopublication_uri, PROV['wasGeneratedBy'], qber_uri))
-        pubinfo_graph.add((nanopublication_uri, PROV['generatedAtTime'],
-                          Literal(timestamp, datatype=XSD.datetime)))
-        pubinfo_graph.add((nanopublication_uri, PROV['wasAttributedTo'], author_uri))
+        self.pig.add((nanopublication_uri, PROV['generatedAtTime'],
+                      Literal(timestamp, datatype=XSD.datetime)))
+        self.pig.add((nanopublication_uri, PROV['wasAttributedTo'], author_uri))
