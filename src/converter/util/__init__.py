@@ -3,9 +3,16 @@ import os
 import yaml
 import datetime
 import string 
+import logging
 
 from hashlib import sha1
 
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+logger.addHandler(ch)
 
 """
 Initialize a set of default namespaces from a configuration file (namespaces.yaml)
