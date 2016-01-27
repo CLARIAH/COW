@@ -1,6 +1,6 @@
 # Default namespaces for Vocabulary/Schema and Resource/Data items
-sdv: http://data.socialhistory.org/ns/resource/
-sdr: http://data.socialhistory.org/ns/vocab/
+sdr: http://data.socialhistory.org/ns/resource/
+sdv: http://data.socialhistory.org/ns/vocab/
 sdp: http://data.socialhistory.org/ns/resource/person/
 # Default W3C namespaces
 ldp: http://www.w3.org/ns/ldp#
