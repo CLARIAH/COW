@@ -14,7 +14,7 @@ from itertools import izip_longest
 
 from rdflib import Graph, URIRef, Literal
 
-from util import Nanopublication, Profile, apply_default_namespaces, QB, RDF, XSD, SDV, SDR, PROV
+from util import Nanopublication, Profile, DatastructureDefinition, apply_default_namespaces, QB, RDF, XSD, SDV, SDR, PROV
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -126,9 +126,17 @@ class Converter(object):
 
         self.publication = Nanopublication(self.source)
 
-        self.publication.add_graph(Profile(author_profile))
+        # We add all triples from a Profile graph to the default graph of the nanopublication
+        self.publication.ingest(Profile(author_profile))
+        # We add all triples from a DatastructureDefinition graph to the assertion graph of the nanopublication
+        self.publication.ingest(DatastructureDefinition(self.dataset_uri, self.dataset_name, self.variables), self.publication.ag.identifier)
 
+        # We link the dataset URI in the Provenance graph to the version of the dataset that was used in the conversion.
         self.publication.pg.add((self.dataset_uri, PROV['wasDerivedFrom'], self.publication.dataset_version_uri))
+
+
+
+
 
 
 

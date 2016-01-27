@@ -4,6 +4,7 @@ import yaml
 import datetime
 import string
 import logging
+import iribaker
 
 from hashlib import sha1
 
@@ -91,6 +92,149 @@ def apply_default_namespaces(graph):
 
 def get_namespaces():
     return namespaces
+
+
+def safe_url(NS, local):
+    """Generates a URIRef from the namespace + local part that is safe for
+    use in RDF graphs
+
+    Arguments:
+    NS      -- a @Namespace object
+    local   -- the local name of the resource
+    """
+    return URIRef(iribaker.to_iri(NS[local]))
+
+
+def get_base_uri(dataset):
+    return Namespace('{}{}/'.format(namespaces['sdr'], dataset))
+
+
+def get_value_uri(dataset, variable, value):
+    """Generates a variable value IRI for a given combination of dataset, variable and value"""
+    BASE = get_base_uri(dataset)
+
+    return iribaker.to_iri(BASE['code/' + variable + '/' + value])
+
+
+def get_variable_uri(dataset, variable):
+    """Generates a variable IRI for a given combination of dataset and variable"""
+    BASE = get_base_uri(dataset)
+
+    return iribaker.to_iri(BASE[variable])
+
+
+class DatastructureDefinition(Graph):
+    """
+    An RDFLib Graph that contains a datastructure definition, as specified by a QBer JSON dataset structure
+    """
+
+    def __init__(self, dataset_uri, dataset_name, variables):
+        # Use the dataset_uri as BASE namespace
+        BASE = Namespace("{}/".format(dataset_uri))
+
+        # The URI of the DatastructureDefinition
+        structure_uri = BASE['structure']
+
+        self.add((dataset_uri, RDF.type, QB['DataSet']))
+        self.add((dataset_uri, RDFS.label, Literal(dataset_name)))
+        self.add((structure_uri, RDF.type, QB['DataStructureDefinition']))
+
+        self.add((dataset_uri, QB['structure'], structure_uri))
+
+        for variable_id, variable in variables.items():
+            variable_uri = URIRef(variable['original']['uri'])
+            variable_label = Literal(variable['original']['label'])
+            variable_type = URIRef(variable['type'])
+
+            codelist_uri = URIRef(variable['codelist']['original']['uri'])
+            codelist_label = Literal(variable['codelist']['original']['label'])
+
+            # The variable as component of the definition
+            component_uri = safe_url(BASE, 'component/' + variable['original']['label'])
+
+            # Add link between the definition and the component
+            self.add((structure_uri, QB['component'], component_uri))
+
+            # Add label to variable
+            # TODO: We may need to do something with a changed label for the variable
+            self.add((variable_uri, RDFS.label, variable_label))
+
+            if 'description' in variable and variable['description'] != "":
+                self.add((variable_uri, RDFS.comment, Literal(variable['description'])))
+
+            # If the variable URI is not the same as the original,
+            # it is a specialization of a prior variable property.
+            if variable['uri'] != str(variable_uri):
+                self.add((variable_uri,
+                          RDFS['subPropertyOf'],
+                          URIRef(variable['uri'])))
+
+            if variable_type == QB['DimensionProperty']:
+                self.add((variable_uri, RDF.type, variable_type))
+                self.add((component_uri, QB['dimension'], variable_uri))
+
+                # Coded variables are also of type coded property (a subproperty of dimension property)
+                if variable['category'] == 'coded':
+                    self.add((variable_uri, RDF.type, QB['CodedProperty']))
+
+            elif variable_type == QB['MeasureProperty']:
+                # The category 'other'
+                self.add((variable_uri, RDF.type, variable_type))
+                self.add((component_uri, QB['measure'], variable_uri))
+            elif variable_type == QB['AttributeProperty']:
+                # Actually never produced by QBer at this stage
+                self.add((variable_uri, RDF.type, variable_type))
+                self.add((component_uri, QB['attribute'], variable_uri))
+
+            # If this variable is of category 'coded', we add codelist and URIs for
+            # each variable (including mappings between value uris and etc....)
+            if variable['category'] == 'coded':
+                self.add((codelist_uri, RDF.type, SKOS['Collection']))
+                self.add((codelist_uri, RDFS.label, Literal(codelist_label)))
+
+                # The variable should point to the codelist
+                self.add((variable_uri, QB['codeList'], codelist_uri))
+
+                # The variable is mapped onto an external code list.
+                # If the codelist uri is not the same as the original one, we
+                # have a derived codelist.
+                if variable['codelist']['uri'] != str(codelist_uri):
+                    self.add((codelist_uri,
+                              PROV['wasDerivedFrom'],
+                              URIRef(variable['codelist']['uri'])))
+
+                # Generate a SKOS concept for each of the values and map it to the
+                # assigned codelist
+                for value in variable['values']:
+                    value_uri = URIRef(value['original']['uri'])
+                    value_label = Literal(value['original']['label'])
+
+                    self.add((value_uri, RDF.type, SKOS['Concept']))
+                    self.add((value_uri, SKOS['prefLabel'], Literal(value_label)))
+                    self.add((codelist_uri, SKOS['member'], value_uri))
+
+                    # The value has been changed, and therefore there is a mapping
+                    if value['original']['uri'] != value['uri']:
+                        self.add((value_uri, SKOS['exactMatch'], URIRef(value['uri'])))
+                        self.add((value_uri, RDFS.label, Literal(value['label'])))
+
+            elif variable['category'] == 'identifier':
+                # Generate a SKOS concept for each of the values
+                for value in variable['values']:
+                    value_uri = URIRef(value['original']['uri'])
+                    value_label = Literal(value['original']['label'])
+
+                    self.add((value_uri, RDF.type, SKOS['Concept']))
+                    self.add((value_uri, SKOS['prefLabel'], value_label))
+
+                    # The value has been changed, and therefore there is a mapping
+                    if value['original']['uri'] != value['uri']:
+                        self.add((value_uri, SKOS['exactMatch'], URIRef(value['uri'])))
+                        self.add((value_uri, RDFS.label, Literal(value['label'])))
+
+            elif variable['category'] == 'other':
+                # Generate a literal for each of the values when converting the dataset (but not here)
+                pass
 
 
 class Profile(Graph):
