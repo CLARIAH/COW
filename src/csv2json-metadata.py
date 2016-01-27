@@ -1,4 +1,4 @@
-from converter import build_schema
+from converter.csvw import build_schema
 import argparse
 
 parser = argparse.ArgumentParser(description="Convert CSV files to JSON Metadata files (according to W3C CSV on the Web)")
