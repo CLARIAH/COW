@@ -14,14 +14,13 @@ from itertools import izip_longest
 
 from rdflib import Graph, URIRef, Literal
 
-from util import apply_default_namespaces, QB, RDF, XSD, SDV, SDR
+from util import Nanopublication, Profile, apply_default_namespaces, QB, RDF, XSD, SDV, SDR, PROV
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
 logger.addHandler(ch)
-
 
 
 def grouper(n, iterable, padvalue=None):
@@ -60,7 +59,7 @@ def simple_convert(infile, outfile, delimiter, quotechar, dataset_name, config):
 
             headers = r.next()
 
-            c = Converter(dataset_name, headers, config)
+            c = BurstConverter(dataset_name, headers, config)
             c.g.add((c._dataset_uri, RDF.type, QB['DataSet']))
             outfile_file.write(c.g.serialize(format='nt'))
 
@@ -70,11 +69,11 @@ def simple_convert(infile, outfile, delimiter, quotechar, dataset_name, config):
 
 
 def parallel_convert(infile, outfile, delimiter, quotechar, dataset_name, processes, chunksize, config):
-    pool = mp.Pool(processes=processes)
 
     with open(outfile, 'w') as outfile_file:
-
         with open(infile, 'r') as infile_file:
+            pool = mp.Pool(processes=processes)
+
             r = csv.reader(infile_file,
                            delimiter=delimiter,
                            quotechar=quotechar,
@@ -82,7 +81,7 @@ def parallel_convert(infile, outfile, delimiter, quotechar, dataset_name, proces
 
             headers = r.next()
 
-            c = Converter(dataset_name, headers, config)
+            c = BurstConverter(dataset_name, headers, config)
             c.g.add((c._dataset_uri, RDF.type, QB['DataSet']))
             outfile_file.write(c.g.serialize(format='nt'))
 
@@ -96,13 +95,13 @@ def parallel_convert(infile, outfile, delimiter, quotechar, dataset_name, proces
                                  enumerate(grouper(chunksize, r))):
                 outfile_file.write(out)
 
-        pool.close()
-        pool.join()
+            pool.close()
+            pool.join()
 
 
 def convert_rows(enumerated_rows, dataset_name, headers, chunksize, config):
     count, rows = enumerated_rows
-    c = Converter(dataset_name, headers, config)
+    c = BurstConverter(dataset_name, headers, config)
     print mp.current_process().name, count, len(rows)
     result = c.process(count, rows, chunksize)
     print mp.current_process().name, 'done'
@@ -110,6 +109,32 @@ def convert_rows(enumerated_rows, dataset_name, headers, chunksize, config):
 
 
 class Converter(object):
+
+    def __init__(self, dataset, author_profile, target='output.nq'):
+        """
+        Takes a dataset_description (currently in QBer format) and prepares:
+        * A dictionary for the BurstConverter (either in one go, or in parallel)
+        * A nanopublication structure for publishing the converted data
+        """
+
+        self.source = dataset['file']
+        self.target = target
+
+        self.dataset_name = dataset['name']
+        self.dataset_uri = dataset['uri']
+        self.variables = dataset['variables']
+
+        self.publication = Nanopublication(self.source)
+
+        self.publication.add_graph(Profile(author_profile))
+
+        self.publication.pg.add((self.dataset_uri, PROV['wasDerivedFrom'], self.publication.dataset_version_uri))
+
+
+
+
+
+class BurstConverter(object):
 
     _VOCAB_BASE = str(SDV)
     _RESOURCE_BASE = str(SDR)
