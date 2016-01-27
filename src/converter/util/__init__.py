@@ -1,8 +1,8 @@
-from rdflib import Dataset, Namespace, RDF, RDFS, OWL, XSD, Literal, URIRef
+from rdflib import Dataset, Graph, Namespace, RDF, RDFS, OWL, XSD, Literal, URIRef
 import os
 import yaml
 import datetime
-import string 
+import string
 import logging
 
 from hashlib import sha1
@@ -28,7 +28,7 @@ def init():
     """
     # Read the file into a dictionary
     with open(YAML_NAMESPACE_FILE, 'r') as nsfile:
-        global namespaces 
+        global namespaces
         namespaces = yaml.load(nsfile)
 
     # Replace each value with a Namespace object for that value
@@ -58,7 +58,7 @@ def serializeTrig(rdf_dataset):
             turtle = "<{id}> {{\n".format(id=c.identifier)
             turtle += reindent(c.serialize(format='turtle'), 4)
             turtle += "}\n\n"
-        else :
+        else:
             turtle = c.serialize(format='turtle')
             turtle += "\n\n"
 
@@ -93,6 +93,28 @@ def get_namespaces():
     return namespaces
 
 
+class Profile(Graph):
+    """
+    An RDFLib Graph that contains author information based on a Google Profile
+    """
+
+    def __init__(self, profile):
+        # A URI that represents the author
+        author_uri = SDP[profile['email']]
+
+        super(Graph, self).__init__(identifier=author_uri)
+
+        self.add((author_uri, RDF.type, FOAF['Person']))
+        self.add((author_uri, FOAF['name'], Literal(profile['name'])))
+        self.add((author_uri, FOAF['email'], Literal(profile['email'])))
+        self.add((author_uri, SDV['googleId'], Literal(profile['id'])))
+        try:
+            self.add((author_uri, FOAF['depiction'], URIRef(profile['image'])))
+        except KeyError:
+            logger.warning('No author depiction provided in author profile')
+
+
+
 class Nanopublication(Dataset):
     """
     A subclass of the rdflib Dataset class that comes pre-initialized with
@@ -103,15 +125,12 @@ class Nanopublication(Dataset):
           function has been called
     """
 
-    def __init__(self, file_name, author_email):
-        
-        
+    def __init__(self, file_name):
         """
         Initialize the graphs needed for the nanopublication
         """
         super(Dataset, self).__init__()
 
-        
         # Assign default namespace prefixes
         for prefix, namespace in namespaces.items():
             self.bind(prefix, namespace)
@@ -128,11 +147,6 @@ class Nanopublication(Dataset):
 
         # Determine a 'hash_part' for all timestamped URIs generated through this procedure
         hash_part = short_hash + '/' + timestamp
-
-        # A URI that represents the author
-        author_uri = SDP[author_email]
-        self.add((author_uri, RDF.type, FOAF['Person']))
-        self.add((author_uri, FOAF['email'], Literal(author_email)))
 
         # A URI that represents the version of the file being converted
         self.dataset_version_uri = SDR[source_hash]
