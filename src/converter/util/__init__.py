@@ -194,12 +194,25 @@ class Nanopublication(Dataset):
         # The publication info graph
         # ----
 
-        # The URI of the latest version of QBer
-        # TODO: should point to the actual latest commit of this QBer source file.
+        # The URI of the latest version of this converter
+        # TODO: should point to the actual latest commit of this converter.
         # TODO: consider linking to this as the plan of some activity, rather than an activity itself.
-        qber_uri = URIRef('https://github.com/CLARIAH/qber.git')
+        clariah_uri = URIRef('https://github.com/CLARIAH/wp4-converters')
 
-        self.pig.add((nanopublication_uri, PROV['wasGeneratedBy'], qber_uri))
+        self.pig.add((nanopublication_uri, PROV['wasGeneratedBy'], clariah_uri))
         self.pig.add((nanopublication_uri, PROV['generatedAtTime'],
                       Literal(timestamp, datatype=XSD.datetime)))
         self.pig.add((nanopublication_uri, PROV['wasAttributedTo'], author_uri))
+
+    def ingest(self, graph, target_graph=None):
+        """
+        Adds all triples in the RDFLib graph to this Dataset
+        If target_graph is None, then the triples are added to the default graph,
+        otherwise they are added to the indicated graph
+        """
+        if target_graph is None:
+            for s, p, o in graph:
+                self.add((s, p, o))
+        else:
+            for s, p, o in graph:
+                self.add((s, p, o), target_graph)
