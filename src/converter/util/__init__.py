@@ -8,6 +8,7 @@ from hashlib import sha1
 """
 Initialize a set of default namespaces from a configuration file (namespaces.yaml)
 """
+global namespaces
 namespaces = {}
 YAML_NAMESPACE_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'namespaces.yaml')
 
@@ -80,7 +81,7 @@ class Nanopublication(Dataset):
         """
         Initialize the graphs needed for the nanopublication
         """
-        super.__init__()
+        super(Dataset, self).__init__()
 
         # Assign default namespace prefixes
         for prefix, namespace in namespaces:
@@ -105,9 +106,9 @@ class Nanopublication(Dataset):
         self.add((author_uri, FOAF['email'], Literal(author_email)))
 
         # A URI that represents the version of the file being converted
-        dataset_version_uri = SDR[source_hash]
-        self.add((dataset_version_uri, SDV['path'], Literal(file_name, datatype=XSD.string)))
-        self.add((dataset_version_uri, SDV['sha1_hash'], Literal(source_hash, datatype=XSD.string)))
+        self.dataset_version_uri = SDR[source_hash]
+        self.add((self.dataset_version_uri, SDV['path'], Literal(file_name, datatype=XSD.string)))
+        self.add((self.dataset_version_uri, SDV['sha1_hash'], Literal(source_hash, datatype=XSD.string)))
 
         # ----
         # The nanopublication graph
@@ -129,8 +130,8 @@ class Nanopublication(Dataset):
         self.add((nanopublication_uri, NP['hasAssertion'], assertion_graph_uri))
         self.add((assertion_graph_uri, RDF.type, NP['Assertion']))
         # The link to the provenance graph
-        self.add((nanopublication_uri, NP['hasProvenance'], self.pg_uri))
-        self.add((self.pg_uri, RDF.type, NP['Provenance']))
+        self.add((nanopublication_uri, NP['hasProvenance'], provenance_graph_uri))
+        self.add((provenance_graph_uri, RDF.type, NP['Provenance']))
         # The link to the publication info graph
         self.add((nanopublication_uri, NP['hasPublicationInfo'], pubinfo_graph_uri))
         self.add((pubinfo_graph_uri, RDF.type, NP['PublicationInfo']))
@@ -140,8 +141,8 @@ class Nanopublication(Dataset):
         # ----
 
         # Provenance information for the assertion graph (the data structure definition itself)
-        self.pg.add((assertion_graph_uri, PROV['wasDerivedFrom'], dataset_version_uri))
-        self.pg.add((dataset_uri, PROV['wasDerivedFrom'], dataset_version_uri))
+        self.pg.add((assertion_graph_uri, PROV['wasDerivedFrom'], self.dataset_version_uri))
+        # self.pg.add((dataset_uri, PROV['wasDerivedFrom'], self.dataset_version_uri))
         self.pg.add((assertion_graph_uri, PROV['generatedAtTime'],
                      Literal(timestamp, datatype=XSD.datetime)))
         self.pg.add((assertion_graph_uri, PROV['wasAttributedTo'], author_uri))
