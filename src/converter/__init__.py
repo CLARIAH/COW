@@ -213,14 +213,14 @@ class Converter(object):
 
         # The result of each chunksize run will be written to the target file
         for out in pool.imap(burstConvert_partial,
-                             enumerate(grouper(self.chunksize, reader))):
+                             enumerate(grouper(self._chunksize, reader))):
             target_file.write(out)
 
         # Make sure to close and join the pool once finished.
         pool.close()
         pool.join()
 
-    def burstConvert(enumerated_rows, headers):
+    def _burstConvert(enumerated_rows, headers):
         count, rows = enumerated_rows
         c = BurstConverter(self.publication.ag.identifier, self._dataset, self._variables, headers)
 
