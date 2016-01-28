@@ -84,7 +84,7 @@ def apply_default_namespaces(graph):
     provided as argument and returns the graph.
     """
 
-    for prefix, namespace in namespaces:
+    for prefix, namespace in namespaces.items():
         graph.bind(prefix, namespace)
 
     return graph
@@ -129,6 +129,8 @@ class DatastructureDefinition(Graph):
     """
 
     def __init__(self, dataset_uri, dataset_name, variables):
+        super(DatastructureDefinition, self).__init__()
+
         # Use the dataset_uri as BASE namespace
         BASE = Namespace("{}/".format(dataset_uri))
 
@@ -244,16 +246,16 @@ class Profile(Graph):
 
     def __init__(self, profile):
         # A URI that represents the author
-        author_uri = SDP[profile['email']]
+        self.author_uri = SDP[profile['email']]
 
-        super(Graph, self).__init__(identifier=author_uri)
+        super(Profile, self).__init__(identifier=self.author_uri)
 
-        self.add((author_uri, RDF.type, FOAF['Person']))
-        self.add((author_uri, FOAF['name'], Literal(profile['name'])))
-        self.add((author_uri, FOAF['email'], Literal(profile['email'])))
-        self.add((author_uri, SDV['googleId'], Literal(profile['id'])))
+        self.add((self.author_uri, RDF.type, FOAF['Person']))
+        self.add((self.author_uri, FOAF['name'], Literal(profile['name'])))
+        self.add((self.author_uri, FOAF['email'], Literal(profile['email'])))
+        self.add((self.author_uri, SDV['googleId'], Literal(profile['id'])))
         try:
-            self.add((author_uri, FOAF['depiction'], URIRef(profile['image'])))
+            self.add((self.author_uri, FOAF['depiction'], URIRef(profile['image'])))
         except KeyError:
             logger.warning('No author depiction provided in author profile')
 
@@ -300,7 +302,7 @@ class Nanopublication(Dataset):
         # ----
         # The nanopublication graph
         # ----
-        nanopublication_uri = SDR['nanopublication/' + hash_part]
+        self.uri = SDR['nanopublication/' + hash_part]
 
         # The Nanopublication consists of three graphs
         assertion_graph_uri = SDR['assertion/' + hash_part]
@@ -312,15 +314,15 @@ class Nanopublication(Dataset):
         self.pig = self.graph(pubinfo_graph_uri)
 
         # The nanopublication
-        self.add((nanopublication_uri, RDF.type, NP['Nanopublication']))
+        self.add((self.uri , RDF.type, NP['Nanopublication']))
         # The link to the assertion
-        self.add((nanopublication_uri, NP['hasAssertion'], assertion_graph_uri))
+        self.add((self.uri , NP['hasAssertion'], assertion_graph_uri))
         self.add((assertion_graph_uri, RDF.type, NP['Assertion']))
         # The link to the provenance graph
-        self.add((nanopublication_uri, NP['hasProvenance'], provenance_graph_uri))
+        self.add((self.uri , NP['hasProvenance'], provenance_graph_uri))
         self.add((provenance_graph_uri, RDF.type, NP['Provenance']))
         # The link to the publication info graph
-        self.add((nanopublication_uri, NP['hasPublicationInfo'], pubinfo_graph_uri))
+        self.add((self.uri , NP['hasPublicationInfo'], pubinfo_graph_uri))
         self.add((pubinfo_graph_uri, RDF.type, NP['PublicationInfo']))
 
         # ----
@@ -332,7 +334,6 @@ class Nanopublication(Dataset):
         # self.pg.add((dataset_uri, PROV['wasDerivedFrom'], self.dataset_version_uri))
         self.pg.add((assertion_graph_uri, PROV['generatedAtTime'],
                      Literal(timestamp, datatype=XSD.datetime)))
-        self.pg.add((assertion_graph_uri, PROV['wasAttributedTo'], author_uri))
 
         # ----
         # The publication info graph
@@ -343,10 +344,10 @@ class Nanopublication(Dataset):
         # TODO: consider linking to this as the plan of some activity, rather than an activity itself.
         clariah_uri = URIRef('https://github.com/CLARIAH/wp4-converters')
 
-        self.pig.add((nanopublication_uri, PROV['wasGeneratedBy'], clariah_uri))
-        self.pig.add((nanopublication_uri, PROV['generatedAtTime'],
+        self.pig.add((self.uri, PROV['wasGeneratedBy'], clariah_uri))
+        self.pig.add((self.uri, PROV['generatedAtTime'],
                       Literal(timestamp, datatype=XSD.datetime)))
-        self.pig.add((nanopublication_uri, PROV['wasAttributedTo'], author_uri))
+
 
     def ingest(self, graph, target_graph=None):
         """
@@ -359,4 +360,4 @@ class Nanopublication(Dataset):
                 self.add((s, p, o))
         else:
             for s, p, o in graph:
-                self.add((s, p, o), target_graph)
+                self.add((s, p, o, target_graph))
