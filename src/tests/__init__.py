@@ -39,6 +39,24 @@ class TestConversion(unittest.TestCase):
 
         c.convert()
 
+    def test_parallel_conversion(self):
+        """
+        Tests parallel conversion (2 threads) capability of converter.Converter class
+        """
+        with open('tests/qber-output-example.json') as dataset_file:
+            dataset = json.load(dataset_file)
+
+        author_profile = {
+            'email': 'john@doe.com',
+            'name': 'John Doe',
+            'id': '2938472912'
+        }
+
+        c = Converter(dataset['dataset'], author_profile)
+        c.setProcesses(2)
+
+        c.convert()
+
 
 if __name__ == '__main__':
     unittest.main()
