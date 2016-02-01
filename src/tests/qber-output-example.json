@@ -28676,6 +28676,7 @@
                 ]
             },
             "huisnummer": {
+		"datatype": "http://www.w3.org/2001/XMLSchema#int",
                 "category": "coded",
                 "codelist": {
                     "label": "Codelist generated from the values for 'huisnummer'",
@@ -33758,7 +33759,8 @@
                 ]
             },
             "leeftijd": {
-                "category": "coded",
+		"datatype": "http://www.w3.org/2001/XMLSchema#int",
+                "category": "other",
                 "codelist": {
                     "label": "Codelist generated from the values for 'leeftijd'",
                     "original": {
