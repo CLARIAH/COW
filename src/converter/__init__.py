@@ -327,8 +327,23 @@ class BurstConverter(object):
 
                     # The original_variable_uri is the URI specified in the variable definition
                     original_variable_uri = URIRef(self._variables[variable]['original']['uri'])
-                    try :
-                        if category == "other":
+
+                    try:
+                        if col == "NA" or col == "N/A":
+                            # Not a value... perhaps map this onto a default 'NA' uri?
+
+                            # We take the default NA uri
+                            value = SDR['NA']
+                            # Add it to the graph
+                            self.g.add((observation_uri, variable_uri, value))
+
+                            # TODO: Add a flag to choose to preserve the original value or not.
+                            # We take the original value from the CSV itself (not from the variable definition, as it often does not exist)
+                            original_value = col
+                            # Add it to the graph
+                            self.g.add((observation_uri, original_variable_uri, Literal(original_value)))
+
+                        elif category == "other":
                             # The variable is a literal
                             # TODO: Distinguish between different datatypes
 
