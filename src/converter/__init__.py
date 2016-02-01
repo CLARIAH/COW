@@ -364,7 +364,7 @@ class BurstConverter(object):
                                 datatype = self._variables[variable]['datatype']
                                 # If a datatype is specified, we use it to create the literal value
                                 self.g.add((observation_uri, variable_uri, Literal(value, datatype=URIRef(datatype))))
-                            else :
+                            else:
                                 # Simply add the value to the graph without datatype
                                 self.g.add((observation_uri, variable_uri, Literal(value)))
 
