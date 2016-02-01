@@ -155,6 +155,7 @@ class Converter(object):
         self._target = target
 
     def addProfile(self, author_profile):
+        print "Adding profile"
         # We add all triples from a Profile graph to the default graph of the nanopublication
         profile_graph = Profile(author_profile)
         self.publication.ingest(profile_graph)
@@ -163,6 +164,7 @@ class Converter(object):
         self.publication.pig.add((self.publication.uri, PROV['wasAttributedTo'], profile_graph.author_uri))
 
     def addDatastructureDefinition(self):
+        print "Adding datastructure definition"
         # We add all triples from a DatastructureDefinition graph to the assertion graph of the nanopublication
         self.publication.ingest(DatastructureDefinition(self.dataset_uri, self.dataset_name, self._variables), self.publication.ag.identifier)
 
@@ -209,7 +211,12 @@ class Converter(object):
 
         # The _burstConvert function is partially instantiated, and will be successively called with
         # chunksize rows from the CSV file
-        burstConvert_partial = partial(self._burstConvert, headers=headers)
+        burstConvert_partial = partial(_burstConvert,
+                                       graph_identifier=self.publication.ag.identifier,
+                                       dataset=self._dataset,
+                                       variables=self._variables,
+                                       headers=headers,
+                                       chunksize=self._chunksize)
 
         # The result of each chunksize run will be written to the target file
         for out in pool.imap(burstConvert_partial,
@@ -220,17 +227,19 @@ class Converter(object):
         pool.close()
         pool.join()
 
-    def _burstConvert(enumerated_rows, headers):
-        count, rows = enumerated_rows
-        c = BurstConverter(self.publication.ag.identifier, self._dataset, self._variables, headers)
 
-        print mp.current_process().name, count, len(rows)
+# This has to be a global method for the parallelization to work.
+def _burstConvert(enumerated_rows, graph_identifier, dataset, variables, headers, chunksize):
+    count, rows = enumerated_rows
+    c = BurstConverter(graph_identifier, dataset, variables, headers)
 
-        result = c.process(count, rows, chunksize)
+    print mp.current_process().name, count, len(rows)
 
-        print mp.current_process().name, 'done'
+    result = c.process(count, rows, chunksize)
 
-        return result
+    print mp.current_process().name, 'done'
+
+    return result
 
 
 
