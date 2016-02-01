@@ -125,10 +125,12 @@ class Converter(object):
         self.dataset_uri = URIRef(dataset['uri'])
 
         # For efficiency, convert the QBer-style value lists into dictionaries
+        # But only for variables that have values, of course (see e.g. the use of valueUrl).
         self._variables = {}
         for variable, variable_definition in dataset['variables'].items():
             self._variables[variable] = variable_definition
-            self._variables[variable]['values_dictionary'] = dict([(unicode(v['label']), v) for v in variable_definition['values']])
+            if 'values' in self._variables[variable]:
+                self._variables[variable]['values_dictionary'] = dict([(unicode(v['label']), v) for v in variable_definition['values']])
 
         # Initialize the nanopublication structure
         self.publication = Nanopublication(self._source)
@@ -377,17 +379,28 @@ class BurstConverter(object):
                         elif category == "coded" or category == "identifier":
                             # The variable is a URI
 
-                            # We take the 'uri' (i.e. the potentially mapped value) from the
-                            # corresponding value of the variable
+                            if 'valueUrl' in self._variables[variable]:
+                                # If a valueUrl (taken from CSVW) is specified, we generate a URI
+                                # for the value by applying the specified template to the column value
 
-                            value = self._variables[variable]['values_dictionary'][col]['uri']
+                                # The format args are key/value couples of header name and value
+                                format_args = dict(zip(self._headers, [c.decode('utf-8') for c in row]))
+                                value = to_iri(self._variables[variable]['valueUrl'].format(**format_args))
+                            else:
+                                # We take the 'uri' (i.e. the potentially mapped value) from the
+                                # corresponding value of the variable
+                                value = to_iri(self._variables[variable]['values_dictionary'][col]['uri'])
+
                             self.g.add((observation_uri, variable_uri, URIRef(value)))
 
-                            # TODO: Add a flag to choose to preserve the original value or not.
-                            # We take the original 'uri' from the corresponding value of the variable
-                            original_value = self._variables[variable]['values_dictionary'][col]['original']['uri']
-                            # Add it to the graph
-                            self.g.add((observation_uri, original_variable_uri, URIRef(original_value)))
+                            if 'values_dictionary' in self._variables[variable] and col in self._variables[variable]['values_dictionary']:
+                                # TODO: Add a flag to choose to preserve the original value or not.
+                                # We take the original 'uri' from the corresponding value of the variable
+                                original_value = to_iri(self._variables[variable]['values_dictionary'][col]['original']['uri'])
+                                # Add it to the graph
+                                self.g.add((observation_uri, original_variable_uri, URIRef(original_value)))
+                        else:
+                            print "Category {} unknown".format(category)
 
                     except KeyError as ke:
                         print "Value found for variable {} does not exist in dataset description".format(variable)
@@ -396,7 +409,8 @@ class BurstConverter(object):
                     # print "Empty variable name"
                     pass
                 else:
-                    print "Could not find '{}' in defined variables, ignoring".format(variable)
+                    # print "Could not find '{}' in defined variables, ignoring".format(variable)
+                    pass
 
                 index += 1
 

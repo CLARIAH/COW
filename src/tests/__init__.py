@@ -84,7 +84,7 @@ class TestConversion(unittest.TestCase):
             ASK {
                 GRAPH ?g {
                     <http://data.socialhistory.org/ns/resource/observation/utrecht_1829_clean_01/224> <http://data.socialhistory.org/resource/utrecht_1829_clean_01/variable/leeftijd> "55"^^<http://www.w3.org/2001/XMLSchema#integer> .
-                    <http://data.socialhistory.org/ns/resource/observation/utrecht_1829_clean_01/1272> <http://data.socialhistory.org/resource/utrecht_1829_clean_01/variable/huisnummer> "170"^^<http://www.w3.org/2001/XMLSchema#integer>  .
+                    <http://data.socialhistory.org/ns/resource/observation/utrecht_1829_clean_01/1272> <http://data.socialhistory.org/resource/utrecht_1829_clean_01/variable/huisnummer> "170"^^<http://www.w3.org/2001/XMLSchema#integer> .
                 }
             }
         """
@@ -94,9 +94,23 @@ class TestConversion(unittest.TestCase):
         for row in result:
             assert row is True
 
+    def test_valueUrl(self):
+        """
+        Tests simple conversion that takes a minimal example that specifies a valueUrl mapping
+        """
+        with open('tests/qber-output-no-values.json') as dataset_file:
+            dataset = json.load(dataset_file)
 
+        author_profile = {
+            'email': 'john@doe.com',
+            'name': 'John Doe',
+            'id': '2938472912'
+        }
 
+        c = Converter(dataset['dataset'], author_profile, target="output.nq")
+        c.setProcesses(1)
 
+        c.convert()
 
 if __name__ == '__main__':
     unittest.main()

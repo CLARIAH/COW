@@ -207,6 +207,10 @@ class DatastructureDefinition(Graph):
 
                 # Generate a SKOS concept for each of the values and map it to the
                 # assigned codelist
+                # But only if the 'values' are specified for this variable.
+                if 'values' not in variable:
+                    continue
+
                 for value in variable['values']:
                     value_uri = URIRef(value['original']['uri'])
                     value_label = Literal(value['original']['label'])
@@ -222,6 +226,10 @@ class DatastructureDefinition(Graph):
 
             elif variable['category'] == 'identifier':
                 # Generate a SKOS concept for each of the values
+                # But only if the variable has specified values
+                if 'values' not in variable:
+                    continue
+
                 for value in variable['values']:
                     value_uri = URIRef(value['original']['uri'])
                     value_label = Literal(value['original']['label'])
