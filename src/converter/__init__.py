@@ -128,7 +128,7 @@ class Converter(object):
         self._variables = {}
         for variable, variable_definition in dataset['variables'].items():
             self._variables[variable] = variable_definition
-            self._variables[variable]['values_dictionary'] = dict([(v['label'], v) for v in variable_definition['values']])
+            self._variables[variable]['values_dictionary'] = dict([(unicode(v['label']), v) for v in variable_definition['values']])
 
         # Initialize the nanopublication structure
         self.publication = Nanopublication(self._source)
@@ -306,6 +306,7 @@ class BurstConverter(object):
             index = 0
             for col in row:
                 variable = self._headers[index]
+                col = col.decode('utf-8')
 
                 if len(col) < 1:
                     index += 1
