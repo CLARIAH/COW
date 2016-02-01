@@ -22,7 +22,6 @@
                 },
                 "type": "http://purl.org/linked-data/cube#MeasureProperty",
                 "uri": "http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/variable/achternaam",
-                "valueUrl": "http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/value/achternaam/{}",
                 "values": [
                     {
                         "count": 9,
