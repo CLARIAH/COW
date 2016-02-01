@@ -28677,7 +28677,7 @@
             },
             "huisnummer": {
 		"datatype": "http://www.w3.org/2001/XMLSchema#int",
-                "category": "coded",
+                "category": "other",
                 "codelist": {
                     "label": "Codelist generated from the values for 'huisnummer'",
                     "original": {
