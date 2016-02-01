@@ -383,10 +383,11 @@ class BurstConverter(object):
                     except KeyError as ke:
                         print "Value found for variable {} does not exist in dataset description".format(variable)
                         print col
+                elif variable == '':
+                    # print "Empty variable name"
+                    pass
                 else:
-                    print "argh!"
-
-
+                    print "Could not find '{}' in defined variables, ignoring".format(variable)
 
                 index += 1
 
