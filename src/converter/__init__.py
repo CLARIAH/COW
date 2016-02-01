@@ -350,8 +350,14 @@ class BurstConverter(object):
                             # We take the 'label' (i.e. the potentially mapped value) from the
                             # corresponding value of the variable
                             value = self._variables[variable]['values_dictionary'][col]['label']
-                            # Add it to the graph
-                            self.g.add((observation_uri, variable_uri, Literal(value)))
+
+                            if 'datatype' in self._variables[variable]:
+                                datatype = self._variables[variable]['datatype']
+                                # If a datatype is specified, we use it to create the literal value
+                                self.g.add((observation_uri, variable_uri, Literal(value, datatype=URIRef(datatype))))
+                            else :
+                                # Simply add the value to the graph without datatype
+                                self.g.add((observation_uri, variable_uri, Literal(value)))
 
                             # TODO: Add a flag to choose to preserve the original value or not.
                             # We take the original 'label' from the corresponding value of the variable
