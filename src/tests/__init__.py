@@ -153,9 +153,9 @@ class TestConversion(unittest.TestCase):
         Tests the extraction of a QBer-style schema from a CSV file, and subsequent conversion in a single process
         """
 
-        build_schema('tests/englandwales1881_small.csv', 'tests/englandwales1881_small.json', dataset_name='englandwales1881')
+        build_schema('tests/englandwales1881_tiny.csv', 'tests/englandwales1881_tiny.json', dataset_name='englandwales1881')
 
-        with open('tests/englandwales1881_small.json') as dataset_file:
+        with open('tests/englandwales1881_tiny.json') as dataset_file:
             dataset = json.load(dataset_file)
 
         author_profile = {
