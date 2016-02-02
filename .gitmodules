@@ -1,3 +1,0 @@
-[submodule "src/csvw-parser"]
-	path = src/csvw-parser
-	url = https://github.com/sebneu/csvw-parser.git
