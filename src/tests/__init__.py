@@ -2,6 +2,7 @@ import unittest
 import json
 
 from converter import Converter
+from converter.qberify import build_schema
 from rdflib import Dataset
 
 
@@ -146,6 +147,29 @@ class TestConversion(unittest.TestCase):
         c.setProcesses(1)
 
         c.convert()
+
+    def test_extract_qber_schema(self):
+        """
+        Tests the extraction of a QBer-style schema from a CSV file, and subsequent conversion in a single process
+        """
+
+        build_schema('tests/englandwales1881_small.csv', 'tests/englandwales1881_small.json', dataset_name='englandwales1881')
+
+        with open('tests/englandwales1881_small.json') as dataset_file:
+            dataset = json.load(dataset_file)
+
+        author_profile = {
+            'email': 'john@doe.com',
+            'name': 'John Doe',
+            'id': '2938472912'
+        }
+
+        c = Converter(dataset['dataset'], author_profile, target="output.nq")
+        c.setProcesses(4)
+
+        c.convert()
+
+
 
 if __name__ == '__main__':
     unittest.main()
