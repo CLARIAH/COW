@@ -17,6 +17,11 @@ including datasets mapped through the [QBer](https://github.com/CLARIAH/QBer) to
 * `pip`
 * `virtualenv` (simply `pip install virtualenv`)
 
+#### Datasets required for tests (but not included)
+
+* Requires an excerpt from the 1881 England Wales dataset (NAPP) for the schema-extraction tests
+* Requires utrecht_1829_clean_01 for other conversion tests
+
 ### Installation
 
 Open up a terminal, and clone this repository to a directory of your choice:
