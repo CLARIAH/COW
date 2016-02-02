@@ -148,8 +148,6 @@ class DatastructureDefinition(Graph):
             variable_label = Literal(variable['original']['label'])
             variable_type = URIRef(variable['type'])
 
-            codelist_uri = URIRef(variable['codelist']['original']['uri'])
-            codelist_label = Literal(variable['codelist']['original']['label'])
 
             # The variable as component of the definition
             component_uri = safe_url(BASE, 'component/' + variable['original']['label'])
@@ -191,6 +189,9 @@ class DatastructureDefinition(Graph):
             # If this variable is of category 'coded', we add codelist and URIs for
             # each variable (including mappings between value uris and etc....)
             if variable['category'] == 'coded':
+                codelist_uri = URIRef(variable['codelist']['original']['uri'])
+                codelist_label = Literal(variable['codelist']['original']['label'])
+
                 self.add((codelist_uri, RDF.type, SKOS['Collection']))
                 self.add((codelist_uri, RDFS.label, Literal(codelist_label)))
 
