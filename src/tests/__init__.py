@@ -94,6 +94,41 @@ class TestConversion(unittest.TestCase):
         for row in result:
             assert row is True
 
+    def test_transformation_function(self):
+        """
+        Tests simple conversion that transforms the 'achternaam' variable values using the `transformation` attribute
+        """
+        with open('tests/qber-output-example.json') as dataset_file:
+            dataset = json.load(dataset_file)
+
+        author_profile = {
+            'email': 'john@doe.com',
+            'name': 'John Doe',
+            'id': '2938472912'
+        }
+
+        c = Converter(dataset['dataset'], author_profile, target="output.nq")
+        c.setProcesses(1)
+
+        c.convert()
+
+        dataset = Dataset()
+        with open("output.nq", "r") as graph_file:
+            dataset.load(graph_file, format='nquads')
+
+        q = """
+            ASK {
+                GRAPH ?g {
+                    <http://data.socialhistory.org/ns/resource/observation/utrecht_1829_clean_01/26> <http://data.socialhistory.org/resource/utrecht_1829_clean_01/variable/achternaam> "hofmanhofman" .
+                }
+            }
+        """
+
+        result = dataset.query(q)
+
+        for row in result:
+            assert row is True
+
     def test_valueUrl(self):
         """
         Tests simple conversion that takes a minimal example that specifies a valueUrl mapping
