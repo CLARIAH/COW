@@ -88,7 +88,7 @@ class Converter(object):
 
     def addProfile(self, author_profile):
         """Adds an author profile to the nanopublication"""
-        
+
         print "Adding profile"
         # We add all triples from a Profile graph to the default graph of the nanopublication
         profile_graph = Profile(author_profile)
@@ -273,6 +273,7 @@ class BurstConverter(object):
 
                     try:
                         if col == "NA" or col == "N/A":
+                            # TODO: Contentious... should these be ignored?
                             # Not a value... perhaps map this onto a default 'NA' uri?
 
                             # We take the default NA uri
