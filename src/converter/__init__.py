@@ -31,79 +31,6 @@ def grouper(n, iterable, padvalue=None):
     return izip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
 
 
-def convert(infile, outfile, delimiter=',', quotechar='\"', dataset_name=None, processes=4, chunksize=1000, config={}):
-    if dataset_name is None:
-        dataset_name = os.path.basename(infile).rstrip('.csv')
-
-    if processes > 1:
-        logger.info("Using " + str(processes) + " parallel processes")
-        parallel_convert(infile, outfile, delimiter, quotechar, dataset_name, processes, chunksize, config)
-    else:
-        logger.info("Using a single process")
-        simple_convert(infile, outfile, delimiter, quotechar, dataset_name, config)
-    logger.info("Done")
-
-    return
-
-
-def simple_convert(infile, outfile, delimiter, quotechar, dataset_name, config):
-    with open(outfile, 'w') as outfile_file:
-        with open(infile, 'r') as infile_file:
-            r = csv.reader(infile_file,
-                           delimiter=delimiter,
-                           quotechar=quotechar,
-                           strict=True)
-
-            headers = r.next()
-
-            c = BurstConverter(dataset_name, headers, config)
-            c.g.add((c._dataset_uri, RDF.type, QB['DataSet']))
-            outfile_file.write(c.g.serialize(format='nt'))
-
-            result = c.process(0, r, 1)
-
-            outfile_file.write(result)
-
-
-def parallel_convert(infile, outfile, delimiter, quotechar, dataset_name, processes, chunksize, config):
-    with open(outfile, 'w') as outfile_file:
-        with open(infile, 'r') as infile_file:
-            pool = mp.Pool(processes=processes)
-
-            r = csv.reader(infile_file,
-                           delimiter=delimiter,
-                           quotechar=quotechar,
-                           strict=True)
-
-            headers = r.next()
-
-            c = BurstConverter(dataset_name, headers, config)
-            c.g.add((c._dataset_uri, RDF.type, QB['DataSet']))
-            outfile_file.write(c.g.serialize(format='nt'))
-
-            convert_rows_partial = partial(convert_rows,
-                                           dataset_name=dataset_name,
-                                           headers=headers,
-                                           chunksize=chunksize,
-                                           config=config)
-
-            for out in pool.imap(convert_rows_partial,
-                                 enumerate(grouper(chunksize, r))):
-                outfile_file.write(out)
-
-            pool.close()
-            pool.join()
-
-
-def convert_rows(enumerated_rows, dataset_name, headers, chunksize, config):
-    count, rows = enumerated_rows
-    c = BurstConverter(dataset_name, headers, config)
-    print mp.current_process().name, count, len(rows)
-    result = c.process(count, rows, chunksize)
-    print mp.current_process().name, 'done'
-    return result
-
-
 class Converter(object):
 
     def __init__(self, dataset, author_profile, target='output.nq'):
@@ -160,6 +87,8 @@ class Converter(object):
         self._target = target
 
     def addProfile(self, author_profile):
+        """Adds an author profile to the nanopublication"""
+        
         print "Adding profile"
         # We add all triples from a Profile graph to the default graph of the nanopublication
         profile_graph = Profile(author_profile)
