@@ -8,6 +8,9 @@ import uuid
 import mappings
 import datetime
 import json
+
+import js2py
+
 from iribaker import to_iri
 from functools import partial
 from itertools import izip_longest
@@ -356,11 +359,22 @@ class BurstConverter(object):
 
                         elif category == "other":
                             # The variable is a literal
-                            # TODO: Distinguish between different datatypes
 
-                            # We take the 'label' (i.e. the potentially mapped value) from the
-                            # corresponding value of the variable
-                            value = self._variables[variable]['values_dictionary'][col]['label']
+                            # If the variable has a transformation function, we apply it to the original value in the CSV file
+                            # Note that this overwrites the provided value (i.e. the function overrides new values provided by QBer)
+                            if 'transform_compiled' in self._variables[variable]:
+                                # If we already have an evaluated version of the transformation function, use it
+                                f = self._variables[variable]['transform_compiled']
+                                value = f(col)
+                            elif 'transform' in self._variables[variable]:
+                                # Otherwise, we evaluate the function definition
+                                f = js2py.eval_js("function f(v) {{ {} }}".format(self._variables[variable]['transform']))
+                                self._variables[variable]['transform_compiled'] = f
+                                value = f(col)
+                            else:
+                                # We take the 'label' (i.e. the potentially mapped value) from the
+                                # corresponding value of the variable
+                                value = self._variables[variable]['values_dictionary'][col]['label']
 
                             if 'datatype' in self._variables[variable]:
                                 datatype = self._variables[variable]['datatype']
