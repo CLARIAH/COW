@@ -1,6 +1,6 @@
 {
     "dataset": {
-        "file": "utrecht_1829_clean_01.csv",
+        "file": "tests/utrecht_1829_clean_01.csv",
         "name": "utrecht_1829_clean_01",
         "uri": "http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01",
         "variables": {
