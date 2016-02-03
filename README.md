@@ -48,6 +48,18 @@ Install the required packages:
 pip install -r requirements.txt
 ```
 
+To run, go to `src`. First make a QBer-style json file describing the csv file's schema:
+
+```
+python csv2qber-schema.py csv_file_name_without_extension dataset_name
+```
+
+Now convert the csv file by running csv2qb on the resulting JSON file:
+
+```
+python csv2qb.py csv_file_name.json output_file_name.nq
+```
+
 
 ## OLD (below)
 
