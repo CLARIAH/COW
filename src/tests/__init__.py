@@ -36,7 +36,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile)
+        c = Converter(dataset['dataset'], author_profile, target="simple_conversion_output.nq")
         c.setProcesses(1)
 
         c.convert()
@@ -54,7 +54,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile)
+        c = Converter(dataset['dataset'], author_profile, target="parallel_conversion_output.nq")
         c.setProcesses(2)
 
         c.convert()
@@ -72,20 +72,20 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile, target="output.nq")
+        c = Converter(dataset['dataset'], author_profile, target="datatype_conversion_output.nq")
         c.setProcesses(1)
 
         c.convert()
 
         dataset = Dataset()
-        with open("output.nq", "r") as graph_file:
+        with open("datatype_conversion_output.nq", "r") as graph_file:
             dataset.load(graph_file, format='nquads')
 
         q = """
             ASK {
                 GRAPH ?g {
-                    <http://data.socialhistory.org/ns/resource/observation/utrecht_1829_clean_01/224> <http://data.socialhistory.org/resource/utrecht_1829_clean_01/variable/leeftijd> "55"^^<http://www.w3.org/2001/XMLSchema#integer> .
-                    <http://data.socialhistory.org/ns/resource/observation/utrecht_1829_clean_01/1272> <http://data.socialhistory.org/resource/utrecht_1829_clean_01/variable/huisnummer> "170"^^<http://www.w3.org/2001/XMLSchema#integer> .
+                    [] <http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/variable/leeftijd> "55"^^<http://www.w3.org/2001/XMLSchema#integer> .
+                    [] <http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/variable/huisnummer> "170"^^<http://www.w3.org/2001/XMLSchema#integer> .
                 }
             }
         """
@@ -108,19 +108,19 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile, target="output.nq")
+        c = Converter(dataset['dataset'], author_profile, target="transformation_function_output.nq")
         c.setProcesses(1)
 
         c.convert()
 
         dataset = Dataset()
-        with open("output.nq", "r") as graph_file:
+        with open("transformation_function_output.nq", "r") as graph_file:
             dataset.load(graph_file, format='nquads')
 
         q = """
             ASK {
                 GRAPH ?g {
-                    <http://data.socialhistory.org/ns/resource/observation/utrecht_1829_clean_01/26> <http://data.socialhistory.org/resource/utrecht_1829_clean_01/variable/achternaam> "hofmanhofman" .
+                    [] <http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/variable/achternaam> "hofmanhofman" .
                 }
             }
         """
@@ -143,7 +143,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile, target="output.nq")
+        c = Converter(dataset['dataset'], author_profile, target="output_valueUrl.nq")
         c.setProcesses(1)
 
         c.convert()
@@ -164,7 +164,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile, target="output.nq")
+        c = Converter(dataset['dataset'], author_profile, target="output_extract_qber_schema.nq")
         c.setProcesses(4)
 
         c.convert()
