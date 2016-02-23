@@ -62,7 +62,7 @@ class Converter(object):
         for variable, variable_definition in dataset['variables'].items():
             self._variables[variable] = variable_definition
             if 'values' in self._variables[variable]:
-                self._variables[variable]['values_dictionary'] = dict([(unicode(v['label']), v) for v in variable_definition['values']])
+                self._variables[variable]['values_dictionary'] = dict([(unicode(v.get('label','')), v) for v in variable_definition['values']])
 
         # Initialize the nanopublication structure
         self.publication = Nanopublication(self._source)
@@ -350,9 +350,11 @@ class BurstConverter(object):
                         else:
                             print "Category {} unknown".format(category)
 
-                    except KeyError as ke:
+                    except KeyError:
                         print "Value found for variable {} does not exist in dataset description".format(variable)
                         print col
+                        print row 
+                        print 
                         
                 elif variable == '':
                     # print "Empty variable name"
