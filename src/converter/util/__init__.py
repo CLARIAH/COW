@@ -5,6 +5,7 @@ import datetime
 import string
 import logging
 import iribaker
+import urllib
 
 from hashlib import sha1
 
@@ -255,8 +256,10 @@ class Profile(Graph):
 
     def __init__(self, profile):
         # A URI that represents the author
-        self.author_uri = SDP[profile['email']]
 
+        # Virtuoso does not like the @ 
+        self.author_uri = SDP[urllib.quote_plus(profile['email'])]
+        
         super(Profile, self).__init__(identifier=self.author_uri)
 
         self.add((self.author_uri, RDF.type, FOAF['Person']))
