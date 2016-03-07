@@ -6,6 +6,7 @@ import string
 import logging
 import iribaker
 import urllib
+import uuid
 
 from hashlib import sha1
 
@@ -257,7 +258,7 @@ class Profile(Graph):
     def __init__(self, profile):
         # A URI that represents the author
 
-        # Virtuoso does not like the @ 
+        # Virtuoso does not accept the @ 
         self.author_uri = SDP[urllib.quote_plus(profile['email'])]
         
         super(Profile, self).__init__(identifier=self.author_uri)
@@ -288,6 +289,10 @@ class Nanopublication(Dataset):
         Initialize the graphs needed for the nanopublication
         """
         super(Dataset, self).__init__()
+        
+        # Virtuoso does not accept BNodes as graph names
+        self.default_context = Graph(store=self.store, identifier=URIRef(uuid.uuid4().urn))
+
 
         # Assign default namespace prefixes
         for prefix, namespace in namespaces.items():
