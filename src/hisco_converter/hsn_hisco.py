@@ -37,10 +37,10 @@ g.bind('product', PRODUCT)
 
 
 
-data_path = "/Users/RichardZ/git/sdh-public-datasets/" # NB: In the future, preferably read file in from DATAVERSE 
-os.chdir(data_path)
-hsn = open('./hsn2013a_hisco_comma.csv')
-# hsn = open('../../sdh-public-datasets/hsn2013a_hisco_comma.csv')
+#data_path = "/Users/RichardZ/git/wp4-converters/sdh-public-datasets/" # NB: In the future, preferably read file in from DATAVERSE 
+#os.chdir(data_path)
+#hsn = open('./hsn2013a_hisco_comma.csv')
+hsn = open('../../sdh-public-datasets/hsn2013a_hisco_comma.csv')
 
 hisco = csv.reader(hsn)
 next(hisco)
@@ -70,7 +70,7 @@ for row in hisco: # define and columns and names for columns
 ## This takes some time...
 # print g.serialize(format='turtle')
 
-with open('./hsn_hisco_entry_2013a.ttl','w') as out:
+with open('~/temp/hsn_hisco_entry_2013a.ttl','w') as out:
 # with open('rdf/hsn_hisco_entry_2013a.ttl','w') as out: 
     g.serialize(out, format='turtle')
 
