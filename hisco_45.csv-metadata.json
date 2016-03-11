@@ -1,0 +1,101 @@
+{
+ "dcat:keyword": ["HISCO"],
+ "dc:license": {
+  "@id": "http://opendefinition.org/licenses/cc-by/"
+ },
+ "dc:publisher": {
+  "schema:name": "Example Municipality",
+  "schema:url": {
+   "@id": "http://example.org"
+  }
+ },
+ "url": "hisco_45.csv",
+ "@context": [
+  "http://www.w3.org/ns/csvw",
+  {
+   "@base": "http://data.socialhistory.org/ns/resource/hisco/",
+   "@language": "en",
+   "skos": "http://www.w3.org/2004/02/skos/core#",
+   "prov": "http://www.w3.org/ns/prov#"
+  },
+  {}
+ ],
+ "dc:title": "hisco_category",
+ "dc:modified": {
+  "@value": "2016-01-14",
+  "@type": "xsd:date"
+ },
+ "tableSchema": {
+  "aboutUrl": "{hisco_1_id}{hisco_2_id}{hisco_3_id}{hisco_45_id}",
+  "primaryKey": "auto_id",
+  "columns": [
+  {
+     "propertyUrl": "rdf:type",
+     "valueUrl": "skos:Concept",
+     "virtual": true
+   },
+   {
+      "propertyUrl": "skos:inScheme",
+      "valueUrl": "category",
+      "virtual": true
+    },
+   {
+    "datatype": "string",
+    "titles": [
+     "hisco_4_id",
+     "HISCO Major Group"
+    ],
+    "name": "hisco_4_id",
+    "dc:description": "HISCO Major Group",
+    "aboutUrl": "{hisco_4_id}{hisco_3_id}",
+    "propertyUrl": "skos:broaderTransitive",
+    "valueUrl": "{hisco_4_id}"
+   },
+   {
+    "propertyUrl": "skos:broaderTransitive",
+    "valueUrl": "{hisco_4_id}{hisco_3_id}",
+    "aboutUrl": "{hisco_4_id}{hisco_3_id}{hisco_2_id}",
+    "virtual": true
+   },
+   {
+    "propertyUrl": "skos:broaderTransitive",
+    "valueUrl": "{hisco_4_id}{hisco_3_id}{hisco_2_id}",
+    "virtual": true
+   },
+   {
+    "datatype": "string",
+    "titles": [
+     "label"
+    ],
+    "name": "label",
+    "dc:description": "label",
+    "propertyUrl": "skos:prefLabel"
+   },
+   {
+    "datatype": "string",
+    "titles": [
+     "description"
+    ],
+    "name": "description",
+    "dc:description": "description",
+    "propertyUrl": "skos:definition"
+   },
+   {
+    "datatype": "string",
+    "titles": [
+     "country_code"
+    ],
+    "name": "country_code",
+    "dc:description": "country_code"
+   },
+   {
+    "datatype": "string",
+    "titles": [
+     "preferred"
+    ],
+    "name": "preferred",
+    "dc:description": "preferred"
+   }
+  ]
+ }
+}
