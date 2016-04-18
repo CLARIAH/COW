@@ -319,12 +319,14 @@ class Nanopublication(Dataset):
         # ----
         # The nanopublication graph
         # ----
-        self.uri = SDR['nanopublication/' + hash_part]
+        name = (file_name.rsplit('/', 1)[-1]).split('.')[0]
+        self.uri = SDV[name + '/nanopublication/' + hash_part]
+
 
         # The Nanopublication consists of three graphs
-        assertion_graph_uri = SDR['assertion/' + hash_part]
-        provenance_graph_uri = SDR['provenance/' + hash_part]
-        pubinfo_graph_uri = SDR['pubinfo/' + hash_part]
+        assertion_graph_uri = SDV[name + '/assertion/' + hash_part]
+        provenance_graph_uri = SDV[name + '/provenance/' + hash_part]
+        pubinfo_graph_uri = SDV[name + '/pubinfo/' + hash_part]
 
         self.ag = self.graph(assertion_graph_uri)
         self.pg = self.graph(provenance_graph_uri)
