@@ -2,6 +2,7 @@ from converter import Converter
 import argparse
 import json
 import os.path 
+import config
 
 parser = argparse.ArgumentParser(description="Convert CSV files to RDF Data Cube (in parallel)")
 parser.add_argument('source_file', metavar='source_file', type=str, help="The QBer-style JSON file that gives the schema of the CSV")
@@ -19,14 +20,11 @@ if __name__ == '__main__':
     with open(args.source_file) as dataset_file:
         dataset = json.load(dataset_file)
 
-
     author_profile = {
-        'email': 'john@doe.com',
-        'name': 'John Doe',
-        'id': '2938472912'
+        'email': config.EMAIL,
+        'name': config.NAME,
+        'id': config.ID
     }
-
-    
     
     c = Converter(dataset['dataset'], dirname, author_profile, target=args.target_file)
     c.setProcesses(args.processes)
