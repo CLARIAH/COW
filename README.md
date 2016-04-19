@@ -48,7 +48,9 @@ Install the required packages:
 pip install -r requirements.txt
 ```
 
-To run, go to `src`. First make a QBer-style json file describing the csv file's schema:
+Change directory to `src`, and optionally replace the author in the config.py with your own data.  
+
+To run, first make a QBer-style json file describing the csv file's schema:
 
 ```
 python csv2qber-schema.py csv_file_name_without_extension dataset_name
