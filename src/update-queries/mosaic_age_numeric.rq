@@ -1,0 +1,13 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX mosaicvrb: <http://data.socialhistory.org/ns/resource/variable/>
+PREFIX mosaicextra: <http://data.socialhistory.org/ns/resource/variable/extra/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+INSERT{
+    ?person mosaicextra:age_num ?age_num .
+}
+WHERE {
+    ?person mosaicvrb:age ?age .
+    BIND(IF(CONTAINS(STRAFTER(STR(?age), 'age/'), 'less'), 0, xsd:int(STRAFTER(STR(?age), 'age/'))) AS ?age_num)
+}
