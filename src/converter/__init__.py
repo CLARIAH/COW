@@ -256,7 +256,7 @@ class BurstConverter(object):
 
                 if len(col) < 1:
                     index += 1
-                    logger.debug('Col length < 1 (no value)')
+#                     logger.debug('Col length < 1 (no value)')
                     continue
                 # TODO: This applies a lambda function in the old version... but this is not currently
                 #       supported.
@@ -351,10 +351,11 @@ class BurstConverter(object):
                             print "Category {} unknown".format(category)
 
                     except KeyError:
-                        print "Value found for variable {} does not exist in dataset description".format(variable)
-                        print col
-                        print row 
-                        print 
+                        pass 
+#                         print "Value found for variable {} does not exist in dataset description".format(variable)
+#                         print col
+#                         print row 
+#                         print 
                         
                 elif variable == '':
                     # print "Empty variable name"

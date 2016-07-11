@@ -30,3 +30,7 @@ canfam = {
                'indnote', 'location'], 
     'integer':['ageyr', 'magemo', 'moschool', 'urbpop', 'earnings', 'earnper', 'exearn']
 }
+mosaic = {
+    'nocode': ['fname', 'lname', 'occupat'],
+    'integer': ['age', 'hhsize', 'year']
+}
