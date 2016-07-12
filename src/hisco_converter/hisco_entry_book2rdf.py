@@ -35,7 +35,7 @@ g.bind('fabio', FABIO)
 g.bind('status', STATUS)
 g.bind('relation', RELATION)
 g.bind('product', PRODUCT)
-g.bind('dcterms', DCTERMS)
+
 
 g.add((HSRC['hiscoBook'], RDF.type, FABIO['Book']))
 g.add((HSRC['hiscoBook'], FABIO.has_ISBN, Literal('urn:isbn:9789058671967')))
