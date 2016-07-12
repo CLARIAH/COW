@@ -19,7 +19,7 @@ for lnk in soup.find_all('a', {'href': re.compile("dat")}):
 HISCO = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/")
 HISCAM = rdflib.Namespace("http://data.socialhistory.org/vocab/hiscam/")
 SKOS = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
-PROV = rdflib.Namespace("http://www.w3.org/ns/prov/")
+PROV = rdflib.Namespace("http://www.w3.org/ns/prov#")
 SDMXMSR = rdflib.Namespace('http://purl.org/linked-data/sdmx/2009/measure#')
 QB = rdflib.Namespace('http://purl.org/linked-data/cube#')
 

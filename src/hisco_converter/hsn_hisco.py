@@ -5,8 +5,8 @@ g = Graph()
 
 CATEGORY = Namespace('http://data.socialhistory.org/vocab/hisco/category/')
 SKOS = Namespace('http://www.w3.org/2004/02/skos/core#')
-ENTRY = Namespace('http://data.socialhistory.org/hisco/entry/')
-PROV = Namespace('http://www.w3.org/ns/prov/')
+ENTRY = Namespace('http://data.socialhistory.org/vocab/hisco/entry/')
+PROV = Namespace('http://www.w3.org/ns/prov#')
 
 g.bind('cat', CATEGORY)
 g.bind('skos', SKOS)
