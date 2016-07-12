@@ -15,6 +15,7 @@ scr/iribaker
 *.json
 sdh-private-dwarsliggers
 sdh-public-datasets
+sdh-private-hisco-datasets
 src/iribaker-master
 include/
 .settings
