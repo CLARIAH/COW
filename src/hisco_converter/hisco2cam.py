@@ -16,12 +16,12 @@ for lnk in soup.find_all('a', {'href': re.compile("dat")}):
     dat = csv.reader(urllib2.urlopen(baseurl + lnk['href'], 'rU'), delimiter='\t')
     csvs[re.sub('.*_|.dat', '', lnk['href'])] = dat
 
-HISCO = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/")
-HISCAM = rdflib.Namespace("http://data.socialhistory.org/vocab/hiscam/")
-SKOS = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
-PROV = rdflib.Namespace("http://www.w3.org/ns/prov#")
+HISCO   = rdflib.Namespace("http://data.socialhistory.org/ns/vocab/hisco/")
+HISCAM  = rdflib.Namespace("http://data.socialhistory.org/ns/vocab/hiscam/")
+SKOS    = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
+PROV    = rdflib.Namespace("http://www.w3.org/ns/prov#")
 SDMXMSR = rdflib.Namespace('http://purl.org/linked-data/sdmx/2009/measure#')
-QB = rdflib.Namespace('http://purl.org/linked-data/cube#')
+QB      = rdflib.Namespace('http://purl.org/linked-data/cube#')
 
 g = rdflib.Graph()
 

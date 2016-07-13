@@ -8,9 +8,9 @@ import csv, os
 
 g = Graph()
 
-HISCO = Namespace('http://data.socialhistory.org/vocab/hisco/')
-RELATION  = Namespace('http://data.socialhistory.org/vocab/hisco/relation/')
-SKOS  = Namespace('http://www.w3.org/2004/02/skos/core#')
+HISCO     = Namespace('http://data.socialhistory.org/ns/vocab/hisco/')
+RELATION  = Namespace('http://data.socialhistory.org/ns/vocab/hisco/relation/')
+SKOS      = Namespace('http://www.w3.org/2004/02/skos/core#')
 
 variable_name = 'relationCollection'
 g.add((RELATION[variable_name], RDF.type, SKOS['Collection']))

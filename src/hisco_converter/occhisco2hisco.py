@@ -8,9 +8,9 @@ SKOS = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
 SDMXMSR = rdflib.Namespace('http://purl.org/linked-data/sdmx/2009/measure#')
 QB = rdflib.Namespace('http://purl.org/linked-data/cube#')
 
-HISCO = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/")
-HISCAM = rdflib.Namespace("http://data.socialhistory.org/vocab/hiscam/")
-OCCHISCO = rdflib.Namespace("http://data.socialhistory.org/resource/napp/OCCHISCO/")
+HISCO = rdflib.Namespace("http://data.socialhistory.org/ns/vocab/hisco/")
+HISCAM = rdflib.Namespace("http://data.socialhistory.org/ns/vocab/hiscam/")
+OCCHISCO = rdflib.Namespace("http://data.socialhistory.org/ns/resource/napp/OCCHISCO/")
 
 g = rdflib.Graph()
 
