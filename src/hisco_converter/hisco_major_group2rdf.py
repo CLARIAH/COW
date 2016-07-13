@@ -3,7 +3,7 @@
 
 # In[3]:
 
-from rdflib import Graph, Namespace, RDF, Literal, RDFS
+from rdflib import Graph, Namespace, RDF, Literal, RDFS, URIRef
 import csv, os
 
 g = Graph()
@@ -37,12 +37,18 @@ g.add((HISCO[variable_name], SKOS.editorialNote,
 for row in hisco: # define and columns and names for columns
     hisco_major_group = row[1]
     hisco_major_group_label = row[2]
-    hisco_major_group_description = row[3]
-    
+#    hisco_major_group_description = row[3] # uncomment for actual descriptions of major group 3
+    #hisco_major_group_url = "http://historyofwork.iisg.nl/list_minor.php?text01=" + str(row[1]) + "&&text01_qt=strict"
+
+    # http://historyofwork.iisg.nl/list_minor.php?text01=3&&text01_qt=strict
+
+
     g.add((MAJOR[hisco_major_group], RDF.type, SKOS['Concept']))
     g.add((MAJOR[hisco_major_group], SKOS['member'], HISCO[variable_name]))
     g.add((MAJOR[hisco_major_group], SKOS['prefLabel'], Literal(hisco_major_group_label,'en')))
-    g.add((MAJOR[hisco_major_group], SKOS['definition'], Literal(hisco_major_group_description,'en')))
+    # g.add((MAJOR[hisco_major_group], SKOS['definition'], Literal(hisco_major_group_description,'en')))  # uncomment for actual descriptions of major group 3
+    g.add((MAJOR[hisco_major_group], SKOS['definition'], URIRef('http://historyofwork.iisg.nl/major.php')))
+
     g.add((MAJOR[hisco_major_group], SKOS.inScheme, HISCO['hiscoScheme'])) 
 
 

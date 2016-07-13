@@ -3,7 +3,7 @@
 
 # In[1]:
 
-from rdflib import Graph, Namespace, RDF, Literal, RDFS
+from rdflib import Graph, Namespace, RDF, Literal, RDFS, URIRef
 import csv
 
 g = Graph()
@@ -45,12 +45,14 @@ for row in hisco: # define and columns and names for columns
     
     hisco_unit_group = row[4] + row[3] + row[2]
     hisco_occupational_category_label = row[5].decode('latin-1') # need to decode to avoid error
-    hisco_occupational_category_description = row[6].decode('latin-1') # need to decode to avoid error
+    # hisco_occupational_category_description = row[6].decode('latin-1') # need to decode to avoid error, uncomment for descriptions
+    hisco_occupational_category_url = "http://historyofwork.iisg.nl/list_micro.php?keywords=" + str(row[4]) + str(row[3]) + str(row[2]) + "&keywords_qt=lstrict"
     
     g.add((CATEGORY[hisco_occupational_category], RDF.type, SKOS['Concept']))
     g.add((CATEGORY[hisco_occupational_category], SKOS['inScheme'], HISCO[variable_name]))
     g.add((CATEGORY[hisco_occupational_category], SKOS['prefLabel'], Literal(hisco_occupational_category_label,'en')))
-    g.add((CATEGORY[hisco_occupational_category], SKOS['definition'], Literal(hisco_occupational_category_description,'en')))
+    # g.add((CATEGORY[hisco_occupational_category], SKOS['definition'], Literal(hisco_occupational_category_description,'en'))) # uncomment for descriptions
+    g.add((CATEGORY[hisco_occupational_category], SKOS['definition'], URIRef(hisco_occupational_category_url)))
 
     g.add((CATEGORY[hisco_occupational_category], SKOS['broaderTransitive'], MAJOR[hisco_major_group]))
     g.add((CATEGORY[hisco_occupational_category], SKOS['broaderTransitive'], MINOR[hisco_minor_group]))
