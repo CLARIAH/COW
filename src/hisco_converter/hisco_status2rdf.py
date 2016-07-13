@@ -8,9 +8,9 @@ import csv, os
 
 g = Graph()
 
-HISCO = Namespace('http://data.socialhistory.org/vocab/hisco/')
-STATUS  = Namespace('http://data.socialhistory.org/vocab/hisco/status/')
-SKOS  = Namespace('http://www.w3.org/2004/02/skos/core#')
+HISCO   = Namespace('http://data.socialhistory.org/ns/vocab/hisco/')
+STATUS  = Namespace('http://data.socialhistory.org/ns/vocab/hisco/status/')
+SKOS    = Namespace('http://www.w3.org/2004/02/skos/core#')
 
 variable_name = 'statusCollection'
 g.add((STATUS[variable_name], RDF.type, SKOS['Collection']))

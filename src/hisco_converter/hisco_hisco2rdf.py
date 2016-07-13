@@ -8,9 +8,9 @@ import csv, datetime, os
 
 g = Graph()
 
-HISCO   = Namespace('http://data.socialhistory.org/vocab/hisco/')
-HSRC    = Namespace('http://data.socialhistory.org/vocab/hisco/resource/')
-STAFF   = Namespace('http://data.socialhistory.org/staff/csdh/')
+HISCO   = Namespace('http://data.socialhistory.org/ns/vocab/hisco/')
+HSRC    = Namespace('http://data.socialhistory.org/ns/vocab/hisco/resource/')
+STAFF   = Namespace('http://data.socialhistory.org/ns/resource/staff/csdh/')
 SKOS    = Namespace('http://www.w3.org/2004/02/skos/core#')
 PROV    = Namespace('http://www.w3.org/ns/prov#')
 DC      = Namespace('http://purl.org/dc/elements/1.1/')
