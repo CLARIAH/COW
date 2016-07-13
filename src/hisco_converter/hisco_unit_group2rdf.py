@@ -3,7 +3,7 @@
 
 # In[3]:
 
-from rdflib import Graph, Namespace, RDF, Literal
+from rdflib import Graph, Namespace, RDF, Literal, URIRef
 import csv, os
 
 g = Graph()
@@ -38,12 +38,16 @@ for row in hisco: # define and columns and names for columns
     
     hisco_unit_group = row[3] + row[2] + row[1]
     hisco_unit_group_label = row[4]
-    hisco_unit_group_description = row[5].decode('latin-1') # need to decode to avoid error
+    # hisco_unit_group_description = row[5].decode('latin-1') # need to decode to avoid error, uncomment for actual descriptions
+    hisco_unit_group_url = "http://historyofwork.iisg.nl/list_rubri.php?keywords=" + str(row[3]) + str(row[2]) + "&keywords_qt=lstrict&orderby=keywords"
+    
     
     g.add((UNIT[hisco_unit_group], RDF.type, SKOS['Concept']))
     g.add((UNIT[hisco_unit_group], SKOS['inScheme'], HISCO[variable_name]))
     g.add((UNIT[hisco_unit_group], SKOS['prefLabel'], Literal(hisco_unit_group_label,'en')))
-    g.add((UNIT[hisco_unit_group], SKOS['definition'], Literal(hisco_unit_group_description,'en')))
+    # g.add((UNIT[hisco_unit_group], SKOS['definition'], Literal(hisco_unit_group_description,'en'))) #uncomment for actual descriptions
+    g.add((UNIT[hisco_unit_group], SKOS['definition'], URIRef(hisco_unit_group_url)))
+    
     g.add((UNIT[hisco_unit_group], SKOS.inScheme, HISCO['conceptScheme']))
 
     g.add((UNIT[hisco_unit_group],SKOS['broaderTransitive'], MAJOR[hisco_major_group]))

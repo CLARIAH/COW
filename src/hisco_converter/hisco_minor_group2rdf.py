@@ -3,7 +3,7 @@
 
 # In[2]:
 
-from rdflib import Graph, Namespace, RDF, Literal, RDFS
+from rdflib import Graph, Namespace, RDF, Literal, RDFS, URIRef
 import csv, os
 
 g = Graph()
@@ -38,13 +38,15 @@ for row in hisco: # define and columns and names for columns
     hisco_major_group = row[2]
     hisco_minor_group = row[2] + row[1]
     hisco_minor_group_label = row[3].decode('latin-1')
-    hisco_minor_group_description = row[4]
+    # hisco_minor_group_description = row[4] # uncomment for actual descriptions
+    hisco_minor_group_url = "http://historyofwork.iisg.nl/list_minor.php?text01=" + str(row[2]) + "&&text01_qt=strict"
 
     g.add((MINOR[hisco_minor_group], RDF.type, SKOS['Collection']))
     g.add((MINOR[hisco_minor_group], SKOS['member'], HISCO[variable_name]))
     g.add((MINOR[hisco_minor_group], SKOS['prefLabel'], Literal(hisco_minor_group_label,'en')))
-    g.add((MINOR[hisco_minor_group], SKOS['definition'], Literal(hisco_minor_group_description,'en')))
+    # g.add((MINOR[hisco_minor_group], SKOS['definition'], Literal(hisco_minor_group_description,'en'))) # uncomment for actual descriptions
     g.add((MINOR[hisco_minor_group], SKOS.inScheme, HISCO[''])) 
+    g.add((MINOR[hisco_minor_group], SKOS['definition'], URIRef(hisco_minor_group_url)))
     
     g.add((MINOR[hisco_minor_group],SKOS['broaderTransitive'], MAJOR[hisco_major_group]))
 

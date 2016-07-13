@@ -31,7 +31,7 @@ for row in hisco: # define and columns and names for columns
     hisco_product = row[6]
     hisco_provenance = row[12] 
     
-    print URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry))
+    # print URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry))
                  
     g.add((CATEGORY[hisco_occupational_category], SKOS['hiddenLabel'], Literal(hisco_occupational_entry, 'nl')))
     g.add((CATEGORY[hisco_occupational_category], SKOS['prefLabel'], Literal(hisco_occupational_standard, 'nl')))
