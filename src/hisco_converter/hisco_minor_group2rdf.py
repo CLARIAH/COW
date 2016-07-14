@@ -8,9 +8,9 @@ import csv, os
 
 g = Graph()
 
-HISCO = Namespace('http://data.socialhistory.org/ns/vocab/hisco/')
-MAJOR = Namespace('http://data.socialhistory.org/ns/vocab/majorGroup/')
-MINOR = Namespace('http://data.socialhistory.org/ns/vocab/minorGroup/')
+HISCO = Namespace('http://data.socialhistory.org/vocab/hisco/')
+MAJOR = Namespace('http://data.socialhistory.org/vocab/majorGroup/')
+MINOR = Namespace('http://data.socialhistory.org/vocab/minorGroup/')
 SKOS  = Namespace('http://www.w3.org/2004/02/skos/core#')
 
 

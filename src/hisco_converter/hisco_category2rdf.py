@@ -8,11 +8,11 @@ import csv
 
 g = Graph()
 
-HISCO = Namespace('http://data.socialhistory.org/ns/vocab/hisco/')
-MAJOR = Namespace('http://data.socialhistory.org/ns/vocab/hisco/majorGroup/')
-MINOR = Namespace('http://data.socialhistory.org/ns/vocab/hisco/minorGroup/')
-UNIT  = Namespace('http://data.socialhistory.org/ns/vocab/hisco/unitGroup/')
-CATEGORY = Namespace('http://data.socialhistory.org/ns/vocab/hisco/category/')
+HISCO = Namespace('http://data.socialhistory.org/vocab/hisco/')
+MAJOR = Namespace('http://data.socialhistory.org/vocab/hisco/majorGroup/')
+MINOR = Namespace('http://data.socialhistory.org/vocab/hisco/minorGroup/')
+UNIT  = Namespace('http://data.socialhistory.org/vocab/hisco/unitGroup/')
+CATEGORY = Namespace('http://data.socialhistory.org/vocab/hisco/category/')
 SKOS  = Namespace('http://www.w3.org/2004/02/skos/core#')
 
 g.bind('hisco', HISCO)

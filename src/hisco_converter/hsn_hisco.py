@@ -3,8 +3,8 @@ import csv, iribaker
 
 g = Graph()
 
-CATEGORY = Namespace('http://data.socialhistory.org/ns/vocab/hisco/category/')
-ENTRY = Namespace('http://data.socialhistory.org/ns/vocab/hisco/entry/')
+CATEGORY = Namespace('http://data.socialhistory.org/vocab/hisco/category/')
+ENTRY = Namespace('http://data.socialhistory.org/vocab/hisco/entry/')
 SKOS = Namespace('http://www.w3.org/2004/02/skos/core#')
 PROV = Namespace('http://www.w3.org/ns/prov#')
 

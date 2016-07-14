@@ -8,8 +8,8 @@ import csv, os
 
 g = Graph()
 
-HISCO   = Namespace('http://data.socialhistory.org/ns/vocab/hisco/')
-STATUS  = Namespace('http://data.socialhistory.org/ns/vocab/hisco/status/')
+HISCO   = Namespace('http://data.socialhistory.org/vocab/hisco/')
+STATUS  = Namespace('http://data.socialhistory.org/vocab/hisco/status/')
 SKOS    = Namespace('http://www.w3.org/2004/02/skos/core#')
 
 variable_name = 'statusCollection'

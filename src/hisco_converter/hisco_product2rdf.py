@@ -8,8 +8,8 @@ import csv, os
 
 g = Graph()
 
-HISCO   = Namespace('http://data.socialhistory.org/ns/vocab/hisco/')
-PRODUCT = Namespace('http://data.socialhistory.org/ns/vocab/hisco/product/')
+HISCO   = Namespace('http://data.socialhistory.org/vocab/hisco/')
+PRODUCT = Namespace('http://data.socialhistory.org/vocab/hisco/product/')
 SKOS    = Namespace('http://www.w3.org/2004/02/skos/core#')
 
 variable_name = 'productCollection'
