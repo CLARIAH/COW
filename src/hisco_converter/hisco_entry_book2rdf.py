@@ -95,7 +95,7 @@ for row in hisco: # define and columns and names for columns
     #g.add((CATEGORY[hisco_occupational_category], SKOS['example'], Literal(hisco_occupational_entry_en, 'en')))
     
     # Now let's create the provenance for the titles
-    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), SKOS['prefLabel'] , Literal(hisco_occupational_entry_en)))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), SKOS['prefLabel'] , Literal(hisco_occupational_entry_en, hisco_language)))
     g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), PROV.wasQuotedFrom, HSRC['hiscoBook']))
     g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), SKOS['closeMatch'], CATEGORY[hisco_occupational_category]))
     g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), SKOS['member'], ENTRY['entryCollection']))
