@@ -63,14 +63,15 @@ for row in hisco: # define and columns and names for columns
     g.add((CATEGORY[hisco_occupational_category], SKOS['prefLabel'], Literal(hisco_occupational_standard, 'se')))
 
 
-    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry)), PROV.wasQuotedFrom, URIRef('http://hdl.handle.net/10622/KNGX6B')))
-    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry)), SKOS['closeMatch'], CATEGORY[hisco_occupational_category]))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry)),    PROV.wasQuotedFrom, URIRef('http://hdl.handle.net/10622/KNGX6B')))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry)),    SKOS['closeMatch'], CATEGORY[hisco_occupational_category]))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry)),    SKOS['member'],     ENTRY['entryCollection']))
+    
 
 ## This takes some time...
 # print g.serialize(format='turtle')
 
 with open('rdf/cedar_se.ttl','w') as out:
-# with open('rdf/hsn_hisco_entry_2013a.ttl','w') as out: 
     g.serialize(out, format='turtle')
 
 # EOF

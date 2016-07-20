@@ -3,14 +3,14 @@
 
 # In[1]:
 
-from rdflib import Graph, Namespace, RDF, Literal, XSD
+from rdflib import Graph, Namespace, RDF, Literal, XSD, URIRef
 import csv, datetime, os
 
 g = Graph()
 
 HISCO   = Namespace('http://data.socialhistory.org/vocab/hisco/')
 HSRC    = Namespace('http://data.socialhistory.org/vocab/hisco/resource/')
-STAFF   = Namespace('http://data.socialhistory.org/ns/resource/staff/csdh/')
+STAFF   = Namespace('http://data.socialhistory.org/resource/staff/csdh/')
 SKOS    = Namespace('http://www.w3.org/2004/02/skos/core#')
 PROV    = Namespace('http://www.w3.org/ns/prov#')
 DC      = Namespace('http://purl.org/dc/elements/1.1/')
@@ -39,11 +39,11 @@ g.add((HISCO['hiscoScheme'], PROV.wasDerivedFrom, HSRC['hiscoWebsite']))
 g.add((HSRC['hiscoBook'], RDF.type, FABIO['Book']))
 g.add((HSRC['hiscoBook'], FABIO.has_ISBN, Literal('9789058671967')))
 g.add((HSRC['hiscoWebsite'], RDF.type, FABIO['Website']))
-g.add((HSRC['hiscoWebsite'], RDF.about, Literal('http://historyofwork.iisg.nl')))
+g.add((HSRC['hiscoWebsite'], RDF.about, URIRef(http://historyofwork.iisg.nl)))
 
-g.add((STAFF['rlzijdeman'], RDF.ID, Literal('http://orcid.org/0000-0003-0782-2704')))
+g.add((STAFF['rlzijdeman'], RDF.ID, URIRef(http://orcid.org/0000-0003-0782-2704)))
 g.add((STAFF['rlzijdeman'], RDF.ID, Literal('info:eu-repo/dai/nl/304832960')))
-g.add((STAFF['rlzijdeman'], RDF.ID, Literal('http://isni.org/isni/000000010711579X')))
+g.add((STAFF['rlzijdeman'], RDF.ID, URIRef(http://isni.org/isni/000000010711579X)))
 
 g.add((STAFF['rlzijdeman'], RDF.type, PROV['Person']))
 g.add((STAFF['rlzijdeman'], RDF.type, PROV['Agent']))

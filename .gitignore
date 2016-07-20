@@ -20,3 +20,4 @@ src/iribaker-master
 include/
 .settings
 .Python
+hisco_job_local.sh
