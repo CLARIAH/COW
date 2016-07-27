@@ -15,7 +15,7 @@ for lnk in soup.find_all('a', {'href': re.compile("dat")}):
     csvs[re.sub('.*_|.dat', '', lnk['href'])] = dat
 
 HISCO    = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/")
-# CATEGORY = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/category/")
+CATEGORY = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/category/")
 HISCAM   = rdflib.Namespace("http://data.socialhistory.org/vocab/hiscam/")
 SKOS     = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
 PROV     = rdflib.Namespace("http://www.w3.org/ns/prov#")
@@ -25,7 +25,7 @@ QB       = rdflib.Namespace('http://purl.org/linked-data/cube#')
 g = rdflib.Graph()
 
 g.bind('hisco', HISCO)
-#g.bind('category', CATEGORY)
+g.bind('category', CATEGORY)
 g.bind('hiscam', HISCAM)
 g.bind('skos', SKOS)
 g.bind('sdmxmsr', SDMXMSR)
@@ -42,8 +42,12 @@ for key, dat in csvs.items():
         hisco_code = row[0].zfill(5)
         hiscam_score = float(row[1])
 
+        # The quick, but dirty way:
+        g.add((CATEGORY[hisco_code], HISCAM['hiscamVersion.'+ key.upper()], rdflib.Literal(hiscam_score)))
+
+        # The more appropriate way:
         # g.add((HISCO[hisco_code], rdflib.RDF.type, SKOS['Concept']))
-        #g.add((HISCO[obsid], SKOS['relatedMatch'], CATEGORY[hisco_code]))
+        g.add((HISCO[obsid], SKOS['relatedMatch'], CATEGORY[hisco_code]))
         g.add((HISCO[obsid], HISCO['hiscoCode'], HISCO[hisco_code]))
         g.add((HISCO[obsid], SKOS['inScheme'], HISCAM[key + 'hiscam']))
         g.add((HISCO[obsid], HISCAM['hiscamValue'], rdflib.Literal(hiscam_score)))
