@@ -1,6 +1,11 @@
 import requests, bs4, re, csv, urllib2, json, rdflib
 
 
+# comment July 22, 2016 / Richard
+# added 'category' to the file, which is the 'official' HISCO term and 
+# links directly to the HISCO Vocab
+# If convenient 'hiscoCode' triples can be removed, but leaving in
+# for now for current schemes.
 
 
 
@@ -15,8 +20,8 @@ for lnk in soup.find_all('a', {'href': re.compile("dat")}):
     csvs[re.sub('.*_|.dat', '', lnk['href'])] = dat
 
 HISCO    = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/")
-# CATEGORY = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/category/")
-HISCAM   = rdflib.Namespace("http://data.socialhistory.org/vocab/hiscam/")
+CATEGORY = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/category/")
+HISCAM   = rdflib.Namespace("http://data.socialhistory.org/vocab/hiscam_alt/") #NB using _alt!
 SKOS     = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
 PROV     = rdflib.Namespace("http://www.w3.org/ns/prov#")
 SDMXMSR  = rdflib.Namespace('http://purl.org/linked-data/sdmx/2009/measure#')
@@ -25,7 +30,7 @@ QB       = rdflib.Namespace('http://purl.org/linked-data/cube#')
 g = rdflib.Graph()
 
 g.bind('hisco', HISCO)
-#g.bind('category', CATEGORY)
+g.bind('category', CATEGORY)
 g.bind('hiscam', HISCAM)
 g.bind('skos', SKOS)
 g.bind('sdmxmsr', SDMXMSR)
@@ -43,12 +48,13 @@ for key, dat in csvs.items():
         hiscam_score = float(row[1])
 
         # g.add((HISCO[hisco_code], rdflib.RDF.type, SKOS['Concept']))
+        g.add((CATEGORY[hisco_code], HISCAM['hasHISCAM.'+ key], rdflib.Literal(hiscam_score)))
         #g.add((HISCO[obsid], SKOS['relatedMatch'], CATEGORY[hisco_code]))
-        g.add((HISCO[obsid], HISCO['hiscoCode'], HISCO[hisco_code]))
-        g.add((HISCO[obsid], SKOS['inScheme'], HISCAM[key + 'hiscam']))
-        g.add((HISCO[obsid], HISCAM['hiscamValue'], rdflib.Literal(hiscam_score)))
-        g.add((HISCO[obsid], SDMXMSR['obsValue'], rdflib.Literal(hiscam_score)))
-        g.add((HISCO[obsid], QB['refArea'], HISCAM[key.upper()]))
+        #g.add((HISCO[obsid], HISCO['hiscoCode'], HISCO[hisco_code]))
+        #g.add((HISCO[obsid], SKOS['inScheme'], HISCAM[key + 'hiscam']))
+        #g.add((HISCO[obsid], HISCAM['hiscamValue'], rdflib.Literal(hiscam_score)))
+        #g.add((HISCO[obsid], SDMXMSR['obsValue'], rdflib.Literal(hiscam_score)))
+        #g.add((HISCO[obsid], QB['refArea'], HISCAM[key.upper()]))
 
  
 with open("hiscamlbls.json") as infile:
@@ -57,5 +63,5 @@ with open("hiscamlbls.json") as infile:
 for key in labels:
     g.add((HISCAM[key], SKOS['prefLabel'], rdflib.Literal(labels[key])))
 
-with open('rdf/hisco2hiscam.ttl', 'w') as outfile:
+with open('rdf/hisco2hiscam_alt.ttl', 'w') as outfile:
     g.serialize(outfile, format='turtle')

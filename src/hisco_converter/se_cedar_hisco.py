@@ -59,13 +59,15 @@ for row in hisco: # define and columns and names for columns
     #hisco_product    =  row[6]
     #hisco_provenance = row[12] 
 
-    #g.add((CATEGORY[hisco_occupational_category], SKOS['hiddenLabel'], Literal(hisco_occupational_entry, 'nl')))
-    g.add((CATEGORY[hisco_occupational_category], SKOS['prefLabel'], Literal(hisco_occupational_standard, 'se')))
+    # g.add((CATEGORY[hisco_occupational_category], SKOS['hiddenLabel'], Literal(hisco_occupational_entry, 'nl')))
+    # g.add((CATEGORY[hisco_occupational_category], SKOS['prefLabel'], Literal(hisco_occupational_standard, 'se')))
 
 
     g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry)),    PROV.wasQuotedFrom, URIRef('http://hdl.handle.net/10622/KNGX6B')))
     g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry)),    SKOS['closeMatch'], CATEGORY[hisco_occupational_category]))
-    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry)),    SKOS['member'],     ENTRY['entryCollection']))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry)),    SKOS['prefLabel'], Literal(hisco_occupational_standard, 'se')))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry)),    SKOS['hiddenLabel'], Literal(hisco_occupational_standard, 'se')))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry)),    SKOS['member'], ENTRY['entryCollection']))
     
 
 ## This takes some time...

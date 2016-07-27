@@ -92,23 +92,31 @@ for row in hisco: # define and columns and names for columns
 
     g.add((CATEGORY[hisco_occupational_category], SKOS['example'], Literal(hisco_occupational_entry_en, 'en')))
     
-    #g.add((CATEGORY[hisco_occupational_category], SKOS['example'], Literal(hisco_occupational_entry_en, 'en')))
-    
     # Now let's create the provenance for the titles
-    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), SKOS['prefLabel'] , Literal(hisco_occupational_entry_en, hisco_language)))
-    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), PROV.wasQuotedFrom, HSRC['hiscoBook']))
-    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), SKOS['closeMatch'], CATEGORY[hisco_occupational_category]))
-    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), SKOS['member'], ENTRY['entryCollection']))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), PROV.wasQuotedFrom,  HSRC['hiscoBook']))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), SKOS['hiddenLabel'], Literal(hisco_occupational_entry_any, hisco_language)))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), SKOS['prefLabel'],   Literal(hisco_occupational_entry_any, hisco_language)))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), SKOS['closeMatch'],  CATEGORY[hisco_occupational_category]))
+
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), PROV.wasQuotedFrom,  HSRC['hiscoBook']))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), SKOS['hiddenLabel'], Literal(hisco_occupational_entry_en, 'en')))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), SKOS['prefLabel'],   Literal(hisco_occupational_entry_en, 'en')))
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), SKOS['closeMatch'],  CATEGORY[hisco_occupational_category]))
+
+    g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), SKOS['member'], ENTRY['entryCollection']))
     
     if hisco_status != "0": 
+        g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), HISCO.STATUS, Literal(hisco_status)))
         g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), HISCO.STATUS, Literal(hisco_status)))
-    
+        
     if hisco_relation != "0": 
+        g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), HISCO.RELATION, Literal(hisco_relation)))
         g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), HISCO.RELATION, Literal(hisco_relation)))
-    
+        
     if hisco_product != "0": 
-        g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), HISCO.PRODUCT, Literal(hisco_product)))
-    
+        g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), HISCO.PRODUCT, Literal(hisco_product)))
+        g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)),  HISCO.PRODUCT, Literal(hisco_product)))
+        
 
 # This takes some time...
 # print g.serialize(format='turtle')
