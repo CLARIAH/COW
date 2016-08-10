@@ -155,7 +155,10 @@ class CSVWConverter(object):
         logger.info("... done")
 
     def expandURL(self, url, row, datatype=False):
+        # TODO This should take into account the special CSVW instructions such as {_row}
         url = url.format(**row)
+
+
         for ns, nsuri in namespaces.items():
             if url.startswith(ns):
                 url = url.replace(ns + ':', nsuri)
