@@ -258,9 +258,9 @@ class Profile(Graph):
     def __init__(self, profile):
         # A URI that represents the author
 
-        # Virtuoso does not accept the @ 
+        # Virtuoso does not accept the @
         self.author_uri = SDP[urllib.quote_plus(profile['email'])]
-        
+
         super(Profile, self).__init__(identifier=self.author_uri)
 
         self.add((self.author_uri, RDF.type, FOAF['Person']))
@@ -289,7 +289,7 @@ class Nanopublication(Dataset):
         Initialize the graphs needed for the nanopublication
         """
         super(Dataset, self).__init__()
-        
+
         # Virtuoso does not accept BNodes as graph names
         self.default_context = Graph(store=self.store, identifier=URIRef(uuid.uuid4().urn))
 
@@ -320,13 +320,13 @@ class Nanopublication(Dataset):
         # The nanopublication graph
         # ----
         name = (file_name.rsplit('/', 1)[-1]).split('.')[0]
-        self.uri = SDV[name + '/nanopublication/' + hash_part]
+        self.uri = SDR[name + '/nanopublication/' + hash_part]
 
 
         # The Nanopublication consists of three graphs
-        assertion_graph_uri = SDV[name + '/assertion/' + hash_part]
-        provenance_graph_uri = SDV[name + '/provenance/' + hash_part]
-        pubinfo_graph_uri = SDV[name + '/pubinfo/' + hash_part]
+        assertion_graph_uri = SDR[name + '/assertion/' + hash_part]
+        provenance_graph_uri = SDR[name + '/provenance/' + hash_part]
+        pubinfo_graph_uri = SDR[name + '/pubinfo/' + hash_part]
 
         self.ag = self.graph(assertion_graph_uri)
         self.pg = self.graph(provenance_graph_uri)
