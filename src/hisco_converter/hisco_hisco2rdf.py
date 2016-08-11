@@ -1,4 +1,4 @@
-
+print "WARNING: This script is deprecated in favour of the CSVW-based converters"
 # coding: utf-8
 
 # In[1]:
@@ -55,7 +55,7 @@ g.add((STAFF['rlzijdeman'], FOAF.mbox, Literal('mailto:richard.zijdeman@iisg.nl'
 
 g.add((HSRC['hisco2rdf_01'], RDF.type, PROV.Activity))
 g.add((HSRC['hisco2rdf_01'], PROV.startedAtTime, Literal('2015-06-10T12:05:00+02:00', datatype = XSD.dateTime)))
-g.add((HSRC['hisco2rdf_01'], PROV.endedAtTime, 
+g.add((HSRC['hisco2rdf_01'], PROV.endedAtTime,
        Literal(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%dT%H:%M:%S+02:00'),datatype = XSD.dateTime)))
 fileout = 'rdf/hisco_hisco.ttl'
 g.add((HSRC['hisco2rdf_01'], PROV.generated, Literal(fileout)))
@@ -72,6 +72,3 @@ with open(fileout,'w') as out:
 
 
 # In[ ]:
-
-
-

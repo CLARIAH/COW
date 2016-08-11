@@ -1,4 +1,4 @@
-
+print "WARNING: This script is deprecated in favour of the CSVW-based converters"
 # coding: utf-8
 
 # In[1]:
@@ -17,7 +17,7 @@ g.add((PRODUCT[variable_name], RDF.type, SKOS['Collection']))
 g.add((PRODUCT[variable_name], RDFS.label, Literal('PRODUCT')))
 g.add((PRODUCT[variable_name], SKOS.definition, Literal('PRODUCT is a subsidiary classification designed to reduce the loss '+
                                                             'of information caused by ISCO68\'s failure in some cases ' +
-                                                            '(especially in relation to major group 4) to accomodate ' + 
+                                                            '(especially in relation to major group 4) to accomodate ' +
                                                             'information on products traded by those in particular occupational '+
                                                             'categories.')))
 
@@ -38,9 +38,9 @@ for row in hisco:
 
     g.add((PRODUCT[hisco_product], RDF.type, SKOS['Concept']))
     g.add((PRODUCT[hisco_product], SKOS['inScheme'], HISCO['hiscoScheme']))
-    g.add((PRODUCT[hisco_product], SKOS['member'], HISCO[variable_name]))  
+    g.add((PRODUCT[hisco_product], SKOS['member'], HISCO[variable_name]))
     g.add((PRODUCT[hisco_product], SKOS['prefLabel'], Literal(hisco_product_label,'en')))
-    
+
 # print g.serialize(format='turtle')
 
 with open('rdf/hisco_product.ttl','w') as out:
@@ -55,6 +55,3 @@ with open('rdf/hisco_product.ttl','w') as out:
 
 
 # In[ ]:
-
-
-

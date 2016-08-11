@@ -1,4 +1,4 @@
-
+print "WARNING: This script is deprecated in favour of the CSVW-based converters"
 # coding: utf-8
 
 # In[3]:
@@ -43,11 +43,11 @@ g.add((HSRC['hiscoBook'], FABIO.has_ISBN, Literal('urn:isbn:9789058671967')))
 g.add((ENTRY['entryCollection'], RDF.type, SKOS['Collection']))
 g.add((ENTRY['entryCollection'], SKOS.definition, Literal('A hisco:entry is a recording of an occupational activity in a register, '+
                                           'such as a marriage record or census enumerator\'s book.')))
-                                          
-g.add((ENTRY['entryCollection'], SKOS.scopeNote, Literal('''While some hisco:entry\'s are correctly spelled occupations, e.g. "butcher", 
-                                          "historian", or "architect", most recordings of occupational activity 
-                                          will contain spelling errors, other recordings, multiple recordings 
-                                          or elaborative recordings, such as "nurse in St. Mary\'s hospital". 
+
+g.add((ENTRY['entryCollection'], SKOS.scopeNote, Literal('''While some hisco:entry\'s are correctly spelled occupations, e.g. "butcher",
+                                          "historian", or "architect", most recordings of occupational activity
+                                          will contain spelling errors, other recordings, multiple recordings
+                                          or elaborative recordings, such as "nurse in St. Mary\'s hospital".
                                           All of these are considered to be hisco:entry\'s, thus even if they cannot
                                           be (easily) linked to an occupation. Examples of hisco:entry\'s from the
                                           hsrc:hiscoBook are clean and referred to as skos:example. All other
@@ -77,21 +77,21 @@ for row in hisco: # define and columns and names for columns
     hisco_relation   =  row[8]
     hisco_product    =  row[9]
     # hisco_provenance = row[11] # add this back in, when the provenance file for the datasets is built.
-    
+
     if hisco_language == 'uk':
         hisco_language = 'en'
-    
+
     g.add((CATEGORY[hisco_occupational_category], RDF.type, SKOS['Concept']))
     g.add((CATEGORY[hisco_occupational_category], SKOS['member'], HISCO['CATEGORY']))
     g.add((CATEGORY[hisco_occupational_category], SKOS['example'], Literal(hisco_occupational_entry_any, hisco_language)))
-    
+
     # not all entries have equivalents in English
     if not hisco_occupational_entry_en:
         continue
-    
+
 
     g.add((CATEGORY[hisco_occupational_category], SKOS['example'], Literal(hisco_occupational_entry_en, 'en')))
-    
+
     # Now let's create the provenance for the titles
     g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), PROV.wasQuotedFrom,  HSRC['hiscoBook']))
     g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), SKOS['hiddenLabel'], Literal(hisco_occupational_entry_any, hisco_language)))
@@ -104,19 +104,19 @@ for row in hisco: # define and columns and names for columns
     g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), SKOS['closeMatch'],  CATEGORY[hisco_occupational_category]))
 
     g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), SKOS['member'], ENTRY['entryCollection']))
-    
-    if hisco_status != "0": 
+
+    if hisco_status != "0":
         g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), HISCO.STATUS, Literal(hisco_status)))
         g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), HISCO.STATUS, Literal(hisco_status)))
-        
-    if hisco_relation != "0": 
+
+    if hisco_relation != "0":
         g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), HISCO.RELATION, Literal(hisco_relation)))
         g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)), HISCO.RELATION, Literal(hisco_relation)))
-        
-    if hisco_product != "0": 
+
+    if hisco_product != "0":
         g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_any)), HISCO.PRODUCT, Literal(hisco_product)))
         g.add((URIRef(iribaker.to_iri(ENTRY + hisco_occupational_entry_en)),  HISCO.PRODUCT, Literal(hisco_product)))
-        
+
 
 # This takes some time...
 # print g.serialize(format='turtle')
@@ -127,6 +127,3 @@ with open('rdf/hisco_entry_book.ttl','w') as out:
 
 
 # In[ ]:
-
-
-

@@ -1,3 +1,4 @@
+print "WARNING: This script is deprecated in favour of the CSVW-based converters"
 
 # coding: utf-8
 
@@ -30,29 +31,29 @@ next(hisco)
 variable_name = 'unitGroup'
 g.add((HISCO[variable_name], RDF.type, SKOS['Collection']))
 g.add((HISCO[variable_name], SKOS.preflabel, Literal('unit group')))
-g.add((HISCO[variable_name], SKOS.member, HISCO['conceptScheme'])) 
+g.add((HISCO[variable_name], SKOS.member, HISCO['conceptScheme']))
 
 for row in hisco: # define and columns and names for columns
     hisco_major_group = row[3]
     hisco_minor_group = row[3] + row[2]
-    
+
     hisco_unit_group = row[3] + row[2] + row[1]
     hisco_unit_group_label = row[4]
     # hisco_unit_group_description = row[5].decode('latin-1') # need to decode to avoid error, uncomment for actual descriptions
     hisco_unit_group_url = "http://historyofwork.iisg.nl/list_rubri.php?keywords=" + str(row[3]) + str(row[2]) + "&keywords_qt=lstrict&orderby=keywords"
-    
-    
+
+
     g.add((UNIT[hisco_unit_group], RDF.type, SKOS['Concept']))
     g.add((UNIT[hisco_unit_group], SKOS['inScheme'], HISCO[variable_name]))
     g.add((UNIT[hisco_unit_group], SKOS['prefLabel'], Literal(hisco_unit_group_label,'en')))
     # g.add((UNIT[hisco_unit_group], SKOS['definition'], Literal(hisco_unit_group_description,'en'))) #uncomment for actual descriptions
     g.add((UNIT[hisco_unit_group], SKOS['definition'], URIRef(hisco_unit_group_url)))
-    
+
     g.add((UNIT[hisco_unit_group], SKOS.inScheme, HISCO['conceptScheme']))
 
     g.add((UNIT[hisco_unit_group],SKOS['broaderTransitive'], MAJOR[hisco_major_group]))
     g.add((UNIT[hisco_unit_group],SKOS['broaderTransitive'], MINOR[hisco_minor_group]))
-    
+
 # print g.serialize(format='turtle')
 
 with open('rdf/hisco_unit_group.ttl','w') as out:
@@ -65,6 +66,3 @@ with open('rdf/hisco_unit_group.ttl','w') as out:
 
 
 # In[ ]:
-
-
-

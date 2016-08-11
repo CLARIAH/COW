@@ -1,3 +1,5 @@
+print "WARNING: This script is deprecated in favour of the CSVW-based converters"
+
 import rdflib
 import csv
 import urllib2

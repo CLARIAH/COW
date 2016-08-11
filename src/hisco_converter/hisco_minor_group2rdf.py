@@ -1,4 +1,4 @@
-
+print "WARNING: This script is deprecated in favour of the CSVW-based converters"
 # coding: utf-8
 
 # In[2]:
@@ -31,7 +31,7 @@ next(hisco)
 variable_name = 'minorGroup'
 g.add((HISCO[variable_name], RDF.type, SKOS['Collection']))
 g.add((HISCO[variable_name], SKOS.prefLabel, Literal('minor group')))
-g.add((HISCO[variable_name], SKOS.member, HISCO[''])) 
+g.add((HISCO[variable_name], SKOS.member, HISCO['']))
 
 
 for row in hisco: # define and columns and names for columns
@@ -45,9 +45,9 @@ for row in hisco: # define and columns and names for columns
     g.add((MINOR[hisco_minor_group], SKOS['member'], HISCO[variable_name]))
     g.add((MINOR[hisco_minor_group], SKOS['prefLabel'], Literal(hisco_minor_group_label,'en')))
     # g.add((MINOR[hisco_minor_group], SKOS['definition'], Literal(hisco_minor_group_description,'en'))) # uncomment for actual descriptions
-    g.add((MINOR[hisco_minor_group], SKOS.inScheme, HISCO[''])) 
+    g.add((MINOR[hisco_minor_group], SKOS.inScheme, HISCO['']))
     g.add((MINOR[hisco_minor_group], SKOS['definition'], URIRef(hisco_minor_group_url)))
-    
+
     g.add((MINOR[hisco_minor_group],SKOS['broaderTransitive'], MAJOR[hisco_major_group]))
 
 # print g.serialize(format='turtle')
@@ -62,6 +62,3 @@ with open('rdf/hisco_minor_group.ttl','w') as out:
 
 
 # In[ ]:
-
-
-

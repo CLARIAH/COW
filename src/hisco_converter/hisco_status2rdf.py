@@ -1,4 +1,4 @@
-
+print "WARNING: This script is deprecated in favour of the CSVW-based converters"
 # coding: utf-8
 
 # In[10]:
@@ -17,7 +17,7 @@ g.add((STATUS[variable_name], RDF.type, SKOS['Collection']))
 g.add((STATUS[variable_name], RDFS.label, Literal('STATUS')))
 g.add((STATUS[variable_name], SKOS.definition, Literal('STATUS is a subsidiary classification designed to reduce the loss '+
                                                             'of information caused by ISCO68\'s failure to accomodate residual ' +
-                                                            'information about employment status, educational qualifications, ' + 
+                                                            'information about employment status, educational qualifications, ' +
                                                             'and social position.')))
 
 
@@ -38,7 +38,7 @@ for row in hisco:
 
     g.add((STATUS[hisco_status], RDF.type, SKOS['Concept']))
     g.add((STATUS[hisco_status], SKOS['inScheme'], HISCO['hiscoScheme']))
-    g.add((STATUS[hisco_status], SKOS['member'], HISCO[variable_name]))  
+    g.add((STATUS[hisco_status], SKOS['member'], HISCO[variable_name]))
     g.add((STATUS[hisco_status], SKOS['prefLabel'], Literal(hisco_status_label,'en')))
 
 # print g.serialize(format='turtle')
@@ -53,6 +53,3 @@ with open('rdf/hisco_status.ttl','w') as out:
 
 
 # In[ ]:
-
-
-
