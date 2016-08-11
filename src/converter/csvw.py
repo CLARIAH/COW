@@ -80,24 +80,31 @@ class CSVWConverter(object):
         self.np = Nanopublication(file_name)
 
         schema_file_name = file_name + '-metadata.json'
-        metadata = json.load(open(schema_file_name,'r'))
+        metadata = json.load(open(schema_file_name, 'r'))
 
         self.base = metadata['@context'][1]['@base']
         self.BASE = Namespace(self.base)
         self.schema = metadata['tableSchema']
 
+        # The metadata schema overrides the default namespace values
+        # (NB: this does not affect the predefined Namespace objects!)
         namespaces.update({ns: url for ns, url in metadata['@context'][1].items() if not ns.startswith('@')})
 
+        self.templates = {}
         self.aboutURLSchema = self.schema['aboutUrl']
         self.columns = self.schema['columns']
-
 
     def convert(self):
         logger.info("Starting conversion")
         with open(self.file_name) as csvfile:
+            logger.info("Opening CSV file for reading")
             reader = csv.DictReader(csvfile)
-
+            logger.info("Starting parsing process")
+            count = 0
             for row in reader:
+                count += 1
+                logger.debug("row: {}".format(count))
+
                 for c in self.columns:
                     # default
                     s = self.expandURL(self.aboutURLSchema, row)
@@ -105,6 +112,10 @@ class CSVWConverter(object):
                     try:
                         if 'valueUrl' in c:
                             # This is an object property
+                            if len(self.render_pattern(c['valueUrl'], row)) == 0:
+                                # Skip value if length is zero
+                                continue
+
                             if 'virtual' in c and c['virtual'] and 'aboutUrl' in c:
                                 s = self.expandURL(c['aboutUrl'], row)
 
@@ -113,7 +124,11 @@ class CSVWConverter(object):
                         else:
                             # This is a datatype property
 
-                            value = row[c['name']].decode('latin')
+                            if 'value' in c:
+                                value = self.render_pattern(c['value'], row)
+                            else:
+                                value = row[c['name']].decode('latin')
+
                             if len(value) == 0:
                                 # Skip value if length is zero
                                 continue
@@ -121,14 +136,16 @@ class CSVWConverter(object):
                             # If propertyUrl is specified, use it, otherwise use the column name
                             if 'propertyUrl' in c:
                                 p = self.expandURL(c['propertyUrl'], row)
-                            else :
+                            else:
                                 p = self.expandURL(c['name'], row)
 
                             if 'datatype' in c:
                                 if c['datatype'] == 'string' and 'lang' in c:
-                                    # If it is a string datatype that has a language, we turn it into a language tagged literal
-                                    o = Literal(value, lang=c['lang'])
-                                elif isinstance(c['datatype'], dict) :
+                                    # If it is a string datatype that has a language, we turn it into a
+                                    # language tagged literal
+                                    # We also render the lang value in case it is a pattern.
+                                    o = Literal(value, lang=self.render_pattern(c['lang'], row))
+                                elif isinstance(c['datatype'], dict):
                                     # If it is a restricted datatype, we only use its base
                                     dt = self.expandURL(c['datatype']['base'], row, datatype=True)
                                     o = Literal(value, datatype=dt)
@@ -143,7 +160,7 @@ class CSVWConverter(object):
                         # Add the triple to the assertion graph
                         self.np.ag.add((s, p, o))
                     except Exception as e:
-                        print row['auto_id'], value
+                        # print row[0], value
                         traceback.print_exc()
         logger.info("... done")
 
@@ -155,13 +172,21 @@ class CSVWConverter(object):
             self.np.serialize(f, format='trig')
         logger.info("... done")
 
-    def expandURL(self, url_pattern, row, datatype=False):
+    def render_pattern(self, pattern, row):
+        # Significant speedup by not re-instantiating Jinja templates for every row.
+        if pattern in self.templates:
+            template = self.templates[pattern]
+        else:
+            template = self.templates[pattern] = Template(pattern)
+
         # TODO This should take into account the special CSVW instructions such as {_row}
         # First we interpret the url_pattern as a Jinja2 template, and pass all column/value pairs as arguments
-        url_template = Template(url_pattern).render(**row)
+        rendered_template = template.render(**row)
         # We then format the resulting string using the standard Python2 expressions
-        url = url_template.format(**row)
+        return rendered_template.format(**row)
 
+    def expandURL(self, url_pattern, row, datatype=False):
+        url = self.render_pattern(url_pattern, row)
 
         for ns, nsuri in namespaces.items():
             if url.startswith(ns):
@@ -173,7 +198,7 @@ class CSVWConverter(object):
             iri = iribaker.to_iri(url)
         except:
             try:
-                if datatype==False:
+                if datatype == False:
                     fullurl = self.base + url
                 else:
                     # TODO: This should include the custom namespaces as defined in the CSVW spec
