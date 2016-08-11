@@ -1,4 +1,6 @@
 from converter.csvw import CSVWConverter, build_schema
+import os
+import datetime
 import argparse
 
 parser = argparse.ArgumentParser(description="Not nearly CSVW compliant schema builder and RDF converter")
@@ -12,6 +14,12 @@ if __name__ == '__main__':
     if args.mode == 'build':
         source_file = args.file
         target_file = "{}-metadata.json".format(args.file)
+
+        if os.path.exists(target_file):
+            modifiedTime = os.path.getmtime(target_file)
+            timeStamp = datetime.datetime.fromtimestamp(modifiedTime).isoformat()
+            os.rename(target_file, target_file+"_"+timeStamp)
+
         build_schema(source_file, target_file, dataset_name=args.dataset)
 
     elif args.mode == 'convert':
