@@ -63,6 +63,11 @@ python csv2qb.py csv_file_name.json output_file_name.nq
 ```
 
 
+# CSVW to RDF support
+
+* Extended CSVW standard to support Jinja2 template formatting in URL patterns.
+
+
 ## OLD (below)
 
 This repository contains a collection of conversion scripts for various datasets and code lists to RDF:

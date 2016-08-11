@@ -7,6 +7,7 @@ import re
 import iribaker
 import traceback
 import rfc3987
+from jinja2 import Template
 from util import get_namespaces, Nanopublication, QB, RDF, OWL, SKOS, XSD, SDV, SDR, PROV, namespaces
 from rdflib import Namespace, URIRef, Literal
 
@@ -154,9 +155,12 @@ class CSVWConverter(object):
             self.np.serialize(f, format='trig')
         logger.info("... done")
 
-    def expandURL(self, url, row, datatype=False):
+    def expandURL(self, url_pattern, row, datatype=False):
         # TODO This should take into account the special CSVW instructions such as {_row}
-        url = url.format(**row)
+        # First we interpret the url_pattern as a Jinja2 template, and pass all column/value pairs as arguments
+        url_template = Template(url_pattern).render(**row)
+        # We then format the resulting string using the standard Python2 expressions
+        url = url_template.format(**row)
 
 
         for ns, nsuri in namespaces.items():

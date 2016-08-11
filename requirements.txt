@@ -1,12 +1,17 @@
+Jinja2==2.8
 Js2Py==0.31
+MarkupSafe==0.23
 PyYAML==3.11
 SPARQLWrapper==1.7.2
 Werkzeug==0.11.2
 beautifulsoup4==4.4.1
 html5lib==0.999999
-iribaker==0.1.2
+-e git://github.com/CLARIAH-SDH/iribaker.git@7adfa027662355560f798355ec950f94b5af3018#egg=iribaker-master
 isodate==0.5.4
+keepalive==0.5
 language-tags==0.4.1
+nose==1.3.7
+nosetests-json-extended==0.1.0
 pyparsing==2.0.5
 pytz==2015.7
 rdflib==4.2.1
