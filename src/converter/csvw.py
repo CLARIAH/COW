@@ -9,8 +9,7 @@ import traceback
 import rfc3987
 from jinja2 import Template
 from util import get_namespaces, Nanopublication, QB, RDF, OWL, SKOS, XSD, SDV, SDR, PROV, namespaces
-from rdflib import Namespace, URIRef, Literal
-
+from rdflib import Namespace, URIRef, Literal, Graph
 
 
 logger = logging.getLogger(__name__)
@@ -74,31 +73,52 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', dataset_name=No
 
 class CSVWConverter(object):
 
-    def __init__(self, file_name):
+    def __init__(self, file_name, delimiter=',', quotechar='\"'):
 
         self.file_name = file_name
+
+        # TODO: This should be taken from the CSVW schema!
+        self.delimiter = delimiter
+        self.quotechar = quotechar
+
         self.np = Nanopublication(file_name)
 
         schema_file_name = file_name + '-metadata.json'
-        metadata = json.load(open(schema_file_name, 'r'))
+        self.metadata = json.load(open(schema_file_name, 'r'))
+        # TODO: This overrides the identifier of the schema file with that of the nanopublication... do we want that?
+        self.metadata['@id'] = self.np.uri
 
-        self.base = metadata['@context'][1]['@base']
+        self.base = self.metadata['@context'][1]['@base']
         self.BASE = Namespace(self.base)
-        self.schema = metadata['tableSchema']
+        self.schema = self.metadata['tableSchema']
+
 
         # The metadata schema overrides the default namespace values
         # (NB: this does not affect the predefined Namespace objects!)
-        namespaces.update({ns: url for ns, url in metadata['@context'][1].items() if not ns.startswith('@')})
+        namespaces.update({ns: url for ns, url in self.metadata['@context'][1].items() if not ns.startswith('@')})
 
         self.templates = {}
         self.aboutURLSchema = self.schema['aboutUrl']
         self.columns = self.schema['columns']
 
+    def convert_info(self):
+        # We take the entire schema file, except for the tableSchema
+        info = self.metadata.copy()
+        info.pop('tableSchema')
+        # Parse it as json-ld
+        data = json.dumps(info)
+        g = Graph().parse(data=data, format='json-ld')
+        # And add it to the publication information graph of the nanopublication.
+        self.np.ingest(g, self.np.pig.identifier)
+
     def convert(self):
+        # First we convert the publication information from the CSVW schema file
+        self.convert_info()
+
         logger.info("Starting conversion")
         with open(self.file_name) as csvfile:
             logger.info("Opening CSV file for reading")
-            reader = csv.DictReader(csvfile)
+            reader = csv.DictReader(csvfile, delimiter=self.delimiter, quotechar=self.quotechar)
             logger.info("Starting parsing process")
             count = 0
             for row in reader:

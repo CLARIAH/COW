@@ -11,10 +11,16 @@ xml: http://www.w3.org/XML/1998/namespace/
 xsd: http://www.w3.org/2001/XMLSchema#
 prov: http://www.w3.org/ns/prov#
 skos: http://www.w3.org/2004/02/skos/core#
+schema: http://schema.org/
+csvw: http://www.w3.org/ns/csvw#
+dcterms: http://purl.org/dc/terms/
+dc: http://purl.org/dc/terms/
+dc11: http://purl.org/dc/elements/1.1/
 # Other standard namespaces
 qb: http://purl.org/linked-data/cube#
 foaf: http://xmls.com/foaf/0.1/
 np: http://www.nanopub.org/nschema#
+bibo: http://purl.org/ontology/bibo/
 # Default SDMX namespaces
 sdmx-concept: http://purl.org/linked-data/sdmx/2009/concept#
 sdmx-code: http://purl.org/linked-data/sdmx/2009/code#

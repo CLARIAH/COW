@@ -5,31 +5,36 @@ import argparse
 
 parser = argparse.ArgumentParser(description="Not nearly CSVW compliant schema builder and RDF converter")
 parser.add_argument('mode', choices=['convert','build'], default='convert', help='Use the schema of the `file` specified to convert it to RDF, or build a schema from scratch.')
-parser.add_argument('file', type=str, help="Path of the file that should be used for building or converting. Must be a CSV file.")
+parser.add_argument('files', metavar='file', nargs='+', type=str, help="Path(s) of the file(s) that should be used for building or converting. Must be a CSV file.")
 parser.add_argument('--dataset', dest='dataset', type=str, help="A short name (slug) for the name of the dataset (will use input file name if not specified)")
+parser.add_argument('--delimiter', dest='delimiter', default=',', type=str, help="The delimiter used in the CSV file(s)")
+parser.add_argument('--quotechar', dest='quotechar', default='\"', type=str, help="The character used as quotation character in the CSV file(s)")
 
 if __name__ == '__main__':
     args = parser.parse_args()
 
-    if args.mode == 'build':
-        source_file = args.file
-        target_file = "{}-metadata.json".format(args.file)
+    for source_file in args.files:
 
-        if os.path.exists(target_file):
-            modifiedTime = os.path.getmtime(target_file)
-            timeStamp = datetime.datetime.fromtimestamp(modifiedTime).isoformat()
-            os.rename(target_file, target_file+"_"+timeStamp)
+        if args.mode == 'build':
+            print "Building schema for {}".format(source_file)
+            target_file = "{}-metadata.json".format(source_file)
 
-        build_schema(source_file, target_file, dataset_name=args.dataset)
+            if os.path.exists(target_file):
+                modifiedTime = os.path.getmtime(target_file)
+                timestamp = datetime.datetime.fromtimestamp(modifiedTime).isoformat()
+                os.rename(target_file, target_file+"_"+timestamp)
+                print "Backed up prior version of schema to {}".format(target_file+"_"+timestamp)
 
-    elif args.mode == 'convert':
-        source_file = args.file
+            print "Delimiter is: ", repr(args.delimiter)
+            build_schema(source_file, target_file, dataset_name=args.dataset, delimiter=args.delimiter, quotechar=args.quotechar)
 
-        c = CSVWConverter(source_file)
-        c.convert()
-        c.serialize()
-    else :
-        print "Whoops"
+        elif args.mode == 'convert':
+            print "Converting {} to RDF".format(source_file)
+            c = CSVWConverter(source_file, delimiter=args.delimiter, quotechar=args.quotechar)
+            c.convert()
+            c.serialize()
+        else:
+            print "Whoops for file {}".format(f)
 
 # FILE = '../sdh-private-hisco-datasets/hisco_45.csv'
 # SCHEMA = '../sdh-private-hisco-datasets/hisco_45.csv-metadata.json'
