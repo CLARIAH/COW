@@ -10,6 +10,8 @@ import rfc3987
 from jinja2 import Template
 from util import get_namespaces, Nanopublication, QB, RDF, OWL, SKOS, XSD, SDV, SDR, PROV, namespaces
 from rdflib import Namespace, URIRef, Literal, Graph
+from rdflib import URIRef, Literal, Graph, BNode, XSD
+from rdflib.resource import Resource
 
 
 logger = logging.getLogger(__name__)
@@ -69,6 +71,28 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', dataset_name=No
     return
 
 
+class Item(Resource):
+    """Wrapper for the rdflib.resource.Resource class that allows getting property values from resources."""
+    def __getattr__(self, p):
+        """Returns the object for predicate p, either as a list (when multiple bindings exist), as an Item
+           when only one object exists, or Null if there are no values for this predicate"""
+        try:
+            objects = list(self.objects(self._to_ref(*p.split('_', 1))))
+        except:
+            raise Exception("Attribute {} does not specify namespace prefix/qname pair separated by an ".format(p) +
+                            "underscore: e.g. `.csvw_tableSchema`")
+
+        # If there is only one object, return it, otherwise return all objects.
+        if len(objects) == 1:
+            return objects[0]
+        elif len(objects) == 0:
+            return None
+        else:
+            return objects
+
+    def _to_ref(self, pfx, name):
+        """Concatenates the name with the expanded namespace prefix into a new URIRef"""
+        return URIRef(self._graph.store.namespace(pfx) + name)
 
 
 class CSVWConverter(object):
