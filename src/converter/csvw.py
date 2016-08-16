@@ -3,15 +3,14 @@ import datetime
 import csv
 import json
 import logging
-import re
 import iribaker
 import traceback
 import rfc3987
 from jinja2 import Template
-from util import get_namespaces, Nanopublication, QB, RDF, OWL, SKOS, XSD, SDV, SDR, PROV, namespaces
-from rdflib import Namespace, URIRef, Literal, Graph
+from util import get_namespaces, Nanopublication, CSVW, PROV
 from rdflib import URIRef, Literal, Graph, BNode, XSD
 from rdflib.resource import Resource
+from rdflib.collection import Collection
 
 
 logger = logging.getLogger(__name__)
@@ -97,47 +96,83 @@ class Item(Resource):
 
 class CSVWConverter(object):
 
-    def __init__(self, file_name, delimiter=',', quotechar='\"'):
+    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8'):
 
         self.file_name = file_name
 
-        # TODO: This should be taken from the CSVW schema!
-        self.delimiter = delimiter
-        self.quotechar = quotechar
+
+
 
         self.np = Nanopublication(file_name)
 
         schema_file_name = file_name + '-metadata.json'
-        self.metadata = json.load(open(schema_file_name, 'r'))
-        # TODO: This overrides the identifier of the schema file with that of the nanopublication... do we want that?
-        self.metadata['@id'] = self.np.uri
 
-        self.base = self.metadata['@context'][1]['@base']
-        self.BASE = Namespace(self.base)
-        self.schema = self.metadata['tableSchema']
+        # self.metadata = json.load(open(schema_file_name, 'r'))
+        self.metadata_graph = Graph()
+        with open(schema_file_name) as f:
+            self.metadata_graph.load(f, format='json-ld')
 
+        (self.metadata_uri, _) = self.metadata_graph.subject_objects(CSVW.url).next()
+        self.metadata = Item(self.metadata_graph, self.metadata_uri)
+
+        # This overrides the identifier of the schema file with that of the nanopublication... do we want that?
+        # TODO: No, I don't think so but it creates a disconnect between the publicationInfo and the nanopublication
+        # self.metadata['@id'] = self.np.uri
+
+        self.schema = self.metadata.csvw_tableSchema
+
+        # Taking defaults from init arguments
+        self.delimiter = delimiter
+        self.quotechar = quotechar
+        self.encoding = encoding
+
+        # Read csv-specific dialiect specification from JSON structure
+        if self.metadata.csvw_dialect is not None:
+            if self.metadata.csvw_dialect.csvw_delimiter is not None:
+                self.delimiter = str(self.metadata.csvw_dialect.csvw_delimiter)
+
+            if self.metadata.csvw_dialect.csvw_quotechar is not None:
+                self.quotechar = str(self.metadata.csvw_dialect.csvw_quoteChar)
+
+            if self.metadata.csvw_dialect.csvw_encoding is not None:
+                self.encoding = str(self.metadata.csvw_dialect.csvw_encoding)
+
+        logger.info("Quotechar: {}".format(self.quotechar.__repr__()))
+        logger.info("Delimiter: {}".format(self.delimiter.__repr__()))
+        logger.info("Encoding : {}".format(self.encoding.__repr__()))
+        logger.warning("Only taking encoding, quotechar and delimiter specifications into account...")
 
         # The metadata schema overrides the default namespace values
         # (NB: this does not affect the predefined Namespace objects!)
-        namespaces.update({ns: url for ns, url in self.metadata['@context'][1].items() if not ns.startswith('@')})
+        # DEPRECATED
+        # namespaces.update({ns: url for ns, url in self.metadata['@context'][1].items() if not ns.startswith('@')})
 
         self.templates = {}
-        self.aboutURLSchema = self.schema['aboutUrl']
-        self.columns = self.schema['columns']
+        self.aboutURLSchema = self.schema.csvw_aboutUrl
+        # Cast the CSVW column rdf:List into an RDF collection
+        self.columns = Collection(self.metadata_graph, BNode(self.schema.csvw_column))
 
     def convert_info(self):
-        # We take the entire schema file, except for the tableSchema
-        info = self.metadata.copy()
-        info.pop('tableSchema')
-        # Parse it as json-ld
-        data = json.dumps(info)
-        g = Graph().parse(data=data, format='json-ld')
-        # And add it to the publication information graph of the nanopublication.
-        self.np.ingest(g, self.np.pig.identifier)
+        # TODO: Need to replace this with the RDF-based one.
+
+        results = self.metadata_graph.query("SELECT ?s ?p ?o WHERE {?s ?p ?o . FILTER(?p = csvw:valueUrl || ?p = csvw:propertyUrl || ?p = csvw:aboutUrl)}")
+
+        for (s, p, o) in results:
+            # Use iribaker
+            escaped_object = URIRef(iribaker.to_iri(unicode(o)))
+
+            # If the escaped IRI of the object is different from the original, update the graph.
+            if escaped_object != o:
+                self.metadata_graph.set((s, p, escaped_object))
+                # Add the provenance of this operation.
+                self.np.pg.add((escaped_object, PROV.wasDerivedFrom, Literal(unicode(o), datatype=XSD.string)))
+
+        self.np.ingest(self.metadata_graph, self.np.pig.identifier)
+
+        return
 
     def convert(self):
-        # First we convert the publication information from the CSVW schema file
-        self.convert_info()
+
 
         logger.info("Starting conversion")
         with open(self.file_name) as csvfile:
@@ -150,53 +185,64 @@ class CSVWConverter(object):
                 logger.debug("row: {}".format(count))
 
                 for c in self.columns:
-                    # default
+
+                    c = Item(self.metadata_graph, c)
+                    # default about URL
                     s = self.expandURL(self.aboutURLSchema, row)
 
                     try:
-                        if 'valueUrl' in c:
+                        # Can also be used to prevent the triggering of virtual columns!
+                        value = row[unicode(c.csvw_name)].decode(self.encoding)
+                        if len(value) == 0 or value == unicode(c.csvw_null) or value == unicode(self.schema.csvw_null):
+                            # Skip value if length is zero
+                            logger.debug("Length is 0 or value is equal to specified 'null' value")
+                            continue
+                    except:
+                        # No column name specified (virtual)
+                        pass
+
+                    try:
+                        if unicode(c.csvw_virtual) == u'true' and c.csvw_aboutUrl is not None:
+                            s = self.expandURL(c.csvw_aboutUrl, row)
+
+                        if c.csvw_valueUrl is not None:
                             # This is an object property
-                            if len(self.render_pattern(c['valueUrl'], row)) == 0:
-                                # Skip value if length is zero
-                                continue
 
-                            if 'virtual' in c and c['virtual'] and 'aboutUrl' in c:
-                                s = self.expandURL(c['aboutUrl'], row)
-
-                            p = self.expandURL(c['propertyUrl'], row)
-                            o = self.expandURL(c['valueUrl'], row)
+                            p = self.expandURL(c.csvw_propertyUrl, row)
+                            o = self.expandURL(c.csvw_valueUrl, row)
                         else:
                             # This is a datatype property
 
-                            if 'value' in c:
-                                value = self.render_pattern(c['value'], row)
+                            if c.csvw_value is not None:
+                                value = self.render_pattern(c.csvw_value, row)
                             else:
-                                value = row[c['name']].decode('latin')
+                                # print s, c.csvw_value, c.csvw_propertyUrl, c.csvw_name, self.encoding
+                                value = row[unicode(c.csvw_name)].decode(self.encoding)
 
-                            if len(value) == 0:
-                                # Skip value if length is zero
-                                continue
+                            # DEPRECATED
+                            # TODO: Ensure that null values are dealt with in a proper fashion
+                            # if len(value) == 0:
+                            #     # Skip value if length is zero
+                            #     continue
 
                             # If propertyUrl is specified, use it, otherwise use the column name
-                            if 'propertyUrl' in c:
-                                p = self.expandURL(c['propertyUrl'], row)
+                            if c.csvw_propertyUrl is not None:
+                                p = self.expandURL(c.csvw_propertyUrl, row)
                             else:
-                                p = self.expandURL(c['name'], row)
-
-                            if 'datatype' in c:
-                                if c['datatype'] == 'string' and 'lang' in c:
-                                    # If it is a string datatype that has a language, we turn it into a
-                                    # language tagged literal
-                                    # We also render the lang value in case it is a pattern.
-                                    o = Literal(value, lang=self.render_pattern(c['lang'], row))
-                                elif isinstance(c['datatype'], dict):
-                                    # If it is a restricted datatype, we only use its base
-                                    dt = self.expandURL(c['datatype']['base'], row, datatype=True)
-                                    o = Literal(value, datatype=dt)
+                                if "" in self.metadata_graph.namespaces():
+                                    propertyUrl = g.metadata_graph.namespaces()[unicode(c.csvw_name)]
                                 else:
-                                    # Otherwise we just use the datatype specified
-                                    dt = self.expandURL(c['datatype'], row, datatype=True)
-                                    o = Literal(value, datatype=dt)
+                                    propertyUrl = "http://data.socialhistory.org/ns/resource/{}".format(unicode(c.csvw_name))
+
+                                p = self.expandURL(propertyUrl, row)
+
+                            if c.csvw_datatype == XSD.string and c.csvw_language is not None:
+                                # If it is a string datatype that has a language, we turn it into a
+                                # language tagged literal
+                                # We also render the lang value in case it is a pattern.
+                                o = Literal(value, lang=self.render_pattern(c.csvw_language, row))
+                            elif c.csvw_datatype is not None:
+                                o = Literal(value, datatype=c.csvw_datatype)
                             else:
                                 # It's just a plain literal without datatype.
                                 o = Literal(value)
@@ -206,6 +252,9 @@ class CSVWConverter(object):
                     except Exception as e:
                         # print row[0], value
                         traceback.print_exc()
+
+        # Finally we convert the publication information from the CSVW schema file
+        self.convert_info()
         logger.info("... done")
 
     def serialize(self):
@@ -226,32 +275,34 @@ class CSVWConverter(object):
         # TODO This should take into account the special CSVW instructions such as {_row}
         # First we interpret the url_pattern as a Jinja2 template, and pass all column/value pairs as arguments
         rendered_template = template.render(**row)
+
         # We then format the resulting string using the standard Python2 expressions
         return rendered_template.format(**row)
 
     def expandURL(self, url_pattern, row, datatype=False):
-        url = self.render_pattern(url_pattern, row)
+        url = self.render_pattern(unicode(url_pattern), row)
 
-        for ns, nsuri in namespaces.items():
-            if url.startswith(ns):
-                url = url.replace(ns + ':', nsuri)
-                break
+        # DEPRECATED
+        # for ns, nsuri in namespaces.items():
+        #     if url.startswith(ns):
+        #         url = url.replace(ns + ':', nsuri)
+        #         break
 
         try:
             rfc3987.parse(url, rule='IRI')
             iri = iribaker.to_iri(url)
         except:
-            try:
-                if datatype == False:
-                    fullurl = self.base + url
-                else:
-                    # TODO: This should include the custom namespaces as defined in the CSVW spec
-                    fullurl = namespaces['xsd'] + url
-
-                rfc3987.parse(fullurl, rule='IRI')
-                iri = iribaker.to_iri(fullurl)
-            except:
-                raise Exception("Cannot convert `{}` to valid IRI".format(url))
+            # try:
+            #     if datatype is False:
+            #         fullurl = self.base + url
+            #     else:
+            #         # TODO: This should include the custom namespaces as defined in the CSVW spec
+            #         fullurl = namespaces['xsd'] + url
+            #
+            #     rfc3987.parse(fullurl, rule='IRI')
+            #     iri = iribaker.to_iri(fullurl)
+            # except:
+            raise Exception("Cannot convert `{}` to valid IRI".format(url))
 
         # print "Baked: ", iri
         return URIRef(iri)
