@@ -21,6 +21,7 @@ qb: http://purl.org/linked-data/cube#
 foaf: http://xmls.com/foaf/0.1/
 np: http://www.nanopub.org/nschema#
 bibo: http://purl.org/ontology/bibo/
+time: http://www.w3.org/2006/time#
 # Default SDMX namespaces
 sdmx-concept: http://purl.org/linked-data/sdmx/2009/concept#
 sdmx-code: http://purl.org/linked-data/sdmx/2009/code#
@@ -39,6 +40,10 @@ hisco-entry: http://data.socialhistory.org/ns/resource/hisco/entry/
 hisco-status: http://data.socialhistory.org/ns/resource/hisco/status/
 hisco-relation: http://data.socialhistory.org/ns/resource/hisco/relation/
 hisco-product: http://data.socialhistory.org/ns/resource/hisco/product/
+# HSN
+hsn: http://data.socialhistory.org/ns/resource/hsn2013a/
+hisclass: http://data.socialhistory.org/ns/resource/hisclass/
+hisclass5: "http://data.socialhistory.org/ns/resource/hisclass5/"
 # Canadian Families
 canfam: http://data.socialhistory.org/ns/resource/canfam/dataset/canada1901/
 canfam-auke: http://data.socialhistory.org/ns/resource/canfam/auke/
