@@ -6,6 +6,7 @@ import logging
 import iribaker
 import traceback
 import rfc3987
+import urllib
 from jinja2 import Template
 from util import get_namespaces, Nanopublication, CSVW, PROV
 from rdflib import URIRef, Literal, Graph, BNode, XSD
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def build_schema(infile, outfile, delimiter=',', quotechar='\"', dataset_name=None):
+def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding='utf-8', dataset_name=None):
     url = os.path.basename(infile)
     # Get the current date and time (UTC)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
@@ -28,6 +29,11 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', dataset_name=No
     metadata = {
         "@context": ["http://www.w3.org/ns/csvw", {"@language": "en", "@base": "http://data.socialhistory.org/ns/resource/"}, get_namespaces()],
         "url": url,
+        "dialect": {
+             "delimiter": delimiter,
+             "encoding": encoding,
+             "quoteChar": quotechar
+         },
         "dc:title": dataset_name,
         "dcat:keyword": [],
         "dc:publisher": {
@@ -181,6 +187,9 @@ class CSVWConverter(object):
             logger.info("Starting parsing process")
             count = 0
             for row in reader:
+                for k,v in row.items():
+                    row[k] = v.decode(self.encoding)
+
                 count += 1
                 logger.debug("row: {}".format(count))
 
@@ -217,7 +226,7 @@ class CSVWConverter(object):
                                 value = self.render_pattern(c.csvw_value, row)
                             else:
                                 # print s, c.csvw_value, c.csvw_propertyUrl, c.csvw_name, self.encoding
-                                value = row[unicode(c.csvw_name)].decode(self.encoding)
+                                value = row[unicode(c.csvw_name)]
 
                             # DEPRECATED
                             # TODO: Ensure that null values are dealt with in a proper fashion
@@ -276,8 +285,13 @@ class CSVWConverter(object):
         # First we interpret the url_pattern as a Jinja2 template, and pass all column/value pairs as arguments
         rendered_template = template.render(**row)
 
-        # We then format the resulting string using the standard Python2 expressions
-        return rendered_template.format(**row)
+        try:
+            # We then format the resulting string using the standard Python2 expressions
+            return rendered_template.format(**row)
+        except:
+            logger.warning("Could not apply python string formatting to '{}'".format(rendered_template))
+            return rendered_template
+
 
     def expandURL(self, url_pattern, row, datatype=False):
         url = self.render_pattern(unicode(url_pattern), row)
@@ -289,20 +303,11 @@ class CSVWConverter(object):
         #         break
 
         try:
-            rfc3987.parse(url, rule='IRI')
             iri = iribaker.to_iri(url)
+            rfc3987.parse(iri, rule='IRI')
         except:
-            # try:
-            #     if datatype is False:
-            #         fullurl = self.base + url
-            #     else:
-            #         # TODO: This should include the custom namespaces as defined in the CSVW spec
-            #         fullurl = namespaces['xsd'] + url
-            #
-            #     rfc3987.parse(fullurl, rule='IRI')
-            #     iri = iribaker.to_iri(fullurl)
-            # except:
-            raise Exception("Cannot convert `{}` to valid IRI".format(url))
+            raise Exception(u"Cannot convert `{}` to valid IRI".format(url))
+
 
         # print "Baked: ", iri
         return URIRef(iri)
