@@ -62,13 +62,28 @@ class TestConversion(unittest.TestCase):
 
         c.convert()
 
+    def test_simple_csvw_conversion(self):
+        """
+        Tests simple, serial CSVW conversion (1 threads) capability of csvw.Converter class
+        """
+
+        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'hsn2013a_hisco_comma_short.csv'), processes=1)
+        c.convert()
+
     def test_parallel_csvw_conversion(self):
         """
         Tests parallel CSVW conversion (2 threads) capability of csvw.Converter class
         """
 
-        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'hsn2013a_hisco_comma_short.csv'))
+        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'hsn2013a_hisco_comma_short.csv'), processes=2)
+        c.convert()
 
+    def test_parallel_csvw_conversion_CEDAR(self):
+        """
+        Tests parallel CSVW conversion (2 threads) capability of csvw.Converter class (Swedish CEDAR)
+        """
+
+        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'se_CEDAR_HISCO.csv'), processes=2)
         c.convert()
 
     def test_datatype_conversion(self):
@@ -90,7 +105,7 @@ class TestConversion(unittest.TestCase):
         c.convert()
 
         dataset = Dataset()
-        with open(os.path.join(os.path.dirname(__file__), 'datatype_conversion_output.nq'), "r") as graph_file:
+        with open('datatype_conversion_output.nq', "r") as graph_file:
             dataset.load(graph_file, format='nquads')
 
         q = """

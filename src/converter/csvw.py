@@ -7,6 +7,7 @@ import iribaker
 import traceback
 import rfc3987
 import multiprocessing as mp
+import codecs
 from jinja2 import Template
 from util import get_namespaces, Nanopublication, CSVW, PROV, apply_default_namespaces
 from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
@@ -14,6 +15,7 @@ from rdflib.resource import Resource
 from rdflib.collection import Collection
 from functools import partial
 from itertools import izip_longest
+
 
 
 logger = logging.getLogger(__name__)
@@ -186,7 +188,7 @@ class CSVWConverter(object):
         logger.info("Starting conversion")
 
         with open(self.target_file, 'w') as target_file:
-            with open(self.file_name) as csvfile:
+            with codecs.open(self.file_name, 'r', encoding=self.encoding) as csvfile:
                 logger.info("Opening CSV file for reading")
                 reader = csv.DictReader(csvfile, delimiter=self.delimiter, quotechar=self.quotechar)
 
