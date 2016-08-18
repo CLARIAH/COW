@@ -5,7 +5,7 @@ PyYAML==3.11
 SPARQLWrapper==1.7.6
 Werkzeug==0.11.2
 beautifulsoup4==4.4.1
-html5lib==0.999999999
+html5lib==0.9999999
 -e git://github.com/CLARIAH-SDH/iribaker.git@7adfa027662355560f798355ec950f94b5af3018#egg=iribaker-master
 isodate==0.5.4
 keepalive==0.5
