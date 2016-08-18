@@ -1,5 +1,6 @@
 import unittest
 import json
+import os
 
 from converter import Converter
 from converter.qberify import build_schema
@@ -13,7 +14,7 @@ class TestConversion(unittest.TestCase):
         """
         Tests basic initialization capability of converter.Converter class
         """
-        with open('tests/qber-output-example.json') as dataset_file:
+        with open(os.path.join(os.path.dirname(__file__), 'qber-output-example.json')) as dataset_file:
             dataset = json.load(dataset_file)
 
         author_profile = {
@@ -28,7 +29,7 @@ class TestConversion(unittest.TestCase):
         """
         Tests simple conversion (non-parallel) capability of converter.Converter class
         """
-        with open('tests/qber-output-example.json') as dataset_file:
+        with open(os.path.join(os.path.dirname(__file__), 'qber-output-example.json')) as dataset_file:
             dataset = json.load(dataset_file)
 
         author_profile = {
@@ -46,7 +47,7 @@ class TestConversion(unittest.TestCase):
         """
         Tests parallel conversion (2 threads) capability of converter.Converter class
         """
-        with open('tests/qber-output-example.json') as dataset_file:
+        with open(os.path.join(os.path.dirname(__file__), 'qber-output-example.json')) as dataset_file:
             dataset = json.load(dataset_file)
 
         author_profile = {
@@ -65,7 +66,7 @@ class TestConversion(unittest.TestCase):
         Tests parallel CSVW conversion (2 threads) capability of csvw.Converter class
         """
 
-        c = csvw.CSVWConverter("tests/hsn2013a_hisco_comma_short.csv")
+        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'hsn2013a_hisco_comma_short.csv'))
 
         c.convert()
 
@@ -73,7 +74,7 @@ class TestConversion(unittest.TestCase):
         """
         Tests simple conversion that takes datatypes for 'other' variables in converter.Converter class
         """
-        with open('tests/qber-output-example.json') as dataset_file:
+        with open(os.path.join(os.path.dirname(__file__), 'qber-output-example.json')) as dataset_file:
             dataset = json.load(dataset_file)
 
         author_profile = {
@@ -88,7 +89,7 @@ class TestConversion(unittest.TestCase):
         c.convert()
 
         dataset = Dataset()
-        with open("datatype_conversion_output.nq", "r") as graph_file:
+        with open(os.path.join(os.path.dirname(__file__), 'datatype_conversion_output.nq'), "r") as graph_file:
             dataset.load(graph_file, format='nquads')
 
         q = """
@@ -109,7 +110,7 @@ class TestConversion(unittest.TestCase):
         """
         Tests simple conversion that transforms the 'achternaam' variable values using the `transformation` attribute
         """
-        with open('tests/qber-output-example.json') as dataset_file:
+        with open(os.path.join(os.path.dirname(__file__), 'qber-output-example.json')) as dataset_file:
             dataset = json.load(dataset_file)
 
         author_profile = {
@@ -144,7 +145,7 @@ class TestConversion(unittest.TestCase):
         """
         Tests simple conversion that takes a minimal example that specifies a valueUrl mapping
         """
-        with open('tests/qber-output-no-values.json') as dataset_file:
+        with open(os.path.join(os.path.dirname(__file__), 'qber-output-no-values.json')) as dataset_file:
             dataset = json.load(dataset_file)
 
         author_profile = {
@@ -163,9 +164,11 @@ class TestConversion(unittest.TestCase):
         Tests the extraction of a QBer-style schema from a CSV file, and subsequent conversion in a single process
         """
 
-        build_schema('tests/englandwales1881_tiny.csv', 'tests/englandwales1881_tiny.json', dataset_name='englandwales1881')
+        build_schema(os.path.join(os.path.dirname(__file__), 'tests/englandwales1881_tiny.csv'),
+                     os.path.join(os.path.dirname(__file__), 'tests/englandwales1881_tiny.json'),
+                     dataset_name='englandwales1881')
 
-        with open('tests/englandwales1881_tiny.json') as dataset_file:
+        with open(os.path.join(os.path.dirname(__file__), 'tests/englandwales1881_tiny.json')) as dataset_file:
             dataset = json.load(dataset_file)
 
         author_profile = {
