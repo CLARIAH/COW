@@ -7,6 +7,7 @@ from converter.qberify import build_schema
 import converter.csvw as csvw
 from rdflib import Dataset
 
+THIS_DIRECTORY = os.path.dirname(__file__)
 
 class TestConversion(unittest.TestCase):
 
@@ -23,7 +24,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile)
+        c = Converter(dataset['dataset'], THIS_DIRECTORY, author_profile)
 
     def test_simple_conversion(self):
         """
@@ -38,7 +39,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], '', author_profile, target="simple_conversion_output.nq")
+        c = Converter(dataset['dataset'], THIS_DIRECTORY, author_profile, target="simple_conversion_output.nq")
         c.setProcesses(1)
 
         c.convert()
@@ -56,7 +57,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], '', author_profile, target="parallel_conversion_output.nq")
+        c = Converter(dataset['dataset'], THIS_DIRECTORY, author_profile, target="parallel_conversion_output.nq")
         c.setProcesses(2)
 
         c.convert()
@@ -83,7 +84,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile, target="datatype_conversion_output.nq")
+        c = Converter(dataset['dataset'], THIS_DIRECTORY, author_profile, target="datatype_conversion_output.nq")
         c.setProcesses(1)
 
         c.convert()
@@ -119,7 +120,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile, target="transformation_function_output.nq")
+        c = Converter(dataset['dataset'], THIS_DIRECTORY, author_profile, target="transformation_function_output.nq")
         c.setProcesses(1)
 
         c.convert()
@@ -154,7 +155,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile, target="output_valueUrl.nq")
+        c = Converter(dataset['dataset'], THIS_DIRECTORY, author_profile, target="output_valueUrl.nq")
         c.setProcesses(1)
 
         c.convert()
@@ -177,7 +178,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile, target="output_extract_qber_schema.nq")
+        c = Converter(dataset['dataset'], THIS_DIRECTORY, author_profile, target="output_extract_qber_schema.nq")
         c.setProcesses(4)
 
         c.convert()
