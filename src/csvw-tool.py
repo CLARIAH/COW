@@ -32,7 +32,6 @@ if __name__ == '__main__':
             print "Converting {} to RDF".format(source_file)
             c = CSVWConverter(source_file, delimiter=args.delimiter, quotechar=args.quotechar)
             c.convert()
-            c.serialize()
         else:
             print "Whoops for file {}".format(f)
 

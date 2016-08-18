@@ -6,12 +6,14 @@ import logging
 import iribaker
 import traceback
 import rfc3987
-import urllib
+import multiprocessing as mp
 from jinja2 import Template
-from util import get_namespaces, Nanopublication, CSVW, PROV
-from rdflib import URIRef, Literal, Graph, BNode, XSD
+from util import get_namespaces, Nanopublication, CSVW, PROV, apply_default_namespaces
+from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
 from rdflib.resource import Resource
 from rdflib.collection import Collection
+from functools import partial
+from itertools import izip_longest
 
 
 logger = logging.getLogger(__name__)
@@ -84,8 +86,10 @@ class Item(Resource):
         try:
             objects = list(self.objects(self._to_ref(*p.split('_', 1))))
         except:
-            raise Exception("Attribute {} does not specify namespace prefix/qname pair separated by an ".format(p) +
-                            "underscore: e.g. `.csvw_tableSchema`")
+            logger.debug("Calling parent function for Item.__getattr__ ...")
+            super(Item, self).__getattr__(self, p)
+            # raise Exception("Attribute {} does not specify namespace prefix/qname pair separated by an ".format(p) +
+            #                 "underscore: e.g. `.csvw_tableSchema`")
 
         # If there is only one object, return it, otherwise return all objects.
         if len(objects) == 1:
@@ -102,17 +106,16 @@ class Item(Resource):
 
 class CSVWConverter(object):
 
-    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8'):
+    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8', processes=2, chunksize=5):
 
         self.file_name = file_name
-
-
-
-
-        self.np = Nanopublication(file_name)
-
+        self.target_file = self.file_name + '.nq'
         schema_file_name = file_name + '-metadata.json'
 
+        self._processes = processes
+        self._chunksize = chunksize
+
+        self.np = Nanopublication(file_name)
         # self.metadata = json.load(open(schema_file_name, 'r'))
         self.metadata_graph = Graph()
         with open(schema_file_name) as f:
@@ -153,15 +156,15 @@ class CSVWConverter(object):
         # DEPRECATED
         # namespaces.update({ns: url for ns, url in self.metadata['@context'][1].items() if not ns.startswith('@')})
 
-        self.templates = {}
-        self.aboutURLSchema = self.schema.csvw_aboutUrl
         # Cast the CSVW column rdf:List into an RDF collection
         self.columns = Collection(self.metadata_graph, BNode(self.schema.csvw_column))
 
     def convert_info(self):
-        # TODO: Need to replace this with the RDF-based one.
-
-        results = self.metadata_graph.query("SELECT ?s ?p ?o WHERE {?s ?p ?o . FILTER(?p = csvw:valueUrl || ?p = csvw:propertyUrl || ?p = csvw:aboutUrl)}")
+        results = self.metadata_graph.query("""SELECT ?s ?p ?o
+                                               WHERE { ?s ?p ?o .
+                                                       FILTER(?p = csvw:valueUrl ||
+                                                              ?p = csvw:propertyUrl ||
+                                                              ?p = csvw:aboutUrl)}""")
 
         for (s, p, o) in results:
             # Use iribaker
@@ -171,108 +174,194 @@ class CSVWConverter(object):
             if escaped_object != o:
                 self.metadata_graph.set((s, p, escaped_object))
                 # Add the provenance of this operation.
-                self.np.pg.add((escaped_object, PROV.wasDerivedFrom, Literal(unicode(o), datatype=XSD.string)))
+                self.np.pg.add((escaped_object,
+                                PROV.wasDerivedFrom,
+                                Literal(unicode(o), datatype=XSD.string)))
 
         self.np.ingest(self.metadata_graph, self.np.pig.identifier)
 
         return
 
     def convert(self):
-
-
         logger.info("Starting conversion")
-        with open(self.file_name) as csvfile:
-            logger.info("Opening CSV file for reading")
-            reader = csv.DictReader(csvfile, delimiter=self.delimiter, quotechar=self.quotechar)
-            logger.info("Starting parsing process")
-            count = 0
-            for row in reader:
-                for k,v in row.items():
-                    row[k] = v.decode(self.encoding)
 
-                count += 1
-                logger.debug("row: {}".format(count))
+        with open(self.target_file, 'w') as target_file:
+            with open(self.file_name) as csvfile:
+                logger.info("Opening CSV file for reading")
+                reader = csv.DictReader(csvfile, delimiter=self.delimiter, quotechar=self.quotechar)
 
-                for c in self.columns:
+                logger.info("Starting parsing process")
 
-                    c = Item(self.metadata_graph, c)
-                    # default about URL
-                    s = self.expandURL(self.aboutURLSchema, row)
+                if self._processes > 1:
+                    self._parallel(reader, target_file)
+                else:
+                    self._simple(reader, target_file)
 
-                    try:
-                        # Can also be used to prevent the triggering of virtual columns!
-                        value = row[unicode(c.csvw_name)].decode(self.encoding)
-                        if len(value) == 0 or value == unicode(c.csvw_null) or value == unicode(self.schema.csvw_null):
-                            # Skip value if length is zero
-                            logger.debug("Length is 0 or value is equal to specified 'null' value")
-                            continue
-                    except:
-                        # No column name specified (virtual)
-                        pass
+            self.convert_info()
+            # Finally, write the nanopublication info to file
+            target_file.write(self.np.serialize(format='nquads'))
 
-                    try:
-                        if unicode(c.csvw_virtual) == u'true' and c.csvw_aboutUrl is not None:
-                            s = self.expandURL(c.csvw_aboutUrl, row)
+    def _simple(self, reader, target_file):
+        c = BurstConverter(self.np.ag.identifier, self.columns, self.schema, self.metadata_graph, self.encoding)
+        # Out will contain an N-Quads serialized representation of the converted CSV
+        out = c.process(0, reader, 1)
+        # We then write it to the file
+        target_file.write(out)
 
-                        if c.csvw_valueUrl is not None:
-                            # This is an object property
+    def _parallel(self, reader, target_file):
+        # Initialize a pool of processes (default=4)
+        pool = mp.Pool(processes=self._processes)
+        print "Running with {} processes".format(self._processes)
 
-                            p = self.expandURL(c.csvw_propertyUrl, row)
-                            o = self.expandURL(c.csvw_valueUrl, row)
+        # The _burstConvert function is partially instantiated, and will be successively called with
+        # chunksize rows from the CSV file
+        burstConvert_partial = partial(_burstConvert,
+                                       identifier=self.np.ag.identifier,
+                                       columns=self.columns,
+                                       schema=self.schema,
+                                       metadata_graph=self.metadata_graph,
+                                       encoding=self.encoding,
+                                       chunksize=self._chunksize)
+
+        # The result of each chunksize run will be written to the target file
+        try:
+            for out in pool.imap(burstConvert_partial, enumerate(grouper(self._chunksize, reader))):
+                target_file.write(out)
+        except:
+            traceback.print_exc()
+
+        # Make sure to close and join the pool once finished.
+        pool.close()
+        pool.join()
+
+
+def grouper(n, iterable, padvalue=None):
+    "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
+    return izip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
+
+
+# This has to be a global method for the parallelization to work.
+def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, encoding, chunksize):
+
+    try:
+        count, rows = enumerated_rows
+        c = BurstConverter(identifier, columns, schema, metadata_graph, encoding)
+
+        print mp.current_process().name, count, len(rows)
+
+        result = c.process(count, rows, chunksize)
+
+        print mp.current_process().name, 'done'
+
+        return result
+    except:
+        traceback.print_exc()
+        return "ERROR"
+
+
+class BurstConverter(object):
+
+    def __init__(self, identifier, columns, schema, metadata_graph, encoding):
+        self.ds = apply_default_namespaces(Dataset())
+        self.g = self.ds.graph(URIRef(identifier))
+
+        self.columns = columns
+        self.schema = schema
+        self.metadata_graph = metadata_graph
+        self.encoding = encoding
+
+        self.templates = {}
+
+        self.aboutURLSchema = self.schema.csvw_aboutUrl
+
+    def process(self, count, rows, chunksize):
+        obs_count = count * chunksize
+
+        print "Row: {}".format(obs_count)
+
+        for row in rows:
+            for k, v in row.items():
+                row[k] = v.decode(self.encoding)
+
+            count += 1
+            logger.debug("row: {}".format(count))
+
+            for c in self.columns:
+
+                c = Item(self.metadata_graph, c)
+                # default about URL
+                s = self.expandURL(self.aboutURLSchema, row)
+
+                try:
+                    # Can also be used to prevent the triggering of virtual columns!
+                    value = row[unicode(c.csvw_name)].decode(self.encoding)
+                    if len(value) == 0 or value == unicode(c.csvw_null) or value == unicode(self.schema.csvw_null):
+                        # Skip value if length is zero
+                        logger.debug("Length is 0 or value is equal to specified 'null' value")
+                        continue
+                except:
+                    # No column name specified (virtual)
+                    pass
+
+                try:
+                    if unicode(c.csvw_virtual) == u'true' and c.csvw_aboutUrl is not None:
+                        s = self.expandURL(c.csvw_aboutUrl, row)
+
+                    if c.csvw_valueUrl is not None:
+                        # This is an object property
+
+                        p = self.expandURL(c.csvw_propertyUrl, row)
+                        o = self.expandURL(c.csvw_valueUrl, row)
+                    else:
+                        # This is a datatype property
+
+                        if c.csvw_value is not None:
+                            value = self.render_pattern(c.csvw_value, row)
                         else:
-                            # This is a datatype property
+                            # print s, c.csvw_value, c.csvw_propertyUrl, c.csvw_name, self.encoding
+                            value = row[unicode(c.csvw_name)]
 
-                            if c.csvw_value is not None:
-                                value = self.render_pattern(c.csvw_value, row)
+                        # If propertyUrl is specified, use it, otherwise use the column name
+                        if c.csvw_propertyUrl is not None:
+                            p = self.expandURL(c.csvw_propertyUrl, row)
+                        else:
+                            if "" in self.metadata_graph.namespaces():
+                                propertyUrl = self.metadata_graph.namespaces()[""][unicode(c.csvw_name)]
                             else:
-                                # print s, c.csvw_value, c.csvw_propertyUrl, c.csvw_name, self.encoding
-                                value = row[unicode(c.csvw_name)]
+                                propertyUrl = "http://data.socialhistory.org/ns/resource/{}".format(unicode(c.csvw_name))
 
-                            # DEPRECATED
-                            # TODO: Ensure that null values are dealt with in a proper fashion
-                            # if len(value) == 0:
-                            #     # Skip value if length is zero
-                            #     continue
+                            p = self.expandURL(propertyUrl, row)
 
-                            # If propertyUrl is specified, use it, otherwise use the column name
-                            if c.csvw_propertyUrl is not None:
-                                p = self.expandURL(c.csvw_propertyUrl, row)
-                            else:
-                                if "" in self.metadata_graph.namespaces():
-                                    propertyUrl = g.metadata_graph.namespaces()[unicode(c.csvw_name)]
-                                else:
-                                    propertyUrl = "http://data.socialhistory.org/ns/resource/{}".format(unicode(c.csvw_name))
+                        if c.csvw_datatype == XSD.string and c.csvw_language is not None:
+                            # If it is a string datatype that has a language, we turn it into a
+                            # language tagged literal
+                            # We also render the lang value in case it is a pattern.
+                            o = Literal(value, lang=self.render_pattern(c.csvw_language, row))
+                        elif c.csvw_datatype is not None:
+                            o = Literal(value, datatype=c.csvw_datatype)
+                        else:
+                            # It's just a plain literal without datatype.
+                            o = Literal(value)
 
-                                p = self.expandURL(propertyUrl, row)
+                    # Add the triple to the assertion graph
+                    self.g.add((s, p, o))
+                except:
+                    # print row[0], value
+                    traceback.print_exc()
 
-                            if c.csvw_datatype == XSD.string and c.csvw_language is not None:
-                                # If it is a string datatype that has a language, we turn it into a
-                                # language tagged literal
-                                # We also render the lang value in case it is a pattern.
-                                o = Literal(value, lang=self.render_pattern(c.csvw_language, row))
-                            elif c.csvw_datatype is not None:
-                                o = Literal(value, datatype=c.csvw_datatype)
-                            else:
-                                # It's just a plain literal without datatype.
-                                o = Literal(value)
+            # We increment the observation (row number) with one
+            obs_count += 1
 
-                        # Add the triple to the assertion graph
-                        self.np.ag.add((s, p, o))
-                    except Exception as e:
-                        # print row[0], value
-                        traceback.print_exc()
-
-        # Finally we convert the publication information from the CSVW schema file
-        self.convert_info()
         logger.info("... done")
+        return self.ds.serialize(format='nquads')
 
-    def serialize(self):
-        trig_file_name = self.file_name + '.trig'
-        logger.info("Starting serialization to {}".format(trig_file_name))
-
-        with open(trig_file_name, 'w') as f:
-            self.np.serialize(f, format='trig')
-        logger.info("... done")
+    # def serialize(self):
+    #     trig_file_name = self.file_name + '.trig'
+    #     logger.info("Starting serialization to {}".format(trig_file_name))
+    #
+    #     with open(trig_file_name, 'w') as f:
+    #         self.np.serialize(f, format='trig')
+    #     logger.info("... done")
 
     def render_pattern(self, pattern, row):
         # Significant speedup by not re-instantiating Jinja templates for every row.
@@ -291,7 +380,6 @@ class CSVWConverter(object):
         except:
             logger.warning("Could not apply python string formatting to '{}'".format(rendered_template))
             return rendered_template
-
 
     def expandURL(self, url_pattern, row, datatype=False):
         url = self.render_pattern(unicode(url_pattern), row)

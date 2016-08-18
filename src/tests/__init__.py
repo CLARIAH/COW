@@ -3,6 +3,7 @@ import json
 
 from converter import Converter
 from converter.qberify import build_schema
+import converter.csvw as csvw
 from rdflib import Dataset
 
 
@@ -36,7 +37,7 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile, target="simple_conversion_output.nq")
+        c = Converter(dataset['dataset'], '', author_profile, target="simple_conversion_output.nq")
         c.setProcesses(1)
 
         c.convert()
@@ -54,8 +55,17 @@ class TestConversion(unittest.TestCase):
             'id': '2938472912'
         }
 
-        c = Converter(dataset['dataset'], author_profile, target="parallel_conversion_output.nq")
+        c = Converter(dataset['dataset'], '', author_profile, target="parallel_conversion_output.nq")
         c.setProcesses(2)
+
+        c.convert()
+
+    def test_parallel_csvw_conversion(self):
+        """
+        Tests parallel CSVW conversion (2 threads) capability of csvw.Converter class
+        """
+
+        c = csvw.CSVWConverter("tests/hsn2013a_hisco_comma_short.csv")
 
         c.convert()
 
