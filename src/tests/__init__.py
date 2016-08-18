@@ -164,11 +164,11 @@ class TestConversion(unittest.TestCase):
         Tests the extraction of a QBer-style schema from a CSV file, and subsequent conversion in a single process
         """
 
-        build_schema(os.path.join(os.path.dirname(__file__), 'tests/englandwales1881_tiny.csv'),
-                     os.path.join(os.path.dirname(__file__), 'tests/englandwales1881_tiny.json'),
+        build_schema(os.path.join(os.path.dirname(__file__), 'englandwales1881_tiny.csv'),
+                     os.path.join(os.path.dirname(__file__), 'englandwales1881_tiny.json'),
                      dataset_name='englandwales1881')
 
-        with open(os.path.join(os.path.dirname(__file__), 'tests/englandwales1881_tiny.json')) as dataset_file:
+        with open(os.path.join(os.path.dirname(__file__), 'englandwales1881_tiny.json')) as dataset_file:
             dataset = json.load(dataset_file)
 
         author_profile = {
