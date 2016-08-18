@@ -6,6 +6,8 @@
 This package contains a comprehensive utility package for batch  conversion of multiple datasets expressed in CSV,
 including datasets mapped through the [QBer](https://github.com/CLARIAH/QBer) tool.
 
+[![Build Status](https://travis-ci.org/CLARIAH/wp4-converters.svg?branch=master)](https://travis-ci.org/CLARIAH/wp4-converters)
+
 ### Open issues
 
 * We do not yet have a standard way to convert vocabularies (e.g. HISCO) expressed in CSV files
