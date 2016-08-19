@@ -70,6 +70,14 @@ class TestConversion(unittest.TestCase):
         c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'hsn2013a_hisco_comma_short.csv'), processes=1)
         c.convert()
 
+    def test_simple_csvw_conversion_CEDAR(self):
+        """
+        Tests simple, serial CSVW conversion (1 threads) capability of csvw.Converter class
+        """
+
+        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'se_CEDAR_HISCO.csv'), processes=1)
+        c.convert()
+
     def test_parallel_csvw_conversion(self):
         """
         Tests parallel CSVW conversion (2 threads) capability of csvw.Converter class
@@ -83,7 +91,7 @@ class TestConversion(unittest.TestCase):
         Tests parallel CSVW conversion (2 threads) capability of csvw.Converter class (Swedish CEDAR)
         """
 
-        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'se_CEDAR_HISCO.csv'), processes=2)
+        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'se_CEDAR_HISCO_lf.csv'), processes=2, chunksize=2)
         c.convert()
 
     def test_datatype_conversion(self):

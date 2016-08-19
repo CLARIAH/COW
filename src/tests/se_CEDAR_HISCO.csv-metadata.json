@@ -12,7 +12,8 @@
  "url": "se_CEDAR_HISCO.csv",
  "dialect": {
      "delimiter": ";",
-     "encoding": "iso-8859-1"
+     "encoding": "iso-8859-1",
+     "quoteChar": ""
  },
  "@context": [
   "http://www.w3.org/ns/csvw",

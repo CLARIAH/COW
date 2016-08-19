@@ -1,13 +1,15 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import os
 import datetime
-import csv
 import json
 import logging
 import iribaker
 import traceback
 import rfc3987
 import multiprocessing as mp
-import codecs
+import unicodecsv as csv
 from jinja2 import Template
 from util import get_namespaces, Nanopublication, CSVW, PROV, apply_default_namespaces
 from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
@@ -108,7 +110,7 @@ class Item(Resource):
 
 class CSVWConverter(object):
 
-    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8', processes=2, chunksize=5):
+    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8', processes=2, chunksize=5000):
 
         self.file_name = file_name
         self.target_file = self.file_name + '.nq'
@@ -188,9 +190,12 @@ class CSVWConverter(object):
         logger.info("Starting conversion")
 
         with open(self.target_file, 'w') as target_file:
-            with codecs.open(self.file_name, 'r', encoding=self.encoding) as csvfile:
+            with open(self.file_name, 'rb') as csvfile:
                 logger.info("Opening CSV file for reading")
-                reader = csv.DictReader(csvfile, delimiter=self.delimiter, quotechar=self.quotechar)
+                reader = csv.DictReader(csvfile,
+                                        encoding=self.encoding,
+                                        delimiter=self.delimiter,
+                                        quotechar=self.quotechar)
 
                 logger.info("Starting parsing process")
 
@@ -235,6 +240,18 @@ class CSVWConverter(object):
         # Make sure to close and join the pool once finished.
         pool.close()
         pool.join()
+
+
+
+def dictreader(data, encoding='utf-8', dialect=csv.excel, **kwargs):
+    """A wrapper around csv.DictReader that decodes read bytestrings to unicode as specified by 'encoding'
+       NB: Currently not used!
+    """
+    reader = csv.DictReader(data, dialect=dialect, **kwargs)
+
+    for row in reader:
+        print row
+        yield {unicode(k, encoding): unicode(v, encoding) for k, v in row.items()}
 
 
 def grouper(n, iterable, padvalue=None):
@@ -282,9 +299,6 @@ class BurstConverter(object):
         print "Row: {}".format(obs_count)
 
         for row in rows:
-            for k, v in row.items():
-                row[k] = v.decode(self.encoding)
-
             count += 1
             logger.debug("row: {}".format(count))
 
@@ -296,7 +310,7 @@ class BurstConverter(object):
 
                 try:
                     # Can also be used to prevent the triggering of virtual columns!
-                    value = row[unicode(c.csvw_name)].decode(self.encoding)
+                    value = row[unicode(c.csvw_name)]
                     if len(value) == 0 or value == unicode(c.csvw_null) or value == unicode(self.schema.csvw_null):
                         # Skip value if length is zero
                         logger.debug("Length is 0 or value is equal to specified 'null' value")
