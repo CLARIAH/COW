@@ -302,6 +302,11 @@ class BurstConverter(object):
             count += 1
             logger.debug("row: {}".format(count))
 
+            # This fixes issue:10
+            if row is None:
+                logger.debug("Skipping empty row...")
+                continue
+
             for c in self.columns:
 
                 c = Item(self.metadata_graph, c)
