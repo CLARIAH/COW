@@ -8,6 +8,7 @@ import logging
 import iribaker
 import traceback
 import rfc3987
+from chardet.universaldetector import UniversalDetector
 import multiprocessing as mp
 import unicodecsv as csv
 from jinja2 import Template
@@ -24,7 +25,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding='utf-8', dataset_name=None):
+def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding=None, dataset_name=None):
     url = os.path.basename(infile)
     # Get the current date and time (UTC)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
@@ -32,14 +33,28 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding='utf-8
     if dataset_name is None:
         dataset_name = url
 
+    if encoding is None:
+        detector = UniversalDetector()
+        with open(infile, 'r') as f:
+            for line in f.readlines():
+                detector.feed(line)
+                if detector.done:
+                    break
+        detector.close()
+        encoding = detector.result['encoding']
+        logger.info("Detected encoding: {} ({} confidence)".format(detector.result['encoding'],
+                                                                   detector.result['confidence']))
+
     metadata = {
-        "@context": ["http://www.w3.org/ns/csvw", {"@language": "en", "@base": "http://data.socialhistory.org/ns/resource/"}, get_namespaces()],
+        "@context": ["http://www.w3.org/ns/csvw",
+                     {"@language": "en",
+                      "@base": "http://data.socialhistory.org/ns/resource/"},
+                     get_namespaces()],
         "url": url,
-        "dialect": {
-             "delimiter": delimiter,
-             "encoding": encoding,
-             "quoteChar": quotechar
-         },
+        "dialect": {"delimiter": delimiter,
+                    "encoding": encoding,
+                    "quoteChar": quotechar
+                    },
         "dc:title": dataset_name,
         "dcat:keyword": [],
         "dc:publisher": {
