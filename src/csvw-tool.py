@@ -9,6 +9,8 @@ parser.add_argument('files', metavar='file', nargs='+', type=str, help="Path(s) 
 parser.add_argument('--dataset', dest='dataset', type=str, help="A short name (slug) for the name of the dataset (will use input file name if not specified)")
 parser.add_argument('--delimiter', dest='delimiter', default=',', type=str, help="The delimiter used in the CSV file(s)")
 parser.add_argument('--quotechar', dest='quotechar', default='\"', type=str, help="The character used as quotation character in the CSV file(s)")
+parser.add_argument('--processes', dest='processes', default='4', type=int, help="The number of processes the converter should use")
+parser.add_argument('--chunksize', dest='chunksize', default='5000', type=int, help="The number of rows processed at each time")
 
 if __name__ == '__main__':
     args = parser.parse_args()
@@ -30,7 +32,7 @@ if __name__ == '__main__':
 
         elif args.mode == 'convert':
             print "Converting {} to RDF".format(source_file)
-            c = CSVWConverter(source_file, delimiter=args.delimiter, quotechar=args.quotechar)
+            c = CSVWConverter(source_file, delimiter=args.delimiter, quotechar=args.quotechar, processes=args.processes, chunksize=args.chunksize)
             c.convert()
         else:
             print "Whoops for file {}".format(f)

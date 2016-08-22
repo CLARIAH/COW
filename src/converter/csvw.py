@@ -121,6 +121,8 @@ class CSVWConverter(object):
 
         self._processes = processes
         self._chunksize = chunksize
+        logger.info("Processes: {}".format(self._processes))
+        logger.info("Chunksize: {}".format(self._chunksize))
 
         self.np = Nanopublication(file_name)
         # self.metadata = json.load(open(schema_file_name, 'r'))
