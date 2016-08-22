@@ -111,7 +111,7 @@ class Item(Resource):
 class CSVWConverter(object):
 
     def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8', processes=1, chunksize=5000):
-
+        logger.info("Initializing converter for {}".format(file_name))
         self.file_name = file_name
         self.target_file = self.file_name + '.nq'
         schema_file_name = file_name + '-metadata.json'
