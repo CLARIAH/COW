@@ -88,7 +88,7 @@ class TestConversion(unittest.TestCase):
 
     def test_parallel_csvw_conversion_CEDAR(self):
         """
-        Tests parallel CSVW conversion (2 threads) capability of csvw.Converter class (Swedish CEDAR)
+        Tests parallel CSVW conversion (2 threads) capability of csvw.Converter class (Swedish CEDAR), fallback to serial
         """
 
         c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'se_CEDAR_HISCO.csv'), processes=2, chunksize=2)

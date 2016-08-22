@@ -110,7 +110,7 @@ class Item(Resource):
 
 class CSVWConverter(object):
 
-    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8', processes=2, chunksize=5000):
+    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8', processes=1, chunksize=5000):
 
         self.file_name = file_name
         self.target_file = self.file_name + '.nq'
@@ -200,7 +200,11 @@ class CSVWConverter(object):
                 logger.info("Starting parsing process")
 
                 if self._processes > 1:
-                    self._parallel(reader, target_file)
+                    try:
+                        self._parallel(reader, target_file)
+                    except TypeError:
+                        logger.info("TypeError in multiprocessing... falling back to serial conversion")
+                        self._simple(reader, target_file)
                 else:
                     self._simple(reader, target_file)
 
@@ -231,11 +235,8 @@ class CSVWConverter(object):
                                        chunksize=self._chunksize)
 
         # The result of each chunksize run will be written to the target file
-        try:
-            for out in pool.imap(burstConvert_partial, enumerate(grouper(self._chunksize, reader))):
-                target_file.write(out)
-        except:
-            traceback.print_exc()
+        for out in pool.imap(burstConvert_partial, enumerate(grouper(self._chunksize, reader))):
+            target_file.write(out)
 
         # Make sure to close and join the pool once finished.
         pool.close()
