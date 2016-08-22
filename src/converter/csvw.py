@@ -60,7 +60,7 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding='utf-8
 
         header = r.next()
 
-        print header
+        logger.info("Found headers: {}".format(header))
 
         # First column is primary key
         metadata['tableSchema']['primaryKey'] = header[0]
@@ -213,6 +213,7 @@ class CSVWConverter(object):
             target_file.write(self.np.serialize(format='nquads'))
 
     def _simple(self, reader, target_file):
+        logger.info("Running in a single process")
         c = BurstConverter(self.np.ag.identifier, self.columns, self.schema, self.metadata_graph, self.encoding)
         # Out will contain an N-Quads serialized representation of the converted CSV
         out = c.process(0, reader, 1)
@@ -222,7 +223,7 @@ class CSVWConverter(object):
     def _parallel(self, reader, target_file):
         # Initialize a pool of processes (default=4)
         pool = mp.Pool(processes=self._processes)
-        print "Running with {} processes".format(self._processes)
+        logger.info("Running with {} processes".format(self._processes))
 
         # The _burstConvert function is partially instantiated, and will be successively called with
         # chunksize rows from the CSV file
@@ -244,17 +245,6 @@ class CSVWConverter(object):
 
 
 
-def dictreader(data, encoding='utf-8', dialect=csv.excel, **kwargs):
-    """A wrapper around csv.DictReader that decodes read bytestrings to unicode as specified by 'encoding'
-       NB: Currently not used!
-    """
-    reader = csv.DictReader(data, dialect=dialect, **kwargs)
-
-    for row in reader:
-        print row
-        yield {unicode(k, encoding): unicode(v, encoding) for k, v in row.items()}
-
-
 def grouper(n, iterable, padvalue=None):
     "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
     return izip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
@@ -267,11 +257,11 @@ def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, 
         count, rows = enumerated_rows
         c = BurstConverter(identifier, columns, schema, metadata_graph, encoding)
 
-        print mp.current_process().name, count, len(rows)
+        logger.info(mp.current_process().name, count, len(rows))
 
         result = c.process(count, rows, chunksize)
 
-        print mp.current_process().name, 'done'
+        logger.info(mp.current_process().name, 'done')
 
         return result
     except:
@@ -295,9 +285,10 @@ class BurstConverter(object):
         self.aboutURLSchema = self.schema.csvw_aboutUrl
 
     def process(self, count, rows, chunksize):
+
         obs_count = count * chunksize
 
-        print "Row: {}".format(obs_count)
+        logger.info("Row: {}".format(obs_count))
 
         for row in rows:
             count += 1
@@ -386,6 +377,7 @@ class BurstConverter(object):
     #     logger.info("... done")
 
     def render_pattern(self, pattern, row):
+
         # Significant speedup by not re-instantiating Jinja templates for every row.
         if pattern in self.templates:
             template = self.templates[pattern]
