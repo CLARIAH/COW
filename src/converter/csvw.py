@@ -257,11 +257,11 @@ def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, 
         count, rows = enumerated_rows
         c = BurstConverter(identifier, columns, schema, metadata_graph, encoding)
 
-        logger.info(mp.current_process().name, count, len(rows))
+        logger.info("Process {}, nr {}, {} rows".format(mp.current_process().name, count, len(rows)))
 
         result = c.process(count, rows, chunksize)
 
-        logger.info(mp.current_process().name, 'done')
+        logger.info("Process {} done".format(mp.current_process().name))
 
         return result
     except:
