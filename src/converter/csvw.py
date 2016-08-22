@@ -116,6 +116,9 @@ class CSVWConverter(object):
         self.target_file = self.file_name + '.nq'
         schema_file_name = file_name + '-metadata.json'
 
+        if not os.path.exists(schema_file_name) or not os.path.exists(file_name):
+            raise Exception("Could not find source file or necessary metadata file in path...")
+
         self._processes = processes
         self._chunksize = chunksize
 
@@ -189,6 +192,18 @@ class CSVWConverter(object):
     def convert(self):
         logger.info("Starting conversion")
 
+        if self._processes == 1:
+            self._simple()
+        elif self._processes > 1:
+            try:
+                self._parallel()
+            except TypeError:
+                logger.info("TypeError in multiprocessing... falling back to serial conversion")
+                self._simple()
+        else:
+            logger.error("Incorrect process count specification")
+
+    def _simple(self):
         with open(self.target_file, 'w') as target_file:
             with open(self.file_name, 'rb') as csvfile:
                 logger.info("Opening CSV file for reading")
@@ -197,51 +212,53 @@ class CSVWConverter(object):
                                         delimiter=self.delimiter,
                                         quotechar=self.quotechar)
 
-                logger.info("Starting parsing process")
-
-                if self._processes > 1:
-                    try:
-                        self._parallel(reader, target_file)
-                    except TypeError:
-                        logger.info("TypeError in multiprocessing... falling back to serial conversion")
-                        self._simple(reader, target_file)
-                else:
-                    self._simple(reader, target_file)
+                logger.info("Starting in a single process")
+                c = BurstConverter(self.np.ag.identifier, self.columns, self.schema, self.metadata_graph, self.encoding)
+                # Out will contain an N-Quads serialized representation of the converted CSV
+                out = c.process(0, reader, 1)
+                # We then write it to the file
+                target_file.write(out)
 
             self.convert_info()
             # Finally, write the nanopublication info to file
             target_file.write(self.np.serialize(format='nquads'))
 
-    def _simple(self, reader, target_file):
-        logger.info("Running in a single process")
-        c = BurstConverter(self.np.ag.identifier, self.columns, self.schema, self.metadata_graph, self.encoding)
-        # Out will contain an N-Quads serialized representation of the converted CSV
-        out = c.process(0, reader, 1)
-        # We then write it to the file
-        target_file.write(out)
 
-    def _parallel(self, reader, target_file):
-        # Initialize a pool of processes (default=4)
-        pool = mp.Pool(processes=self._processes)
-        logger.info("Running with {} processes".format(self._processes))
+    def _parallel(self):
+        with open(self.target_file, 'w') as target_file:
+            with open(self.file_name, 'rb') as csvfile:
+                logger.info("Opening CSV file for reading")
+                reader = csv.DictReader(csvfile,
+                                        encoding=self.encoding,
+                                        delimiter=self.delimiter,
+                                        quotechar=self.quotechar)
 
-        # The _burstConvert function is partially instantiated, and will be successively called with
-        # chunksize rows from the CSV file
-        burstConvert_partial = partial(_burstConvert,
-                                       identifier=self.np.ag.identifier,
-                                       columns=self.columns,
-                                       schema=self.schema,
-                                       metadata_graph=self.metadata_graph,
-                                       encoding=self.encoding,
-                                       chunksize=self._chunksize)
+                # Initialize a pool of processes (default=4)
+                pool = mp.Pool(processes=self._processes)
+                logger.info("Running in {} processes".format(self._processes))
 
-        # The result of each chunksize run will be written to the target file
-        for out in pool.imap(burstConvert_partial, enumerate(grouper(self._chunksize, reader))):
-            target_file.write(out)
+                # The _burstConvert function is partially instantiated, and will be successively called with
+                # chunksize rows from the CSV file
+                burstConvert_partial = partial(_burstConvert,
+                                               identifier=self.np.ag.identifier,
+                                               columns=self.columns,
+                                               schema=self.schema,
+                                               metadata_graph=self.metadata_graph,
+                                               encoding=self.encoding,
+                                               chunksize=self._chunksize)
 
-        # Make sure to close and join the pool once finished.
-        pool.close()
-        pool.join()
+                # The result of each chunksize run will be written to the target file
+                for out in pool.imap(burstConvert_partial, enumerate(grouper(self._chunksize, reader))):
+                    target_file.write(out)
+
+                # Make sure to close and join the pool once finished.
+                pool.close()
+                pool.join()
+
+            self.convert_info()
+            # Finally, write the nanopublication info to file
+            target_file.write(self.np.serialize(format='nquads'))
+
 
 
 
