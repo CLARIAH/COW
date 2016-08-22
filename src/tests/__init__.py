@@ -91,7 +91,7 @@ class TestConversion(unittest.TestCase):
         Tests parallel CSVW conversion (2 threads) capability of csvw.Converter class (Swedish CEDAR)
         """
 
-        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'se_CEDAR_HISCO_lf.csv'), processes=2, chunksize=2)
+        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'se_CEDAR_HISCO.csv'), processes=2, chunksize=2)
         c.convert()
 
     def test_datatype_conversion(self):
