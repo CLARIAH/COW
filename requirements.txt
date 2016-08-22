@@ -1,5 +1,6 @@
 beautifulsoup4==4.4.1
-html5lib==0.99999999
+chardet==2.3.0
+html5lib==0.999999999
 -e git://github.com/CLARIAH-SDH/iribaker.git@7adfa027662355560f798355ec950f94b5af3018#egg=iribaker
 isodate==0.5.4
 Jinja2==2.8
