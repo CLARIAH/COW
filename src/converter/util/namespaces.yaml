@@ -22,6 +22,10 @@ foaf: http://xmls.com/foaf/0.1/
 np: http://www.nanopub.org/nschema#
 bibo: http://purl.org/ontology/bibo/
 time: http://www.w3.org/2006/time#
+dbr: http://dbpedia.org/resource/
+dbpedia: http://dbpedia.org/resource/
+dbo: http://dbpedia.org/ontology/
+dbp: http://dbpedia.org/property/
 # Default SDMX namespaces
 sdmx-concept: http://purl.org/linked-data/sdmx/2009/concept#
 sdmx-code: http://purl.org/linked-data/sdmx/2009/code#

@@ -217,6 +217,10 @@ class CSVWConverter(object):
             except TypeError:
                 logger.info("TypeError in multiprocessing... falling back to serial conversion")
                 self._simple()
+            except Exception:
+                logger.error("Some exception occurred, falling back to serial conversion")
+                traceback.print_exc()
+                self._simple()
         else:
             logger.error("Incorrect process count specification")
 
@@ -300,13 +304,13 @@ def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, 
         return result
     except:
         traceback.print_exc()
-        return "ERROR"
 
 
 class BurstConverter(object):
 
     def __init__(self, identifier, columns, schema, metadata_graph, encoding):
-        self.ds = apply_default_namespaces(Dataset())
+        self.ds = Dataset()
+        # self.ds = apply_default_namespaces(Dataset())
         self.g = self.ds.graph(URIRef(identifier))
 
         self.columns = columns
@@ -325,13 +329,16 @@ class BurstConverter(object):
         logger.info("Row: {}".format(obs_count))
 
         for row in rows:
-            count += 1
-            logger.debug("row: {}".format(count))
-
             # This fixes issue:10
             if row is None:
-                logger.debug("Skipping empty row...")
+                logger.debug("Skipping empty row caused by multiprocessing (multiple of chunksize exceeds number of rows in file)...")
                 continue
+
+            logger.debug("row: {}".format(count))
+            row['_row'] = count
+            count += 1
+
+
 
             for c in self.columns:
 
@@ -361,7 +368,6 @@ class BurstConverter(object):
                         o = self.expandURL(c.csvw_valueUrl, row)
                     else:
                         # This is a datatype property
-
                         if c.csvw_value is not None:
                             value = self.render_pattern(c.csvw_value, row)
                         else:
