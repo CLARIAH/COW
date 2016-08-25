@@ -6,7 +6,7 @@ YAML_NAMESPACE_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), 
 
 FOAF = rdflib.Namespace('http://xmlns.com/foaf/0.1/')
 LODE = rdflib.Namespace('http://linkedevents.org/ontology/')
-IDS = rdflib.Namespace('http://data.socialhistory.org/ns/resource/ids/')
+IDS = rdflib.Namespace('http://data.socialhistory.org/resource/ids/')
 TIME = rdflib.Namespace('https://www.w3.org/2006/time#')
 
 rdf_graph = rdflib.Graph()

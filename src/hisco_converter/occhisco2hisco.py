@@ -12,7 +12,7 @@ QB = rdflib.Namespace('http://purl.org/linked-data/cube#')
 
 HISCO = rdflib.Namespace("http://data.socialhistory.org/vocab/hisco/")
 HISCAM = rdflib.Namespace("http://data.socialhistory.org/vocab/hiscam/")
-OCCHISCO = rdflib.Namespace("http://data.socialhistory.org/ns/resource/napp/OCCHISCO/")
+OCCHISCO = rdflib.Namespace("http://data.socialhistory.org/resource/napp/OCCHISCO/")
 
 g = rdflib.Graph()
 

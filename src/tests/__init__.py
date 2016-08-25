@@ -119,8 +119,8 @@ class TestConversion(unittest.TestCase):
         q = """
             ASK {
                 GRAPH ?g {
-                    [] <http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/variable/leeftijd> "55"^^<http://www.w3.org/2001/XMLSchema#integer> .
-                    [] <http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/variable/huisnummer> "170"^^<http://www.w3.org/2001/XMLSchema#integer> .
+                    [] <http://data.socialhistory.org/resource/utrecht_1829_clean_01/variable/leeftijd> "55"^^<http://www.w3.org/2001/XMLSchema#integer> .
+                    [] <http://data.socialhistory.org/resource/utrecht_1829_clean_01/variable/huisnummer> "170"^^<http://www.w3.org/2001/XMLSchema#integer> .
                 }
             }
         """
@@ -155,7 +155,7 @@ class TestConversion(unittest.TestCase):
         q = """
             ASK {
                 GRAPH ?g {
-                    [] <http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/variable/achternaam> "hofmanhofman" .
+                    [] <http://data.socialhistory.org/resource/utrecht_1829_clean_01/variable/achternaam> "hofmanhofman" .
                 }
             }
         """

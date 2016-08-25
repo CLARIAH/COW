@@ -48,7 +48,7 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding=None, 
     metadata = {
         "@context": ["http://www.w3.org/ns/csvw",
                      {"@language": "en",
-                      "@base": "http://data.socialhistory.org/ns/resource/"},
+                      "@base": "http://data.socialhistory.org/resource/"},
                      get_namespaces()],
         "url": url,
         "dialect": {"delimiter": delimiter,
@@ -381,7 +381,7 @@ class BurstConverter(object):
                             if "" in self.metadata_graph.namespaces():
                                 propertyUrl = self.metadata_graph.namespaces()[""][unicode(c.csvw_name)]
                             else:
-                                propertyUrl = "http://data.socialhistory.org/ns/resource/{}".format(unicode(c.csvw_name))
+                                propertyUrl = "http://data.socialhistory.org/resource/{}".format(unicode(c.csvw_name))
 
                             p = self.expandURL(propertyUrl, row)
 
