@@ -12,7 +12,7 @@ from chardet.universaldetector import UniversalDetector
 import multiprocessing as mp
 import unicodecsv as csv
 from jinja2 import Template
-from util import get_namespaces, Nanopublication, CSVW, PROV, apply_default_namespaces
+from util import get_namespaces, Nanopublication, CSVW, PROV, DC, apply_default_namespaces
 from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
 from rdflib.resource import Resource
 from rdflib.collection import Collection
@@ -46,6 +46,7 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding=None, 
                                                                    detector.result['confidence']))
 
     metadata = {
+        "@id": iribaker.to_iri("http://data.socialhistory.org/resource/"+url),
         "@context": ["http://www.w3.org/ns/csvw",
                      {"@language": "en",
                       "@base": "http://data.socialhistory.org/resource/"},
@@ -145,12 +146,18 @@ class CSVWConverter(object):
         with open(schema_file_name) as f:
             self.metadata_graph.load(f, format='json-ld')
 
+        # Get the URI of the schema specification by looking for the subject with a csvw:url property.
         (self.metadata_uri, _) = self.metadata_graph.subject_objects(CSVW.url).next()
+
         self.metadata = Item(self.metadata_graph, self.metadata_uri)
 
-        # This overrides the identifier of the schema file with that of the nanopublication... do we want that?
-        # TODO: No, I don't think so but it creates a disconnect between the publicationInfo and the nanopublication
-        # self.metadata['@id'] = self.np.uri
+        # Add a prov:wasDerivedFrom between the nanopublication assertion graph and the metadata_uri
+        self.np.pg.add((self.np.ag.identifier, PROV['wasDerivedFrom'], self.metadata_uri))
+        # Add an attribution relation and dc:author relation between the nanopublication, the assertion graph and the authors of the schema
+        for o in self.metadata_graph.objects(self.metadata_uri, DC['author']):
+            self.np.pg.add((self.np.ag.identifier, PROV['wasAttributedTo'], o))
+            self.np.add((self.np.uri, PROV['wasAttributedTo'], o))
+            self.np.pig.add((self.np.ag.identifier, DC['author'], o))
 
         self.schema = self.metadata.csvw_tableSchema
 
@@ -202,7 +209,8 @@ class CSVWConverter(object):
                                 PROV.wasDerivedFrom,
                                 Literal(unicode(o), datatype=XSD.string)))
 
-        self.np.ingest(self.metadata_graph, self.np.pig.identifier)
+        # Add the information of the schema file to the provenance graph of the nanopublication
+        self.np.ingest(self.metadata_graph, self.np.pg.identifier)
 
         return
 
