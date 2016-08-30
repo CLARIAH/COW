@@ -33,7 +33,7 @@ def grouper(n, iterable, padvalue=None):
 
 class Converter(object):
 
-    def __init__(self, dataset, dirname, author_profile, target='output.nq'):
+    def __init__(self, dataset, dirname, author_profile, source=None, target='output.nq'):
         """
         Takes a dataset_description (currently in QBer format) and prepares:
         * A dictionary for the BurstConverter (either in one go, or in parallel)
@@ -46,9 +46,11 @@ class Converter(object):
         self._delimiter = ','        # Comma is the default delimiter
         self._quotechar = '\"'       # The double parenthesis is the default quoting character
 
-        
-        self._source = os.path.join(dirname,  dataset['file'])
-        
+        if source is None:
+            self._source = os.path.join(dirname,  dataset['file'])
+        else:
+            self._source = source
+
         self._target = target
 
         self._dataset = dataset
@@ -250,7 +252,7 @@ class BurstConverter(object):
 
             index = 0
             for col in row:
-                
+
                 variable = self._headers[index]
                 col = col.decode('utf-8')
 
@@ -351,12 +353,12 @@ class BurstConverter(object):
                             print "Category {} unknown".format(category)
 
                     except KeyError:
-                        pass 
+                        pass
 #                         print "Value found for variable {} does not exist in dataset description".format(variable)
 #                         print col
-#                         print row 
-#                         print 
-                        
+#                         print row
+#                         print
+
                 elif variable == '':
                     # print "Empty variable name"
                     pass
