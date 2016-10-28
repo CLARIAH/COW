@@ -112,11 +112,14 @@ python csvw-tool.py convert data/*.csv data/more/example1.csv data/more/example2
 Have fun!
 
 ### CSVW status
-* Extended CSVW standard to support Jinja2 template formatting in URL patterns.
+* Extended CSVW standard to support Jinja2 template formatting in URL patterns (see below for commonly used template formatting).
 * Also supports patterns in lang attributes.
 * CSVW has several 'special' formatting keywords, such as {_title} and {_row}. This converter currently only supports {_row}, which will insert a row number.
 * Literal values can also be formatted as patterns, but this is not supported by CSVW. You need to use `csvw:value` as key to a column specification (rather than just `value`). The `csvw:value` instruction works in the same way as the `valueUrl` (and friends), but results in a Literal, rather than a URI.
 
+#### Commonly used Jinja2 template formatting
+* Leading zeroes: `variable:{0>N}`, where `N` is the number of digits to fill up to.
+* If-else statements: `{% if conditional_variable=="something"}value_if{% else %}value_else{% endif %}`.
 
 ## OLD (below)
 
