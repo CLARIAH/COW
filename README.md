@@ -120,6 +120,7 @@ Have fun!
 #### Commonly used Jinja2 template formatting
 * Leading zeroes: `variable:{0>N}`, where `N` is the number of digits to fill up to.
 * If-else statements: `{% if conditional_variable=="something"}value_if{% else %}value_else{% endif %}`.
+* Convert to string and concatenate: `{{variable ~ 'string'}}`, e.g. if variable has value "Hello" then the result would be "Hello string". Note the double brackets.
 
 ## OLD (below)
 
