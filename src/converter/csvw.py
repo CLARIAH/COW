@@ -82,6 +82,7 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding=None, 
 
         for head in header:
             col = {
+                "@id": iribaker.to_iri("http://data.socialhistory.org/resource/{}/column/{}".format(url, head)),
                 "name": head,
                 "titles": [head],
                 "dc:description": head,
@@ -426,6 +427,11 @@ class BurstConverter(object):
 
                     # Add the triple to the assertion graph
                     self.g.add((s, p, o))
+
+                    # Add provenance relating the propertyUrl to the column id
+                    if '@id' in c:
+                        self.g.add((p, PROV['wasDerivedFrom'], URIRef(c['@id'])))
+
                 except:
                     # print row[0], value
                     traceback.print_exc()
