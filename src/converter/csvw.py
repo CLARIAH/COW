@@ -77,10 +77,6 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding=None, 
 
         logger.info("Found headers: {}".format(header))
 
-        # Replacing any spaces with underscores in column headers to make sure
-        # the resulting value is a valid Python identifier
-        header = [h.replace(' ','_') for h in header]
-
         # First column is primary key
         metadata['tableSchema']['primaryKey'] = header[0]
 
