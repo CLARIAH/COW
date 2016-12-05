@@ -18,7 +18,7 @@ dc: http://purl.org/dc/terms/
 dc11: http://purl.org/dc/elements/1.1/
 # Other standard namespaces
 qb: http://purl.org/linked-data/cube#
-foaf: http://xmls.com/foaf/0.1/
+foaf: http://xmlns.com/foaf/0.1/
 np: http://www.nanopub.org/nschema#
 bibo: http://purl.org/ontology/bibo/
 time: http://www.w3.org/2006/time#
