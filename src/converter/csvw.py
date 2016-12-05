@@ -12,13 +12,12 @@ from chardet.universaldetector import UniversalDetector
 import multiprocessing as mp
 import unicodecsv as csv
 from jinja2 import Template
-from util import get_namespaces, Nanopublication, CSVW, PROV, DC, apply_default_namespaces
+from util import get_namespaces, Nanopublication, CSVW, PROV, DC
 from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
 from rdflib.resource import Resource
 from rdflib.collection import Collection
 from functools import partial
 from itertools import izip_longest
-
 
 
 logger = logging.getLogger(__name__)
@@ -46,7 +45,7 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding=None, 
                                                                    detector.result['confidence']))
 
     metadata = {
-        "@id": iribaker.to_iri("http://data.socialhistory.org/resource/"+url),
+        "@id": iribaker.to_iri("http://data.socialhistory.org/resource/" + url),
         "@context": ["http://www.w3.org/ns/csvw",
                      {"@language": "en",
                       "@base": "http://data.socialhistory.org/resource/"},
@@ -100,6 +99,7 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding=None, 
 
 class Item(Resource):
     """Wrapper for the rdflib.resource.Resource class that allows getting property values from resources."""
+
     def __getattr__(self, p):
         """Returns the object for predicate p, either as a list (when multiple bindings exist), as an Item
            when only one object exists, or Null if there are no values for this predicate"""
@@ -133,7 +133,8 @@ class CSVWConverter(object):
         schema_file_name = file_name + '-metadata.json'
 
         if not os.path.exists(schema_file_name) or not os.path.exists(file_name):
-            raise Exception("Could not find source file or necessary metadata file in path...")
+            raise Exception(
+                "Could not find source file or necessary metadata file in path...")
 
         self._processes = processes
         self._chunksize = chunksize
@@ -146,14 +147,18 @@ class CSVWConverter(object):
         with open(schema_file_name) as f:
             self.metadata_graph.load(f, format='json-ld')
 
-        # Get the URI of the schema specification by looking for the subject with a csvw:url property.
+        # Get the URI of the schema specification by looking for the subject
+        # with a csvw:url property.
         (self.metadata_uri, _) = self.metadata_graph.subject_objects(CSVW.url).next()
 
         self.metadata = Item(self.metadata_graph, self.metadata_uri)
 
-        # Add a prov:wasDerivedFrom between the nanopublication assertion graph and the metadata_uri
-        self.np.pg.add((self.np.ag.identifier, PROV['wasDerivedFrom'], self.metadata_uri))
-        # Add an attribution relation and dc:author relation between the nanopublication, the assertion graph and the authors of the schema
+        # Add a prov:wasDerivedFrom between the nanopublication assertion graph
+        # and the metadata_uri
+        self.np.pg.add((self.np.ag.identifier, PROV[
+                       'wasDerivedFrom'], self.metadata_uri))
+        # Add an attribution relation and dc:author relation between the
+        # nanopublication, the assertion graph and the authors of the schema
         for o in self.metadata_graph.objects(self.metadata_uri, DC['author']):
             self.np.pg.add((self.np.ag.identifier, PROV['wasAttributedTo'], o))
             self.np.add((self.np.uri, PROV['wasAttributedTo'], o))
@@ -180,7 +185,8 @@ class CSVWConverter(object):
         logger.info("Quotechar: {}".format(self.quotechar.__repr__()))
         logger.info("Delimiter: {}".format(self.delimiter.__repr__()))
         logger.info("Encoding : {}".format(self.encoding.__repr__()))
-        logger.warning("Only taking encoding, quotechar and delimiter specifications into account...")
+        logger.warning(
+            "Only taking encoding, quotechar and delimiter specifications into account...")
 
         # The metadata schema overrides the default namespace values
         # (NB: this does not affect the predefined Namespace objects!)
@@ -188,7 +194,8 @@ class CSVWConverter(object):
         # namespaces.update({ns: url for ns, url in self.metadata['@context'][1].items() if not ns.startswith('@')})
 
         # Cast the CSVW column rdf:List into an RDF collection
-        self.columns = Collection(self.metadata_graph, BNode(self.schema.csvw_column))
+        self.columns = Collection(
+            self.metadata_graph, BNode(self.schema.csvw_column))
 
     def convert_info(self):
         results = self.metadata_graph.query("""SELECT ?s ?p ?o
@@ -201,7 +208,8 @@ class CSVWConverter(object):
             # Use iribaker
             escaped_object = URIRef(iribaker.to_iri(unicode(o)))
 
-            # If the escaped IRI of the object is different from the original, update the graph.
+            # If the escaped IRI of the object is different from the original,
+            # update the graph.
             if escaped_object != o:
                 self.metadata_graph.set((s, p, escaped_object))
                 # Add the provenance of this operation.
@@ -209,7 +217,8 @@ class CSVWConverter(object):
                                 PROV.wasDerivedFrom,
                                 Literal(unicode(o), datatype=XSD.string)))
 
-        # Add the information of the schema file to the provenance graph of the nanopublication
+        # Add the information of the schema file to the provenance graph of the
+        # nanopublication
         self.np.ingest(self.metadata_graph, self.np.pg.identifier)
 
         return
@@ -223,10 +232,12 @@ class CSVWConverter(object):
             try:
                 self._parallel()
             except TypeError:
-                logger.info("TypeError in multiprocessing... falling back to serial conversion")
+                logger.info(
+                    "TypeError in multiprocessing... falling back to serial conversion")
                 self._simple()
             except Exception:
-                logger.error("Some exception occurred, falling back to serial conversion")
+                logger.error(
+                    "Some exception occurred, falling back to serial conversion")
                 traceback.print_exc()
                 self._simple()
         else:
@@ -242,8 +253,10 @@ class CSVWConverter(object):
                                         quotechar=self.quotechar)
 
                 logger.info("Starting in a single process")
-                c = BurstConverter(self.np.ag.identifier, self.columns, self.schema, self.metadata_graph, self.encoding)
-                # Out will contain an N-Quads serialized representation of the converted CSV
+                c = BurstConverter(self.np.ag.identifier, self.columns,
+                                   self.schema, self.metadata_graph, self.encoding)
+                # Out will contain an N-Quads serialized representation of the
+                # converted CSV
                 out = c.process(0, reader, 1)
                 # We then write it to the file
                 target_file.write(out)
@@ -251,7 +264,6 @@ class CSVWConverter(object):
             self.convert_info()
             # Finally, write the nanopublication info to file
             target_file.write(self.np.serialize(format='nquads'))
-
 
     def _parallel(self):
         with open(self.target_file, 'w') as target_file:
@@ -276,7 +288,8 @@ class CSVWConverter(object):
                                                encoding=self.encoding,
                                                chunksize=self._chunksize)
 
-                # The result of each chunksize run will be written to the target file
+                # The result of each chunksize run will be written to the
+                # target file
                 for out in pool.imap(burstConvert_partial, enumerate(grouper(self._chunksize, reader))):
                     target_file.write(out)
 
@@ -289,8 +302,6 @@ class CSVWConverter(object):
             target_file.write(self.np.serialize(format='nquads'))
 
 
-
-
 def grouper(n, iterable, padvalue=None):
     "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
     return izip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
@@ -301,9 +312,11 @@ def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, 
 
     try:
         count, rows = enumerated_rows
-        c = BurstConverter(identifier, columns, schema, metadata_graph, encoding)
+        c = BurstConverter(identifier, columns, schema,
+                           metadata_graph, encoding)
 
-        logger.info("Process {}, nr {}, {} rows".format(mp.current_process().name, count, len(rows)))
+        logger.info("Process {}, nr {}, {} rows".format(
+            mp.current_process().name, count, len(rows)))
 
         result = c.process(count, rows, chunksize)
 
@@ -339,14 +352,13 @@ class BurstConverter(object):
         for row in rows:
             # This fixes issue:10
             if row is None:
-                logger.debug("Skipping empty row caused by multiprocessing (multiple of chunksize exceeds number of rows in file)...")
+                logger.debug(
+                    "Skipping empty row caused by multiprocessing (multiple of chunksize exceeds number of rows in file)...")
                 continue
 
             logger.debug("row: {}".format(count))
             row['_row'] = count
             count += 1
-
-
 
             for c in self.columns:
 
@@ -355,11 +367,13 @@ class BurstConverter(object):
                 s = self.expandURL(self.aboutURLSchema, row)
 
                 try:
-                    # Can also be used to prevent the triggering of virtual columns!
+                    # Can also be used to prevent the triggering of virtual
+                    # columns!
                     value = row[unicode(c.csvw_name)]
-                    if len(value) == 0 or value == unicode(c.csvw_null) or value == unicode(self.schema.csvw_null):
+                    if len(value) == 0 or value == unicode(c.csvw_null) or value in c.csvw_null or value == unicode(self.schema.csvw_null):
                         # Skip value if length is zero
-                        logger.debug("Length is 0 or value is equal to specified 'null' value")
+                        logger.debug(
+                            "Length is 0 or value is equal to specified 'null' value")
                         continue
                 except:
                     # No column name specified (virtual)
@@ -379,25 +393,31 @@ class BurstConverter(object):
                         if c.csvw_value is not None:
                             value = self.render_pattern(c.csvw_value, row)
                         else:
-                            # print s, c.csvw_value, c.csvw_propertyUrl, c.csvw_name, self.encoding
+                            # print s, c.csvw_value, c.csvw_propertyUrl,
+                            # c.csvw_name, self.encoding
                             value = row[unicode(c.csvw_name)]
 
-                        # If propertyUrl is specified, use it, otherwise use the column name
+                        # If propertyUrl is specified, use it, otherwise use
+                        # the column name
                         if c.csvw_propertyUrl is not None:
                             p = self.expandURL(c.csvw_propertyUrl, row)
                         else:
                             if "" in self.metadata_graph.namespaces():
-                                propertyUrl = self.metadata_graph.namespaces()[""][unicode(c.csvw_name)]
+                                propertyUrl = self.metadata_graph.namespaces()[""][
+                                    unicode(c.csvw_name)]
                             else:
-                                propertyUrl = "http://data.socialhistory.org/resource/{}".format(unicode(c.csvw_name))
+                                propertyUrl = "http://data.socialhistory.org/resource/{}".format(
+                                    unicode(c.csvw_name))
 
                             p = self.expandURL(propertyUrl, row)
 
                         if c.csvw_datatype == XSD.string and c.csvw_language is not None:
                             # If it is a string datatype that has a language, we turn it into a
                             # language tagged literal
-                            # We also render the lang value in case it is a pattern.
-                            o = Literal(value, lang=self.render_pattern(c.csvw_language, row))
+                            # We also render the lang value in case it is a
+                            # pattern.
+                            o = Literal(value, lang=self.render_pattern(
+                                c.csvw_language, row))
                         elif c.csvw_datatype is not None:
                             o = Literal(value, datatype=c.csvw_datatype)
                         else:
@@ -426,21 +446,25 @@ class BurstConverter(object):
 
     def render_pattern(self, pattern, row):
 
-        # Significant speedup by not re-instantiating Jinja templates for every row.
+        # Significant speedup by not re-instantiating Jinja templates for every
+        # row.
         if pattern in self.templates:
             template = self.templates[pattern]
         else:
             template = self.templates[pattern] = Template(pattern)
 
         # TODO This should take into account the special CSVW instructions such as {_row}
-        # First we interpret the url_pattern as a Jinja2 template, and pass all column/value pairs as arguments
+        # First we interpret the url_pattern as a Jinja2 template, and pass all
+        # column/value pairs as arguments
         rendered_template = template.render(**row)
 
         try:
-            # We then format the resulting string using the standard Python2 expressions
+            # We then format the resulting string using the standard Python2
+            # expressions
             return rendered_template.format(**row)
         except:
-            logger.warning("Could not apply python string formatting to '{}'".format(rendered_template))
+            logger.warning(
+                "Could not apply python string formatting to '{}'".format(rendered_template))
             return rendered_template
 
     def expandURL(self, url_pattern, row, datatype=False):
@@ -457,7 +481,6 @@ class BurstConverter(object):
             rfc3987.parse(iri, rule='IRI')
         except:
             raise Exception(u"Cannot convert `{}` to valid IRI".format(url))
-
 
         # print "Baked: ", iri
         return URIRef(iri)

@@ -36,6 +36,7 @@ class Converter(object):
     def __init__(self, dataset, dirname, author_profile, source=None, target='output.nq'):
         """
         Takes a dataset_description (currently in QBer format) and prepares:
+
         * A dictionary for the BurstConverter (either in one go, or in parallel)
         * A nanopublication structure for publishing the converted data
         """
