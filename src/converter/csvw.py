@@ -419,6 +419,8 @@ class BurstConverter(object):
                             # pattern.
                             o = Literal(value, lang=self.render_pattern(
                                 c.csvw_language, row))
+                        elif c.csvw_datatype == XSD.anyURI:
+                            o = URIRef(value)
                         elif c.csvw_datatype is not None:
                             o = Literal(value, datatype=c.csvw_datatype)
                         else:
