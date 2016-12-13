@@ -412,15 +412,15 @@ class BurstConverter(object):
 
                             p = self.expandURL(propertyUrl, row)
 
-                        if c.csvw_datatype == XSD.string and c.csvw_language is not None:
+                        if URIRef(c.csvw_datatype) == XSD.anyURI:
+                            o = URIRef(value)
+                        elif URIRef(c.csvw_datatype) == XSD.string and c.csvw_language is not None:
                             # If it is a string datatype that has a language, we turn it into a
                             # language tagged literal
                             # We also render the lang value in case it is a
                             # pattern.
                             o = Literal(value, lang=self.render_pattern(
                                 c.csvw_language, row))
-                        elif c.csvw_datatype == XSD.anyURI:
-                            o = URIRef(value)
                         elif c.csvw_datatype is not None:
                             o = Literal(value, datatype=c.csvw_datatype)
                         else:
