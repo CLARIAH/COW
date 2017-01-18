@@ -119,7 +119,7 @@ Have fun!
   - block 4 contains the reference to the file, your base-uri, language and short-hand uri definitions, and finally some provenance info, such as date first created
   - block 5 starts with 'tableSchema'. This is the section that you will want to focus on, as this is where you'll describe your variables in RDF.
 * After I build my file I get all kinds of @id rows. What should I do with those?
-The purpose of these rows is that they [xxx please add xxx] In principle you can delete them.
+    - The purpose of these rows is that they [xxx please add xxx] In principle you can delete them.
 
 * What do the blocks of code for each variable mean?
 ```
@@ -132,13 +132,13 @@ The purpose of these rows is that they [xxx please add xxx] In principle you can
 "dc:description": "institute"
 },
 ```
-  - datatype indicates the datatype of your variable. possible values are: string, url, decimal [xxx please add xxx]
-  - titles indicates the title ... appearing in ..... It is in plural because [xxx please add xxx]
-  - name refers to the name of the variable. It is different from title, because [xxx please add xxx]
-  - dc:description provides a way to describe your variable in more detail. E.g. if your variable is called 'age' a more concise description would be 'age at interview'. the 'dc:' part means it is part of the Dublin Core vocabulary (http://dublincore.org/documents/dces/)
+   - datatype indicates the datatype of your variable. possible values are: string, url, decimal [xxx please add xxx]
+   - titles indicates the title ... appearing in ..... It is in plural because [xxx please add xxx]
+   - name refers to the name of the variable. It is different from title, because [xxx please add xxx]
+   - dc:description provides a way to describe your variable in more detail. E.g. if your variable is called 'age' a more concise description would be 'age at interview'. the 'dc:' part means it is part of the Dublin Core vocabulary (http://dublincore.org/documents/dces/)
 
 * How can I expand the description of my variable in RDF?
-You can add information by adding a 'virtual block'. For example, suppose we started out with the block above, we could expand on it in the follow way.
+    - You can add information by adding a 'virtual block'. For example, suppose we started out with the block above, we could expand on it in the follow way.
 ```
 {
  "datatype": "string",
@@ -154,10 +154,11 @@ You can add information by adding a 'virtual block'. For example, suppose we sta
  "valueUrl": "institute/{institution}"
 },
 ```
-If our base url would be http://example.com, it would create a series of uri's representing all the different values (institutes) in the dataset, like so: http://example.com/institute/Institute4AwesomeResearch, http://example.com/institute/StarWarsAcademy, etc..
+   - If our base url would be http://example.com, it would create a series of uri's representing all the different values (institutes) in the dataset, like so: http://example.com/institute/Institute4AwesomeResearch, http://example.com/institute/StarWarsAcademy, etc..
 
 * My variable contains web addresses (urls). How can I have them as proper addresses rather than strings?
-Change the datatype to: url.
+
+    - Change the datatype to: url.
 
 
 ### CSVW status
