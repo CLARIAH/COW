@@ -111,6 +111,55 @@ python csvw-tool.py convert data/*.csv data/more/example1.csv data/more/example2
 
 Have fun!
 
+## FAQ / Tips and tricks (this section is currently being edited)
+* What's the general structure of the resulting .nq file?
+  - block 1 contains information on the csv file such as delimiter and encoding
+  - block 2 provides information on the licensing
+  - block 3 provides information on the publisher (you)
+  - block 4 contains the reference to the file, your base-uri, language and short-hand uri definitions, and finally some provenance info, such as date first created
+  - block 5 starts with 'tableSchema'. This is the section that you will want to focus on, as this is where you'll describe your variables in RDF.
+* After I build my file I get all kinds of @id rows. What should I do with those?
+The purpose of these rows is that they [xxx please add xxx] In principle you can delete them.
+
+* What do the blocks of code for each variable mean?
+```
+{
+ "datatype": "string"
+ "titles": [
+ "institute"
+  ],
+"name": "institute",
+"dc:description": "institute"
+},
+```
+  - datatype indicates the datatype of your variable. possible values are: string, url, decimal [xxx please add xxx]
+  - titles indicates the title ... appearing in ..... It is in plural because [xxx please add xxx]
+  - name refers to the name of the variable. It is different from title, because [xxx please add xxx]
+  - dc:description provides a way to describe your variable in more detail. E.g. if your variable is called 'age' a more concise description would be 'age at interview'. the 'dc:' part means it is part of the Dublin Core vocabulary (http://dublincore.org/documents/dces/)
+
+* How can I expand the description of my variable in RDF?
+You can add information by adding a 'virtual block'. For example, suppose we started out with the block above, we could expand on it in the follow way.
+```
+{
+ "datatype": "string",
+ "titles": [
+ "institution"
+ ],
+ "name": "institution",
+ "dc:description": "The research institute providing the study"
+ },
+ {
+ "virtual": true,
+ "propertyUrl": "foaf:Organization",
+ "valueUrl": "institute/{institution}"
+},
+```
+If our base url would be http://example.com, it would create a series of uri's representing all the different values (institutes) in the dataset, like so: http://example.com/institute/Institute4AwesomeResearch, http://example.com/institute/StarWarsAcademy, etc..
+
+* My variable contains web addresses (urls). How can I have them as proper addresses rather than strings?
+Change the datatype to: url.
+
+
 ### CSVW status
 * Extended CSVW standard to support Jinja2 template formatting in URL patterns (see below for commonly used template formatting).
 * Also supports patterns in lang attributes.
@@ -122,6 +171,9 @@ Have fun!
 * If-else statements: `{% if conditional_variable=="something"}value_if{% else %}value_else{% endif %}`.
 * Convert to string and concatenate: `{{variable ~ 'string'}}`, e.g. if variable has value "Hello" then the result would be "Hello string". Note the double braces.
 * Arithmetic: use double braces and cast as numeric first, e.g. `{{variable|float() * 1000}}`.
+
+
+
 
 ## OLD (below)
 
