@@ -165,7 +165,7 @@ Have fun!
     ```
     "aboutUrl": "hisco:{% if not HISCO in ['-1','-3','-2']%}{HISCO:0>5}{% else %}{HISCO}{% endif %}"
     ```
-
+    Also see the section https://github.com/CLARIAH/wp4-converters/blob/master/README.md#commonly-used-jinja2-template-formatting below.
 
 ### CSVW status
 * Extended CSVW standard to support Jinja2 template formatting in URL patterns (see below for commonly used template formatting).
