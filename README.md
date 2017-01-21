@@ -159,6 +159,12 @@ Have fun!
 * My variable contains web addresses (urls). How can I have them as proper addresses rather than strings?
 
     - Change the datatype to: url.
+    
+* Can I assign values conditionally, i.e. use an if-statement?
+    - Indeed you can. For example, HISCO codes ought to be 5 digits, but sometimes the first digit is a zero and then gets 'lost'. So we want to add that zero back, when HISCO has less than 5 digits. However, we don't want to add a zero, to the codes indicating missing HISCO's: (-1, -2 (and -3 in the Dutch Historical Sample version of HISCO)). Ergo:
+    ```
+    "aboutUrl": "hisco:{% if not HISCO in ['-1','-3','-2']%}{HISCO:0>5}{% else %}{HISCO}{% endif %}"
+    ```
 
 
 ### CSVW status
