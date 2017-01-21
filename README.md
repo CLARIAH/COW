@@ -111,7 +111,7 @@ python csvw-tool.py convert data/*.csv data/more/example1.csv data/more/example2
 
 Have fun!
 
-## FAQ / Tips and tricks (this section is currently being edited)
+## FAQ / Tips and tricks ('under construction')
 * What's the general structure of the resulting .nq file?
   - block 1 contains information on the csv file such as delimiter and encoding
   - block 2 provides information on the licensing
@@ -167,6 +167,10 @@ Have fun!
     ```
     Also see the section https://github.com/CLARIAH/wp4-converters/blob/master/README.md#commonly-used-jinja2-template-formatting below.
 
+
+* What does ValueError: Expecting , delimiter: line 161 column 5 (char 5716) mean?
+  - This might happen when you use the csvw-tool to convert a dataset. It indicates that you probably forgot say a comma in the line before.
+  
 ### CSVW status
 * Extended CSVW standard to support Jinja2 template formatting in URL patterns (see below for commonly used template formatting).
 * Also supports patterns in lang attributes.
