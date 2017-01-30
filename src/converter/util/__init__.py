@@ -352,7 +352,7 @@ class Nanopublication(Dataset):
         self.pg.add((assertion_graph_uri, PROV['wasDerivedFrom'], self.dataset_version_uri))
         # self.pg.add((dataset_uri, PROV['wasDerivedFrom'], self.dataset_version_uri))
         self.pg.add((assertion_graph_uri, PROV['generatedAtTime'],
-                     Literal(timestamp, datatype=XSD.datetime)))
+                     Literal(timestamp, datatype=XSD.dateTime)))
 
         # ----
         # The publication info graph
@@ -365,7 +365,7 @@ class Nanopublication(Dataset):
 
         self.pig.add((self.uri, PROV['wasGeneratedBy'], clariah_uri))
         self.pig.add((self.uri, PROV['generatedAtTime'],
-                      Literal(timestamp, datatype=XSD.datetime)))
+                      Literal(timestamp, datatype=XSD.dateTime)))
 
 
     def ingest(self, graph, target_graph=None):
