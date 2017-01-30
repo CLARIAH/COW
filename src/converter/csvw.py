@@ -160,10 +160,10 @@ class CSVWConverter(object):
                        'wasDerivedFrom'], self.metadata_uri))
         # Add an attribution relation and dc:author relation between the
         # nanopublication, the assertion graph and the authors of the schema
-        for o in self.metadata_graph.objects(self.metadata_uri, DC['author']):
+        for o in self.metadata_graph.objects(self.metadata_uri, DC['creator']):
             self.np.pg.add((self.np.ag.identifier, PROV['wasAttributedTo'], o))
             self.np.add((self.np.uri, PROV['wasAttributedTo'], o))
-            self.np.pig.add((self.np.ag.identifier, DC['author'], o))
+            self.np.pig.add((self.np.ag.identifier, DC['creator'], o))
 
         self.schema = self.metadata.csvw_tableSchema
 
@@ -393,10 +393,12 @@ class BurstConverter(object):
                         # This is a datatype property
                         if c.csvw_value is not None:
                             value = self.render_pattern(c.csvw_value, row)
-                        else:
+                        elif c.csvw_name is not None:
                             # print s, c.csvw_value, c.csvw_propertyUrl,
                             # c.csvw_name, self.encoding
                             value = row[unicode(c.csvw_name)]
+                        else:
+                            raise Exception("No 'name' or 'csvw:value' attribute found for this column specification")
 
                         # If propertyUrl is specified, use it, otherwise use
                         # the column name
@@ -414,19 +416,19 @@ class BurstConverter(object):
 
                         if c.csvw_datatype is not None:
                             if URIRef(c.csvw_datatype) == XSD.anyURI:
-                                o = URIRef(value)
+                                o = URIRef(iribaker.to_iri(value))
                             elif URIRef(c.csvw_datatype) == XSD.string and c.csvw_language is not None:
                                 # If it is a string datatype that has a language, we turn it into a
                                 # language tagged literal
                                 # We also render the lang value in case it is a
                                 # pattern.
-                                o = Literal(value, lang=self.render_pattern(
+                                o = Literal(value.encode('utf-8'), lang=self.render_pattern(
                                     c.csvw_language, row))
                             else:
-                                o = Literal(value, datatype=c.csvw_datatype)
+                                o = Literal(value.encode('utf-8'), datatype=c.csvw_datatype)
                         else:
                             # It's just a plain literal without datatype.
-                            o = Literal(value)
+                            o = Literal(value.encode('utf-8'))
 
                     # Add the triple to the assertion graph
                     self.g.add((s, p, o))
