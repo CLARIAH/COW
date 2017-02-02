@@ -7,6 +7,8 @@ rdf/
 datasets/
 bin/
 lib/
+docs/
+man/
 local/
 scr/iribaker
 *.ttl
@@ -21,3 +23,7 @@ include/
 .settings
 .Python
 hisco_job_local.sh
+TopBraid
+.metadata
+
+src/iribaker/
