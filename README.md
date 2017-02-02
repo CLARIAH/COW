@@ -117,7 +117,7 @@ Have fun!
   - block 2 provides information on the licensing
   - block 3 provides information on the publisher (you)
   - block 4 contains the reference to the file, your base-uri, language and short-hand uri definitions, and finally some provenance info, such as date first created
-  - block 5 starts with 'tableSchema'. This is the section that you will want to focus on, as this is where you'll describe your variables in RDF.
+  - block 5 starts with 'tableSchema'. This is the section that you will want to focus on, as this is where you'll describe your variables in RDF. Note that the 'aboutUrl' just under tableSchema is the default 'aboutUrl'.
 * After I build my file I get all kinds of @id rows. What should I do with those?
     - The purpose of these rows is that they [xxx please add xxx] In principle you can delete them.
 
@@ -134,7 +134,7 @@ Have fun!
 ```
    - datatype indicates the datatype of your variable. possible values are: string, url, decimal [xxx please add xxx]
    - titles indicates the title ... appearing in ..... It is in plural because [xxx please add xxx]
-   - name refers to the name of the variable. It is different from title, because [xxx please add xxx]
+   - name refers to the name of the variable. It is different from title, because [xxx please add xxx]. Note that when no 'valueUrl' is specified, the values for the column specified by ```"name": "my_column"``` are used as literals. 
    - dc:description provides a way to describe your variable in more detail. E.g. if your variable is called 'age' a more concise description would be 'age at interview'. the 'dc:' part means it is part of the Dublin Core vocabulary (http://dublincore.org/documents/dces/)
 
 * How can I expand the description of my variable in RDF?
