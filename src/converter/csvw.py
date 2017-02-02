@@ -158,7 +158,7 @@ class CSVWConverter(object):
         # and the metadata_uri
         self.np.pg.add((self.np.ag.identifier, PROV[
                        'wasDerivedFrom'], self.metadata_uri))
-        # Add an attribution relation and dc:author relation between the
+        # Add an attribution relation and dc:creator relation between the
         # nanopublication, the assertion graph and the authors of the schema
         for o in self.metadata_graph.objects(self.metadata_uri, DC['creator']):
             self.np.pg.add((self.np.ag.identifier, PROV['wasAttributedTo'], o))
