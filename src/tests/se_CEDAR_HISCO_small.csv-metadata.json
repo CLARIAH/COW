@@ -81,6 +81,7 @@
   "aboutUrl": "{{OCCUPATION|capitalize()}}",
   "columns": [
    {
+    "@id": "OCCUPATION",
     "datatype": "string",
     "titles": [
      "OCCUPATION"
