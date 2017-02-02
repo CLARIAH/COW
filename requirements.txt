@@ -37,7 +37,6 @@ SPARQLWrapper==1.7.6
 Sphinx==1.4.8
 sphinx-autobuild==0.6.0
 tornado==4.4.2
-travis==0.0.2
 tzlocal==1.2
 unicodecsv==0.14.1
 uritemplate==0.6
