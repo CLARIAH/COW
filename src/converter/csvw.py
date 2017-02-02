@@ -475,7 +475,7 @@ class BurstConverter(object):
             return rendered_template.format(**row)
         except:
             logger.warning(
-                "Could not apply python string formatting to '{}'".format(rendered_template))
+                "Could not apply python string formatting, probably due to mismatched curly brackets. IRI will be '{}'. ".format(rendered_template))
             return rendered_template
 
     def expandURL(self, url_pattern, row, datatype=False):
