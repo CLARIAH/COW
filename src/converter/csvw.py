@@ -417,13 +417,13 @@ class BurstConverter(object):
                         if c.csvw_datatype is not None:
                             if URIRef(c.csvw_datatype) == XSD.anyURI:
                                 o = URIRef(iribaker.to_iri(value))
-                            elif URIRef(c.csvw_datatype) == XSD.string and c.csvw_language is not None:
+                            elif URIRef(c.csvw_datatype) == XSD.string and c.csvw_lang is not None:
                                 # If it is a string datatype that has a language, we turn it into a
                                 # language tagged literal
                                 # We also render the lang value in case it is a
                                 # pattern.
                                 o = Literal(value.encode('utf-8'), lang=self.render_pattern(
-                                    c.csvw_language, row))
+                                    c.csvw_lang, row))
                             else:
                                 o = Literal(value.encode('utf-8'), datatype=c.csvw_datatype)
                         else:
