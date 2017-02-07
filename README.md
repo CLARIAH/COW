@@ -185,7 +185,7 @@ Have fun!
 * If-else statements: `{% if conditional_variable=="something" %} value_if {% else %} value_else {% endif %}`.
 * Convert to string and concatenate: `{{variable ~ 'string'}}`, e.g. if variable has value "Hello" then the result would be "Hello string". Note the double braces.
 * Arithmetic: use double braces and cast as numeric first, e.g. `{{variable|float() * 1000}}`.
-
+* Lowercase, uppercase, etc.: `{{variable|lower()}}`. Note the double brace.
 
 
 
