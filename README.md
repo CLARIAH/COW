@@ -169,11 +169,14 @@ Have fun!
 
 
 * What does ValueError: Expecting , delimiter: line 161 column 5 (char 5716) mean?
-  - This might happen when you use the csvw-tool to convert a dataset. It indicates that you probably forgot say a comma in the line before.
+  - This might happen when you use the csvw-tool to convert a dataset. It indicates that you probably forgot a comma in the line before.
 
 * When converting, I get the following error: "Exception: Could not find source file or necessary metadata file in path..."
   - It's likely your trying to convert the .csv-metadata.json file rather than the .csv file itself.
-  
+
+* I've added a language tag using "lang": "whatever_language", but why doesn't show @whatever_language in the n-quads file?
+  - The "lang": part should be placed directly after the specification of the skos:pref/hidden/altLabel.
+
 ### CSVW status
 * Extended CSVW standard to support Jinja2 template formatting in URL patterns (see below for commonly used template formatting).
 * Also supports patterns in lang attributes.
