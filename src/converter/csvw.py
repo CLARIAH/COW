@@ -371,7 +371,7 @@ class BurstConverter(object):
                     # Can also be used to prevent the triggering of virtual
                     # columns!
                     value = row[unicode(c.csvw_name)]
-                    if len(value) == 0 or value == unicode(c.csvw_null) or value in c.csvw_null or value == unicode(self.schema.csvw_null):
+                    if len(value) == 0 or value == unicode(c.csvw_null) or value in [unicode(n) for n in c.csvw_null] or value == unicode(self.schema.csvw_null):
                         # Skip value if length is zero
                         logger.debug(
                             "Length is 0 or value is equal to specified 'null' value")
@@ -390,13 +390,17 @@ class BurstConverter(object):
                         p = self.expandURL(c.csvw_propertyUrl, row)
                         o = self.expandURL(c.csvw_valueUrl, row)
                     else:
+
                         # This is a datatype property
                         if c.csvw_value is not None:
-                            value = self.render_pattern(c.csvw_value, row)
+                            value = self.render_pattern(unicode(c.csvw_value), row)
                         elif c.csvw_name is not None:
-                            # print s, c.csvw_value, c.csvw_propertyUrl,
-                            # c.csvw_name, self.encoding
-                            value = row[unicode(c.csvw_name)]
+                            # print s
+                            # print c.csvw_name, self.encoding
+                            # print row[unicode(c.csvw_name)], type(row[unicode(c.csvw_name)])
+                            # print row[unicode(c.csvw_name)].encode('utf-8')
+                            # print '...'
+                            value = row[unicode(c.csvw_name)].encode('utf-8')
                         else:
                             raise Exception("No 'name' or 'csvw:value' attribute found for this column specification")
 
@@ -422,13 +426,13 @@ class BurstConverter(object):
                                 # language tagged literal
                                 # We also render the lang value in case it is a
                                 # pattern.
-                                o = Literal(value.encode('utf-8'), lang=self.render_pattern(
+                                o = Literal(value, lang=self.render_pattern(
                                     c.csvw_lang, row))
                             else:
-                                o = Literal(value.encode('utf-8'), datatype=c.csvw_datatype)
+                                o = Literal(value, datatype=c.csvw_datatype)
                         else:
                             # It's just a plain literal without datatype.
-                            o = Literal(value.encode('utf-8'))
+                            o = Literal(value)
 
                     # Add the triple to the assertion graph
                     self.g.add((s, p, o))
@@ -456,7 +460,6 @@ class BurstConverter(object):
     #     logger.info("... done")
 
     def render_pattern(self, pattern, row):
-
         # Significant speedup by not re-instantiating Jinja templates for every
         # row.
         if pattern in self.templates:
