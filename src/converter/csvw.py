@@ -187,7 +187,7 @@ class CSVWConverter(object):
         logger.info("Delimiter: {}".format(self.delimiter.__repr__()))
         logger.info("Encoding : {}".format(self.encoding.__repr__()))
         logger.warning(
-            "Only taking encoding, quotechar and delimiter specifications into account...")
+            "Taking encoding, quotechar and delimiter specifications into account...")
 
         # The metadata schema overrides the default namespace values
         # (NB: this does not affect the predefined Namespace objects!)
@@ -371,7 +371,10 @@ class BurstConverter(object):
                     # Can also be used to prevent the triggering of virtual
                     # columns!
                     value = row[unicode(c.csvw_name)]
-                    if len(value) == 0 or value == unicode(c.csvw_null) or value in [unicode(n) for n in c.csvw_null] or value == unicode(self.schema.csvw_null):
+
+                    if len(value) == 0 and unicode(c.csvw_parseOnEmpty) == u"true":
+                        print("Not skipping empty value")
+                    elif len(value) == 0 or value == unicode(c.csvw_null) or value in [unicode(n) for n in c.csvw_null] or value == unicode(self.schema.csvw_null):
                         # Skip value if length is zero
                         logger.debug(
                             "Length is 0 or value is equal to specified 'null' value")
