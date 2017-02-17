@@ -13,7 +13,7 @@ import multiprocessing as mp
 import unicodecsv as csv
 from jinja2 import Template
 from util import get_namespaces, Nanopublication, CSVW, PROV, DC
-from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
+from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset, RDF, SKOS
 from rdflib.resource import Resource
 from rdflib.collection import Collection
 from functools import partial
@@ -392,6 +392,22 @@ class BurstConverter(object):
 
                         p = self.expandURL(c.csvw_propertyUrl, row)
                         o = self.expandURL(c.csvw_valueUrl, row)
+
+                        # For coded properties, the collectionUrl can be used to indicate that the
+                        # value URL is a concept and a member of a SKOS Collection with that URL.
+                        if c.csvw_collectionUrl is not None:
+                            collection = self.expandURL(c.csvw_collectionUrl, row)
+                            self.g.add((collection, RDF.type, SKOS['Collection']))
+                            self.g.add((o, RDF.type, SKOS['Concept']))
+                            self.g.add((collection, SKOS['member'], o))
+
+                        # For coded properties, the schemeUrl can be used to indicate that the
+                        # value URL is a concept and a member of a SKOS Scheme with that URL.
+                        if c.csvw_schemeUrl is not None:
+                            scheme = self.expandURL(c.csvw_schemeUrl, row)
+                            self.g.add((scheme, RDF.type, SKOS['Scheme']))
+                            self.g.add((o, RDF.type, SKOS['Concept']))
+                            self.g.add((o, SKOS['inScheme'], scheme))
                     else:
 
                         # This is a datatype property
