@@ -78,6 +78,14 @@ class TestConversion(unittest.TestCase):
         c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'se_CEDAR_HISCO.csv'), processes=1)
         c.convert()
 
+    def test_simple_csvw_conversion_NULL(self):
+        """
+        Tests simple, serial CSVW conversion (1 threads) capability of csvw.Converter class for NULL values
+        """
+
+        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'null_values.csv'), processes=1)
+        c.convert()
+
     def test_parallel_csvw_conversion(self):
         """
         Tests parallel CSVW conversion (2 threads) capability of csvw.Converter class
