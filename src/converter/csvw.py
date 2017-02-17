@@ -12,8 +12,8 @@ from chardet.universaldetector import UniversalDetector
 import multiprocessing as mp
 import unicodecsv as csv
 from jinja2 import Template
-from util import get_namespaces, Nanopublication, CSVW, PROV, DC
-from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset, RDF, SKOS
+from util import get_namespaces, Nanopublication, CSVW, PROV, DC, SKOS, RDF
+from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
 from rdflib.resource import Resource
 from rdflib.collection import Collection
 from functools import partial
