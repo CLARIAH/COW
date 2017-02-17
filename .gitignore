@@ -13,8 +13,6 @@ local/
 scr/iribaker
 *.ttl
 *.nq
-*.csv
-*.json
 sdh-private-dwarsliggers
 sdh-public-datasets
 sdh-private-hisco-datasets
