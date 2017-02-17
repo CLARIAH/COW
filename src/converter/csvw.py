@@ -357,8 +357,8 @@ class BurstConverter(object):
                     "Skipping empty row caused by multiprocessing (multiple of chunksize exceeds number of rows in file)...")
                 continue
 
-            logger.debug("row: {}".format(count))
-            row['_row'] = count
+            logger.debug("row: {}".format(obs_count))
+            row['_row'] = obs_count
             count += 1
 
             for c in self.columns:
