@@ -171,6 +171,9 @@ Have fun!
 * What does ValueError: Expecting , delimiter: line 161 column 5 (char 5716) mean?
   - This might happen when you use the csvw-tool to convert a dataset. It indicates that you probably forgot a comma in the line before.
 
+* What does ValueError:"No JSON object could be decoded" mean?
+  - This error occurs when your second to final `}` is followed by a comma, probably the result of copying/pasting.
+
 * When converting, I get the following error: "Exception: Could not find source file or necessary metadata file in path..."
   - It's likely your trying to convert the .csv-metadata.json file rather than the .csv file itself.
 
