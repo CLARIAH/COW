@@ -172,7 +172,7 @@ Have fun!
   - This might happen when you use the csvw-tool to convert a dataset. It indicates that you probably forgot a comma in the line before.
 
 * What does ValueError:"No JSON object could be decoded" mean?
-  - This error occurs when your second to final `}` is followed by a comma, probably the result of copying/pasting.
+  - In general it means that the Json schema is not syntactically valid. This could mean anything from missing commas, brackets, closing quotes, incorrect string quotes or invalid structure. E.g. this error occurs when your second to final `}` is followed by a comma.
 
 * When converting, I get the following error: "Exception: Could not find source file or necessary metadata file in path..."
   - It's likely your trying to convert the .csv-metadata.json file rather than the .csv file itself.
