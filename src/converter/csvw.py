@@ -350,6 +350,8 @@ class BurstConverter(object):
 
         logger.info("Row: {}".format(obs_count))
 
+
+
         for row in rows:
             # This fixes issue:10
             if row is None:
@@ -379,11 +381,33 @@ class BurstConverter(object):
                         logger.debug(
                             "Length is 0 or value is equal to specified 'null' value")
                         continue
+                    elif isinstance(c.csvw_null, Item):
+                        nulls = Collection(self.metadata_graph, BNode(c.csvw_null))
+
+                        for n in nulls:
+                            n = Item(self.metadata_graph, n)
+                            col = str(n.csvw_name)
+                            val = str(n.csvw_null)
+                            if row[col] == val:
+                                logger.debug("Value of column {} is equal to specified 'null' value: '{}' (Non-Virtual)".format(col, val))
+                                continue
                 except:
+
                     # No column name specified (virtual)
-                    pass
+
+                    if isinstance(c.csvw_null, Item):
+                        nulls = Collection(self.metadata_graph, BNode(c.csvw_null))
+
+                        for n in nulls:
+                            n = Item(self.metadata_graph, n)
+                            col = str(n.csvw_name)
+                            val = str(n.csvw_null)
+                            if row[col] == val:
+                                logger.debug("Value of column {} is equal to specified 'null' value: '{}' (Virtual)".format(col, val))
+                                continue
 
                 try:
+
                     if unicode(c.csvw_virtual) == u'true' and c.csvw_aboutUrl is not None:
                         s = self.expandURL(c.csvw_aboutUrl, row)
 
