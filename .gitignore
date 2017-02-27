@@ -23,5 +23,5 @@ include/
 hisco_job_local.sh
 TopBraid
 .metadata
-
+docs/_build
 src/iribaker/
