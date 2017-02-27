@@ -344,6 +344,18 @@ class BurstConverter(object):
 
         self.aboutURLSchema = self.schema.csvw_aboutUrl
 
+    def equal_to_null(self, nulls, row):
+        for n in nulls:
+            n = Item(self.metadata_graph, n)
+            col = str(n.csvw_name)
+            val = str(n.csvw_null)
+            if row[col] == val:
+                print("Value of column {} ('{}') is equal to specified 'null' value: '{}'".format(col, unicode(row[col]).encode('utf-8'), val))
+                # There is a match with null value
+                return True
+        # There is no match with null value
+        return False
+
     def process(self, count, rows, chunksize):
 
         obs_count = count * chunksize
@@ -384,27 +396,17 @@ class BurstConverter(object):
                     elif isinstance(c.csvw_null, Item):
                         nulls = Collection(self.metadata_graph, BNode(c.csvw_null))
 
-                        for n in nulls:
-                            n = Item(self.metadata_graph, n)
-                            col = str(n.csvw_name)
-                            val = str(n.csvw_null)
-                            if row[col] == val:
-                                logger.debug("Value of column {} is equal to specified 'null' value: '{}' (Non-Virtual)".format(col, val))
-                                continue
+                        if self.equal_to_null(nulls, row):
+                            # Continue to next column specification in this row, if the value is equal to (one of) the null values.
+                            continue
                 except:
 
                     # No column name specified (virtual)
-
                     if isinstance(c.csvw_null, Item):
                         nulls = Collection(self.metadata_graph, BNode(c.csvw_null))
-
-                        for n in nulls:
-                            n = Item(self.metadata_graph, n)
-                            col = str(n.csvw_name)
-                            val = str(n.csvw_null)
-                            if row[col] == val:
-                                logger.debug("Value of column {} is equal to specified 'null' value: '{}' (Virtual)".format(col, val))
-                                continue
+                        if self.equal_to_null(nulls, row):
+                            # Continue to next column specification in this row, if the value is equal to (one of) the null values.
+                            continue
 
                 try:
 
