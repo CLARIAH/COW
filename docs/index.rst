@@ -12,8 +12,8 @@
 
   self
 
-COW
-===
+COW: Converter for CSV on the Web
+=================================
 
 This package contains a comprehensive tool (COW [#f2]_) for batch conversion of multiple datasets expressed in CSV. It uses a JSON schema expressed using an extended version of the CSVW standard, to convert CSV files to RDF in scalable fashion.
 
@@ -26,12 +26,12 @@ Another feature of CSVW is that it allows the specification of a mapping (or int
 
 Interestingly, the JSON format used by CSVW metadata is an `extension of the JSON-LD specification <https://www.w3.org/TR/json-ld/>`_, a JSON-based serialization for Linked Data. As a consequence of this, the CSVW metadata can be directly attached (as provenance) to the RDF resulting from a CSVW-based conversion.
 
-This is exactly what the CSVW Converters do.
+This is exactly what the COW converter does.
 
 Features & Limitations
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Compared to the CSVW specification, the converters have a number of limitations and extra features. These are:
+Compared to the CSVW specification, the converter has a number of limitations and extra features. These are:
 
 1. COW *does not* perform any schema checking, and ignores any and all parts of the `CSVW Specification <https://www.w3.org/ns/csvw>`_ that are not directly needed for the RDF conversion.
 
@@ -48,6 +48,11 @@ Compared to the CSVW specification, the converters have a number of limitations 
   * Determining file encoding
   * Determining the delimiter
   * Generating a skeleton schema for any CSV file (see :ref:`here <skeleton-schema>`)
+
+4. COW produces extensive provenance:
+
+  * Converted data is encapsulated in a `Nanopublication <http://nanopub.org>`_
+  * The original CSVW schema is encapsulated in the `np:hasProvenance` graph associated with the nanopublication.
 
 Installation
 ^^^^^^^^^^^^^
@@ -80,7 +85,7 @@ Install the required packages::
 
   pip install -r requirements.txt
 
-Change directory to `src`, and optionally replace the author in the config.py with your own data.
+Change directory to ``src``, and optionally replace the author in the ``config.py`` with your own data.
 
 
 Usage
@@ -98,7 +103,9 @@ General usage instructions can be obtained by running ``python csvw-tool.py -h``
                       [--chunksize CHUNKSIZE] [--base BASE]
                       {convert,build} file [file ...]
 
-.. table:: Explanation of commandline options for ``csvw-tool.py``
+The table below gives a brief description of each of these options.
+
+.. table:: Commandline options for ``csvw-tool.py``
 
    ===================    ===========
    Option                 Explanation
@@ -211,7 +218,7 @@ This will genrate a file called ``imf_gdppc.csv-metadata.json`` with the followi
    }
   }
 
-
+The exact meaning of this structure is explained in :ref:`the section below <the-schema>`.
 
 .. _converting-csv:
 
@@ -222,9 +229,132 @@ If we now want to convert our example file ``imf_gdppc.csv``, you first make sur
 
   python csvw-tool.py convert imf_gdppc.csv
 
+This will produce a file `imf_gdppc.csv.nq` that holds an NQuads serialization of the RDF.
+
 This is also the preferred method for converting multiple files at the same time. For instance, if you want to convert `all` CSV files in a specific directory, simply use unix-style wildcards::
 
   python csvw-tool.py convert /path/to/some/directory/*.csv
+
+Going back to our running example, the resulting RDF looks like this (when serialized as TriG):
+
+.. code-block:: turtle
+  :linenos:
+
+  @prefix dlr: <http://data.socialhistory.org/resource/> .
+  @prefix prov-o: <http://www.w3.org/ns/prov#> .
+  @prefix schema: <http://schema.org/> .
+  @prefix csvw: <http://www.w3.org/ns/csvw#> .
+  @prefix dcterms: <http://purl.org/dc/terms/> .
+  @prefix uuid: <urn:uuid:> .
+  @prefix dlv: <http://data.socialhistory.org/vocab/> .
+  @prefix np: <http://www.nanopub.org/nschema#> .
+  @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+  @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+  @prefix xml: <http://www.w3.org/XML/1998/namespace> .
+  @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+  <http://data.socialhistory.org/resource/imf_gdppc/pubinfo/769bcbf7/2017-02-28T14:05> {
+      <http://data.socialhistory.org/resource/imf_gdppc/nanopublication/769bcbf7/2017-02-28T14:05> prov-o:generatedAtTime "2017-02-28T14:05:00"^^xsd:dateTime ;
+          prov-o:wasGeneratedBy <https://github.com/CLARIAH/wp4-converters> .
+  }
+
+  <http://data.socialhistory.org/resource/imf_gdppc/provenance/769bcbf7/2017-02-28T14:05> {
+      <http://data.socialhistory.org/resource/imf_gdppc/assertion/769bcbf7/2017-02-28T14:05> prov-o:generatedAtTime "2017-02-28T14:05:00"^^xsd:dateTime ;
+          prov-o:wasDerivedFrom <http://data.socialhistory.org/resource/769bcbf7c31b526ce7bcf889c92837e276fd545d>,
+              <http://example.com/imf_gdppc.csv> .
+
+      <http://example.com/__row_> prov-o:wasDerivedFrom "http://example.com/{_row}"^^xsd:string .
+
+      <http://example.com/imf_gdppc.csv> dcterms:license <http://opendefinition.org/licenses/cc-by/> ;
+          dcterms:modified "2017-02-28"^^xsd:date ;
+          dcterms:publisher [ schema:name "CLARIAH Structured Data Hub - Datalegend"@en ;
+                  schema:url <http://datalegend.org/> ] ;
+          dcterms:title "imf_gdppc.csv"@en ;
+          csvw:dialect [ csvw:delimiter ";" ;
+                  csvw:encoding "ascii" ;
+                  csvw:quoteChar "\"" ] ;
+          csvw:tableSchema [ csvw:aboutUrl <http://example.com/__row_> ;
+                  csvw:column ( <http://example.com/imf_gdppc.csv/column/Rank> <http://example.com/imf_gdppc.csv/column/Country> <http://example.com/imf_gdppc.csv/column/Int$> ) ;
+                  csvw:primaryKey "Rank" ] ;
+          csvw:url "imf_gdppc.csv"^^xsd:anyURI .
+
+      <http://example.com/imf_gdppc.csv/column/Country> dcterms:description "Country"@en ;
+          csvw:datatype xsd:string ;
+          csvw:name "Country" ;
+          csvw:title "Country"@en .
+
+      <http://example.com/imf_gdppc.csv/column/Int$> dcterms:description "Int$"@en ;
+          csvw:datatype xsd:string ;
+          csvw:name "Int$" ;
+          csvw:title "Int$"@en .
+
+      <http://example.com/imf_gdppc.csv/column/Rank> dcterms:description "Rank"@en ;
+          csvw:datatype xsd:string ;
+          csvw:name "Rank" ;
+          csvw:title "Rank"@en .
+  }
+
+  <http://data.socialhistory.org/resource/imf_gdppc/assertion/769bcbf7/2017-02-28T14:05> {
+      <http://example.com/0> dlr:Country "Qatar"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int$> "131.63"^^xsd:string ;
+          dlr:Rank "1"^^xsd:string .
+
+      <http://example.com/1> dlr:Country "Luxembourg"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int$> "104.906"^^xsd:string ;
+          dlr:Rank "2"^^xsd:string .
+
+      <http://example.com/2> dlr:Country "Macau"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int$> "96.832"^^xsd:string ;
+          dlr:Rank "3"^^xsd:string .
+
+      <http://example.com/3> dlr:Country "Singapore"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int$> "90.249"^^xsd:string ;
+          dlr:Rank "4"^^xsd:string .
+
+      <http://example.com/4> dlr:Country "Brunei Darussalam"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int$> "83.513"^^xsd:string ;
+          dlr:Rank "5"^^xsd:string .
+
+      <http://example.com/5> dlr:Country "Kuwait"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int$> "72.675"^^xsd:string ;
+          dlr:Rank "6"^^xsd:string .
+
+      <http://example.com/6> dlr:Country "Ireland"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int$> "72.524"^^xsd:string ;
+          dlr:Rank "7"^^xsd:string .
+
+      <http://example.com/7> dlr:Country "Norway"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int$> "70.645"^^xsd:string ;
+          dlr:Rank "8"^^xsd:string .
+  }
+
+  uuid:af2851b5-405f-484b-869f-9f119f4b796f {
+      <http://data.socialhistory.org/resource/769bcbf7c31b526ce7bcf889c92837e276fd545d> dlv:path "imf_gdppc.csv"^^xsd:string ;
+          dlv:sha1_hash "769bcbf7c31b526ce7bcf889c92837e276fd545d"^^xsd:string .
+
+      <http://data.socialhistory.org/resource/imf_gdppc/nanopublication/769bcbf7/2017-02-28T14:05> a np:Nanopublication ;
+          np:hasAssertion <http://data.socialhistory.org/resource/imf_gdppc/assertion/769bcbf7/2017-02-28T14:05> ;
+          np:hasProvenance <http://data.socialhistory.org/resource/imf_gdppc/provenance/769bcbf7/2017-02-28T14:05> ;
+          np:hasPublicationInfo <http://data.socialhistory.org/resource/imf_gdppc/pubinfo/769bcbf7/2017-02-28T14:05> .
+
+      <http://data.socialhistory.org/resource/imf_gdppc/assertion/769bcbf7/2017-02-28T14:05> a np:Assertion .
+
+      <http://data.socialhistory.org/resource/imf_gdppc/provenance/769bcbf7/2017-02-28T14:05> a np:Provenance .
+
+      <http://data.socialhistory.org/resource/imf_gdppc/pubinfo/769bcbf7/2017-02-28T14:05> a np:PublicationInfo .
+  }
+
+What does this mean?
+
+* Everything in ``http://data.socialhistory.org/resource/imf_gdppc/provenance/769bcbf7/2017-02-28T14:05`` is the RDF representation of the CSVW JSON schema.
+* Everything in ``http://data.socialhistory.org/resource/imf_gdppc/assertion/769bcbf7/2017-02-28T14:05`` is the RDF representation of the CSV file.
+
+  Since the global ``aboutUrl`` is set to ``{_row}``, every row is represented in RDF as a resource with the base URI concatenated with the row number. The column names are used as predicates to relate the row resource to a string literal representation of the value of a cell in that row.
+
+* The graph ``uuid:af2851b5-405f-484b-869f-9f119f4b796f`` is the default graph that contains the Nanopublication.
+
+
+.. _the-schema:
 
 The Schema
 ^^^^^^^^^^
