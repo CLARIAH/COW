@@ -6,6 +6,12 @@
 .. highlight:: python
   :linenothreshold: 5
 
+.. toctree::
+  :hidden:
+  :maxdepth: 2
+
+  self
+
 COW
 ===
 
@@ -27,7 +33,7 @@ Features & Limitations
 
 Compared to the CSVW specification, the converters have a number of limitations and extra features. These are:
 
-1. COW *does not* perform any schema checking, and ignore any and all parts of the `CSVW Specification <https://www.w3.org/ns/csvw>`_ that are not directly needed for the RDF conversion.
+1. COW *does not* perform any schema checking, and ignores any and all parts of the `CSVW Specification <https://www.w3.org/ns/csvw>`_ that are not directly needed for the RDF conversion.
 
 2. COW extends the CSVW specification in several ways:
 
@@ -42,12 +48,6 @@ Compared to the CSVW specification, the converters have a number of limitations 
   * Determining file encoding
   * Determining the delimiter
   * Generating a skeleton schema for any CSV file (see :ref:`here <skeleton-schema>`)
-
-.. toctree::
-  :titlesonly:
-  :maxdepth: 2
-
-  self
 
 Installation
 ^^^^^^^^^^^^^
