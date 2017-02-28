@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding=None, dataset_name=None):
+def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None, dataset_name=None, base="http://data.socialhistory.org/resource"):
     url = os.path.basename(infile)
     # Get the current date and time (UTC)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
@@ -53,11 +53,15 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding=None, 
 
 
     logger.info("Delimiter is: {}".format(delimiter))
+
+    if base.endswith('/'):
+        base = base[:-1]
+
     metadata = {
-        "@id": iribaker.to_iri("http://data.socialhistory.org/resource/" + url),
+        "@id": iribaker.to_iri(u"{}/{}".format(base, url)),
         "@context": ["http://www.w3.org/ns/csvw",
                      {"@language": "en",
-                      "@base": "http://data.socialhistory.org/resource/"},
+                      "@base": "{}/".format(base)},
                      get_namespaces()],
         "url": url,
         "dialect": {"delimiter": delimiter,
@@ -91,7 +95,7 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding=None, 
 
         for head in header:
             col = {
-                "@id": iribaker.to_iri("http://data.socialhistory.org/resource/{}/column/{}".format(url, head)),
+                "@id": iribaker.to_iri("{}/{}/column/{}".format(base, url, head)),
                 "name": head,
                 "titles": [head],
                 "dc:description": head,
