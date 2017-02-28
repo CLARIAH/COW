@@ -9,9 +9,7 @@
 COW
 ===
 
-This package contains a comprehensive utility package (COW [#f2]_) for batch conversion of multiple datasets expressed in CSV, including datasets mapped through the [QBer](https://github.com/CLARIAH/QBer) tool.
-
-This documentation focuses on the first of these functionalities: using a JSON schema expressed using an extended version of the CSVW standard, to convert CSV files to RDF in scalable fashion.
+This package contains a comprehensive tool (COW [#f2]_) for batch conversion of multiple datasets expressed in CSV. It uses a JSON schema expressed using an extended version of the CSVW standard, to convert CSV files to RDF in scalable fashion.
 
 `CSV on the Web (CSVW) <https://www.w3.org/ns/csvw>`_ is a W3C standard for metadata descriptions for tabular data. Typically, these data reside in CSV files. CSVW metadata is captured in ``.csv-metadata.json`` files that live alongside the CSV files that they describe. For instance, a CSV file called ``data.csv`` and its metadata ``data.csv-metadata.json`` would be hosted at::
 
