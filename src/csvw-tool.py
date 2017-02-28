@@ -33,8 +33,12 @@ if __name__ == '__main__':
 
         elif args.mode == 'convert':
             print "Converting {} to RDF".format(source_file)
-            c = CSVWConverter(source_file, delimiter=args.delimiter, quotechar=args.quotechar, processes=args.processes, chunksize=args.chunksize)
-            c.convert()
+
+            try:
+                c = CSVWConverter(source_file, delimiter=args.delimiter, quotechar=args.quotechar, processes=args.processes, chunksize=args.chunksize)
+                c.convert()
+            except:
+                print "Something went wrong, skipping {}.".format(source_file)
         else:
             print "Whoops for file {}".format(f)
 
