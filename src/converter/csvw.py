@@ -44,6 +44,15 @@ def build_schema(infile, outfile, delimiter=',', quotechar='\"', encoding=None, 
         logger.info("Detected encoding: {} ({} confidence)".format(detector.result['encoding'],
                                                                    detector.result['confidence']))
 
+    if delimiter is None:
+        with open(infile, 'rb') as csvfile:
+            dialect = csv.Sniffer().sniff(csvfile.read(1024), delimiters=";,$\t")
+            csvfile.seek(0)
+        logger.info("Detected dialect: {} (delimiter: '{}')".format(dialect, dialect.delimiter))
+        delimiter = dialect.delimiter
+
+
+    logger.info("Delimiter is: {}".format(delimiter))
     metadata = {
         "@id": iribaker.to_iri("http://data.socialhistory.org/resource/" + url),
         "@context": ["http://www.w3.org/ns/csvw",
