@@ -62,6 +62,8 @@ class TestConversion(unittest.TestCase):
 
         c.convert()
 
+
+
     def test_simple_csvw_conversion(self):
         """
         Tests simple, serial CSVW conversion (1 threads) capability of csvw.Converter class
@@ -109,6 +111,27 @@ class TestConversion(unittest.TestCase):
 
         c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'se_CEDAR_HISCO.csv'), processes=2, chunksize=2)
         c.convert()
+
+
+    def test_iso_csvw_conversion(self):
+        """
+        Tests fix for ISO-8859-1 encoding issue, https://github.com/CLARIAH/wp4-converters/issues/15.
+        Uses simple, serial CSVW conversion (1 threads) capability of csvw.Converter class
+        """
+
+        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'occupation_link_test.csv'), processes=1)
+        c.convert()
+
+    def test_spaces_empty_col_csvw_conversion(self):
+        """
+        Tests fix for ISO-8859-1 encoding issue, https://github.com/CLARIAH/wp4-converters/issues/15.
+        Uses simple, serial CSVW conversion (1 threads) capability of csvw.Converter class
+        """
+
+        c = csvw.CSVWConverter(os.path.join(os.path.dirname(__file__), 'occupation_link_spaces_empty_col.csv'), processes=1)
+        c.convert()
+
+
 
     def test_datatype_conversion(self):
         """

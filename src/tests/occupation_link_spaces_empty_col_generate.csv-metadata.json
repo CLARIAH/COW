@@ -1,0 +1,207 @@
+{
+ "dialect": {
+  "quoteChar": "\"", 
+  "delimiter": ",", 
+  "encoding": "ISO-8859-2"
+ }, 
+ "dcat:keyword": [], 
+ "dc:license": {
+  "@id": "http://opendefinition.org/licenses/cc-by/"
+ }, 
+ "dc:publisher": {
+  "schema:name": "CLARIAH Structured Data Hub - Datalegend", 
+  "schema:url": {
+   "@id": "http://datalegend.org"
+  }
+ }, 
+ "url": "occupation_link_spaces_empty_col_generate.csv", 
+ "@context": [
+  "http://www.w3.org/ns/csvw", 
+  {
+   "@base": "http://data.socialhistory.org/resource/", 
+   "@language": "en"
+  }, 
+  {
+   "owl": "http://www.w3.org/2002/07/owl#", 
+   "dbo": "http://dbpedia.org/ontology/", 
+   "clioctr": "http://data.socialhistory.org/resource/clio/country/", 
+   "hisclass": "http://data.socialhistory.org/resource/hisclass/", 
+   "hisco-product": "http://data.socialhistory.org/resource/hisco/product/", 
+   "hisco-entry": "http://data.socialhistory.org/resource/hisco/entry/", 
+   "ldp": "http://www.w3.org/ns/ldp#", 
+   "clio": "http://data.socialhistory.org/resource/clio/", 
+   "occhisco": "http://data.socialhistory.org/resource/napp/OCCHISCO/", 
+   "dbr": "http://dbpedia.org/resource/", 
+   "skos": "http://www.w3.org/2004/02/skos/core#", 
+   "xml": "http://www.w3.org/XML/1998/namespace/", 
+   "bibo": "http://purl.org/ontology/bibo/", 
+   "rdfs": "http://www.w3.org/2000/01/rdf-schema#", 
+   "prov": "http://www.w3.org/ns/prov#", 
+   "sdmx-code": "http://purl.org/linked-data/sdmx/2009/code#", 
+   "napp-can91": "http://data.socialhistory.org/resource/napp/dataset/canada1891/", 
+   "hiscam": "http://data.socialhistory.org/resource/hiscam/", 
+   "dbpedia": "http://dbpedia.org/resource/", 
+   "np": "http://www.nanopub.org/nschema#", 
+   "canfam-auke": "http://data.socialhistory.org/resource/canfam/auke/", 
+   "dcterms": "http://purl.org/dc/terms/", 
+   "schema": "http://schema.org/", 
+   "foaf": "http://xmlns.com/foaf/0.1/", 
+   "napp": "http://data.socialhistory.org/resource/napp/", 
+   "sdv": "http://data.socialhistory.org/vocab/", 
+   "hisco": "http://data.socialhistory.org/resource/hisco/", 
+   "sdp": "http://data.socialhistory.org/resource/person/", 
+   "sdr": "http://data.socialhistory.org/resource/", 
+   "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#", 
+   "time": "http://www.w3.org/2006/time#", 
+   "hsn": "http://data.socialhistory.org/resource/hsn2013a/", 
+   "dc": "http://purl.org/dc/terms/", 
+   "hisco-relation": "http://data.socialhistory.org/resource/hisco/relation/", 
+   "hisco-status": "http://data.socialhistory.org/resource/hisco/status/", 
+   "dbp": "http://dbpedia.org/property/", 
+   "clioprop": "http://data.socialhistory.org/resource/clio/property/", 
+   "sdmx-concept": "http://purl.org/linked-data/sdmx/2009/concept#", 
+   "csvw": "http://www.w3.org/ns/csvw#", 
+   "clioind": "http://data.socialhistory.org/resource/clio/indicator/", 
+   "dc11": "http://purl.org/dc/elements/1.1/", 
+   "canfam-dimension": "http://data.socialhistory.org/vocab/canfam/dimension/", 
+   "napp-eng81": "http://data.socialhistory.org/resource/napp/dataset/englandwales1881/", 
+   "canfam": "http://data.socialhistory.org/resource/canfam/dataset/canada1901/", 
+   "napp-sct81": "http://data.socialhistory.org/resource/napp/dataset/scotland1881/", 
+   "sdmx-measure": "http://purl.org/linked-data/sdmx/2009/measure#", 
+   "qb": "http://purl.org/linked-data/cube#", 
+   "hisclass5": "http://data.socialhistory.org/resource/hisclass5/", 
+   "xsd": "http://www.w3.org/2001/XMLSchema#", 
+   "sdmx-dimension": "http://purl.org/linked-data/sdmx/2009/dimension#", 
+   "napp-dimension": "http://data.socialhistory.org/vocab/napp/dimension/"
+  }
+ ], 
+ "dc:title": "occupation_link_spaces_empty_col_generate.csv", 
+ "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv", 
+ "dc:modified": {
+  "@value": "2017-04-06", 
+  "@type": "xsd:date"
+ }, 
+ "tableSchema": {
+  "aboutUrl": "{_row}", 
+  "primaryKey": "occupation_id", 
+  "columns": [
+   {
+    "datatype": "string", 
+    "titles": [
+     "occupation_id"
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/occupation_id", 
+    "name": "occupation_id", 
+    "dc:description": "occupation_id"
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     "label"
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/label", 
+    "name": "label", 
+    "dc:description": "label"
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     "english translation"
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/english_translation", 
+    "name": "english translation", 
+    "dc:description": "english translation"
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     "country_code"
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/country_code", 
+    "name": "country_code", 
+    "dc:description": "country_code"
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     "lang_code"
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/lang_code", 
+    "name": "lang_code", 
+    "dc:description": "lang_code"
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     ""
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/", 
+    "name": "", 
+    "dc:description": ""
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     "hisco_id"
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/hisco_id", 
+    "name": "hisco_id", 
+    "dc:description": "hisco_id"
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     "status_id"
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/status_id", 
+    "name": "status_id", 
+    "dc:description": "status_id"
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     "relation_id"
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/relation_id", 
+    "name": "relation_id", 
+    "dc:description": "relation_id"
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     "product_id"
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/product_id", 
+    "name": "product_id", 
+    "dc:description": "product_id"
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     ""
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/", 
+    "name": "", 
+    "dc:description": ""
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     "provenance"
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/provenance", 
+    "name": "provenance", 
+    "dc:description": "provenance"
+   }, 
+   {
+    "datatype": "string", 
+    "titles": [
+     "link_id"
+    ], 
+    "@id": "http://data.socialhistory.org/resource/occupation_link_spaces_empty_col_generate.csv/column/link_id", 
+    "name": "link_id", 
+    "dc:description": "link_id"
+   }
+  ]
+ }
+}

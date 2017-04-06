@@ -245,8 +245,12 @@ class CSVWConverter(object):
     def convert(self):
         logger.info("Starting conversion")
 
+        # If the number of processes is set to 1, we start the 'simple' conversion (in a single thread)
         if self._processes == 1:
             self._simple()
+        # Otherwise, we start the parallel processing procedure, but fall back to simple conversion
+        # when it turns out that for some reason the parallel processing fails (this happens on some
+        # files. The reason could not yet be determined.)
         elif self._processes > 1:
             try:
                 self._parallel()
@@ -363,6 +367,7 @@ class BurstConverter(object):
         self.aboutURLSchema = self.schema.csvw_aboutUrl
 
     def equal_to_null(self, nulls, row):
+        """Determines whether a value in a cell matches a 'null' value as specified in the CSVW schema)"""
         for n in nulls:
             n = Item(self.metadata_graph, n)
             col = str(n.csvw_name)
@@ -375,13 +380,13 @@ class BurstConverter(object):
         return False
 
     def process(self, count, rows, chunksize):
-
+        """Process the rows fed to the converter. Count and chunksize are used to determine the
+        current row number (needed for default observation identifiers)"""
         obs_count = count * chunksize
 
         logger.info("Row: {}".format(obs_count))
 
-
-
+        # We iterate row by row, and then column by column, as given by the CSVW mapping file.
         for row in rows:
             # This fixes issue:10
             if row is None:
@@ -389,10 +394,13 @@ class BurstConverter(object):
                     "Skipping empty row caused by multiprocessing (multiple of chunksize exceeds number of rows in file)...")
                 continue
 
+            # set the '_row' value in case we need to generate 'default' URIs for each observation ()
             logger.debug("row: {}".format(obs_count))
             row['_row'] = obs_count
             count += 1
 
+            # The self.columns dictionary gives the mapping definition per column in the 'columns'
+            # array of the CSVW tableSchema definition.
             for c in self.columns:
 
                 c = Item(self.metadata_graph, c)
@@ -402,15 +410,18 @@ class BurstConverter(object):
                 try:
                     # Can also be used to prevent the triggering of virtual
                     # columns!
-                    value = row[unicode(c.csvw_name)]
 
+                    # Get the raw value from the cell in the CSV file
+                    value = row[unicode(c.csvw_name)]
+                    # This checks whether we should continue parsing this cell, or skip it.
                     if len(value) == 0 and unicode(c.csvw_parseOnEmpty) == u"true":
                         print("Not skipping empty value")
                     elif len(value) == 0 or value == unicode(c.csvw_null) or value in [unicode(n) for n in c.csvw_null] or value == unicode(self.schema.csvw_null):
-                        # Skip value if length is zero
+                        # Skip value if length is zero and equal to (one of) the null value(s)
                         logger.debug(
                             "Length is 0 or value is equal to specified 'null' value")
                         continue
+                    # If the null values are specified in an array, we need to parse it as a collection (list)
                     elif isinstance(c.csvw_null, Item):
                         nulls = Collection(self.metadata_graph, BNode(c.csvw_null))
 
@@ -418,8 +429,8 @@ class BurstConverter(object):
                             # Continue to next column specification in this row, if the value is equal to (one of) the null values.
                             continue
                 except:
-
-                    # No column name specified (virtual)
+                    # No column name specified (virtual) because there clearly was no c.csvw_name key in the row.
+                    logger.debug(traceback.format_exc())
                     if isinstance(c.csvw_null, Item):
                         nulls = Collection(self.metadata_graph, BNode(c.csvw_null))
                         if self.equal_to_null(nulls, row):
@@ -427,13 +438,13 @@ class BurstConverter(object):
                             continue
 
                 try:
-
+                    # This overrides the subject resource 's' that has been created earlier based on the
+                    # schema wide aboutURLSchema specification.
                     if unicode(c.csvw_virtual) == u'true' and c.csvw_aboutUrl is not None:
                         s = self.expandURL(c.csvw_aboutUrl, row)
 
                     if c.csvw_valueUrl is not None:
-                        # This is an object property
-
+                        # This is an object property, because the value needs to be cast to a URL
                         p = self.expandURL(c.csvw_propertyUrl, row)
                         o = self.expandURL(c.csvw_valueUrl, row)
 
@@ -453,7 +464,6 @@ class BurstConverter(object):
                             self.g.add((o, RDF.type, SKOS['Concept']))
                             self.g.add((o, SKOS['inScheme'], scheme))
                     else:
-
                         # This is a datatype property
                         if c.csvw_value is not None:
                             value = self.render_pattern(unicode(c.csvw_value), row)
@@ -483,6 +493,7 @@ class BurstConverter(object):
 
                         if c.csvw_datatype is not None:
                             if URIRef(c.csvw_datatype) == XSD.anyURI:
+                                # The xsd:anyURI datatype will be cast to a proper IRI resource.
                                 o = URIRef(iribaker.to_iri(value))
                             elif URIRef(c.csvw_datatype) == XSD.string and c.csvw_lang is not None:
                                 # If it is a string datatype that has a language, we turn it into a
@@ -541,7 +552,7 @@ class BurstConverter(object):
             return rendered_template.format(**row)
         except:
             logger.warning(
-                "Could not apply python string formatting, probably due to mismatched curly brackets. IRI will be '{}'. ".format(rendered_template))
+                u"Could not apply python string formatting, probably due to mismatched curly brackets. IRI will be '{}'. ".format(rendered_template))
             return rendered_template
 
     def expandURL(self, url_pattern, row, datatype=False):
