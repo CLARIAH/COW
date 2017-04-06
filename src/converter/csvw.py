@@ -90,6 +90,11 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
 
         logger.info("Found headers: {}".format(header))
 
+        if u'' in header:
+            logger.warning("WARNING: You have one or more empty column headers in your CSV file. Conversion might produce incorrect results because of conflated URIs or worse")
+        if len(set(header)) < header:
+            logger.warning("WARNING: You have two or more column headers that are syntactically the same. Conversion might produce incorrect results because of conflated URIs or worse")
+
         # First column is primary key
         metadata['tableSchema']['primaryKey'] = header[0]
 
