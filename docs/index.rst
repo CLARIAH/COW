@@ -375,7 +375,7 @@ The Schema
 
 4. By default COW skips cells that are empty (as per the CSVW specification), setting the ``csvw:parseOnEmpty`` attribute to ``true`` overrides this setting. This is useful when an empty cell has a specific meaning.
 
-5. Column specifications with a ``xsd:anyURI`` datatype are converted to proper URIs rather than Literals with the ``xsd:anyURI`` datatype.
+5. Column specifications with a ``xsd:anyURI`` datatype are converted to proper URIs rather than Literals with the ``xsd:anyURI`` datatype. This allows for conditionally generating URIs across multiple namespaces using Jinja2 templates, see `issue #13 <https://github.com/CLARIAH/wp4-converters/issues/13>`_ .
 
 6. Column specifications in COW should have a JSON-LD style ``@id`` attribute. This ensures that all predicates generated through the conversion are linked back to the RDF representation of the CSVW JSON schema that informed the conversion.
 
