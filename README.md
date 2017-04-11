@@ -192,6 +192,7 @@ Have fun!
 * Convert to string and concatenate: `{{variable ~ 'string'}}`, e.g. if variable has value "Hello" then the result would be "Hello string". Note the double braces.
 * Arithmetic: use double braces and cast as numeric first, e.g. `{{variable|float() * 1000}}`.
 * Lowercase, uppercase, etc.: `{{variable|lower()}}`. Note the double brace.
+* String slices: `{{variable[n:m]}}` as described [here](https://docs.python.org/2/tutorial/introduction.html#strings).
 
 
 
