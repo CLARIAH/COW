@@ -12,8 +12,9 @@
 
   self
 
+*********************************
 COW: Converter for CSV on the Web
-=================================
+*********************************
 
 This package contains a comprehensive tool (COW [#f2]_) for batch conversion of multiple datasets expressed in CSV. It uses a JSON schema expressed using an extended version of the CSVW standard, to convert CSV files to RDF in scalable fashion.
 
@@ -29,7 +30,7 @@ Interestingly, the JSON format used by CSVW metadata is an `extension of the JSO
 This is exactly what the COW converter does.
 
 Features & Limitations
-^^^^^^^^^^^^^^^^^^^^^^
+======================
 
 Compared to the CSVW specification, the converter has a number of limitations and extra features. These are:
 
@@ -55,7 +56,7 @@ Compared to the CSVW specification, the converter has a number of limitations an
   * The original CSVW schema is encapsulated in the `np:hasProvenance` graph associated with the nanopublication.
 
 Installation
-^^^^^^^^^^^^^
+============
 
 Prerequisites
 -------------
@@ -87,9 +88,8 @@ Install the required packages::
 
 Change directory to ``src``, and optionally replace the author in the ``config.py`` with your own data.
 
-
 Usage
-^^^^^
+=====
 
 The primary command line script for CSVW-based conversion is ``csvw-tool.py``. It can be used for two tasks:
 
@@ -129,7 +129,7 @@ Since JSON is a rather verbose language, and we currently do not have a convenie
 
 Suppose you want to build a skeleton schema for a file ``imf_gdppc.csv`` (from [#f4]_) that looks like::
 
-  Rank;Country;Int$
+  Rank;Country;Int
   1;Qatar;131,063
   2;Luxembourg;104,906
   3;Macau;96,832
@@ -208,11 +208,11 @@ This will genrate a file called ``imf_gdppc.csv-metadata.json`` with the followi
      {
       "datatype": "string",
       "titles": [
-       "Int$"
+       "Int"
       ],
-      "@id": "http://example.com/resource/imf_gdppc.csv/column/Int$",
-      "name": "Int$",
-      "dc:description": "Int$"
+      "@id": "http://example.com/resource/imf_gdppc.csv/column/Int",
+      "name": "Int",
+      "dc:description": "Int"
      }
     ]
    }
@@ -274,7 +274,7 @@ Going back to our running example, the resulting RDF looks like this (when seria
                   csvw:encoding "ascii" ;
                   csvw:quoteChar "\"" ] ;
           csvw:tableSchema [ csvw:aboutUrl <http://example.com/__row_> ;
-                  csvw:column ( <http://example.com/imf_gdppc.csv/column/Rank> <http://example.com/imf_gdppc.csv/column/Country> <http://example.com/imf_gdppc.csv/column/Int$> ) ;
+                  csvw:column ( <http://example.com/imf_gdppc.csv/column/Rank> <http://example.com/imf_gdppc.csv/column/Country> <http://example.com/imf_gdppc.csv/column/Int> ) ;
                   csvw:primaryKey "Rank" ] ;
           csvw:url "imf_gdppc.csv"^^xsd:anyURI .
 
@@ -283,10 +283,10 @@ Going back to our running example, the resulting RDF looks like this (when seria
           csvw:name "Country" ;
           csvw:title "Country"@en .
 
-      <http://example.com/imf_gdppc.csv/column/Int$> dcterms:description "Int$"@en ;
+      <http://example.com/imf_gdppc.csv/column/Int> dcterms:description "Int"@en ;
           csvw:datatype xsd:string ;
-          csvw:name "Int$" ;
-          csvw:title "Int$"@en .
+          csvw:name "Int" ;
+          csvw:title "Int"@en .
 
       <http://example.com/imf_gdppc.csv/column/Rank> dcterms:description "Rank"@en ;
           csvw:datatype xsd:string ;
@@ -296,35 +296,35 @@ Going back to our running example, the resulting RDF looks like this (when seria
 
   <http://data.socialhistory.org/resource/imf_gdppc/assertion/769bcbf7/2017-02-28T14:05> {
       <http://example.com/0> dlr:Country "Qatar"^^xsd:string ;
-          <http://data.socialhistory.org/resource/Int$> "131.63"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int> "131.63"^^xsd:string ;
           dlr:Rank "1"^^xsd:string .
 
       <http://example.com/1> dlr:Country "Luxembourg"^^xsd:string ;
-          <http://data.socialhistory.org/resource/Int$> "104.906"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int> "104.906"^^xsd:string ;
           dlr:Rank "2"^^xsd:string .
 
       <http://example.com/2> dlr:Country "Macau"^^xsd:string ;
-          <http://data.socialhistory.org/resource/Int$> "96.832"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int> "96.832"^^xsd:string ;
           dlr:Rank "3"^^xsd:string .
 
       <http://example.com/3> dlr:Country "Singapore"^^xsd:string ;
-          <http://data.socialhistory.org/resource/Int$> "90.249"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int> "90.249"^^xsd:string ;
           dlr:Rank "4"^^xsd:string .
 
       <http://example.com/4> dlr:Country "Brunei Darussalam"^^xsd:string ;
-          <http://data.socialhistory.org/resource/Int$> "83.513"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int> "83.513"^^xsd:string ;
           dlr:Rank "5"^^xsd:string .
 
       <http://example.com/5> dlr:Country "Kuwait"^^xsd:string ;
-          <http://data.socialhistory.org/resource/Int$> "72.675"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int> "72.675"^^xsd:string ;
           dlr:Rank "6"^^xsd:string .
 
       <http://example.com/6> dlr:Country "Ireland"^^xsd:string ;
-          <http://data.socialhistory.org/resource/Int$> "72.524"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int> "72.524"^^xsd:string ;
           dlr:Rank "7"^^xsd:string .
 
       <http://example.com/7> dlr:Country "Norway"^^xsd:string ;
-          <http://data.socialhistory.org/resource/Int$> "70.645"^^xsd:string ;
+          <http://data.socialhistory.org/resource/Int> "70.645"^^xsd:string ;
           dlr:Rank "8"^^xsd:string .
   }
 
@@ -357,7 +357,16 @@ What does this mean?
 .. _the-schema:
 
 The Schema
-^^^^^^^^^^
+==========
+
+The COW converter uses the CSWV standard syntax for defining mappings from CSV to RDF graphs. These mappings are all defined in the ``tableSchema`` dictionary. For a full reference of the things you can do, we refer to the `CSV on the Web (CSVW) <https://www.w3.org/ns/csvw>`_ specification and in particular to the document on `Generating RDF from Tabular Data on the Web <http://www.w3.org/TR/csv2rdf/>`_.
+
+**Important**: COW does not purport to implement the full CSVW specification, nor has it been tested against the `official test suite <http://www.w3.org/2013/csvw/tests/>`_. In fact, COW extends and deviates from the CSVW specification in several important ways.
+
+We document the most important differences in the section below, and give a :ref:`short overview <short-overview>` of how schemas can be defined.
+
+Differences and Extensions
+--------------------------
 
 1. While CSVW allows only for simple references to values in a column using the curly-brackets syntax (e.g. ``{name}`` to refer to the value of the name column at the current row), COW interprets the strings containing these references in two ways:
 
@@ -383,6 +392,132 @@ The Schema
 
 8. For convenience, COW uses a default set of namespaces, specified in the ``src/converter/namespaces.yaml`` file, that will be used to interpret namespace prefix use in the JSON schema. Any namespace prefixes defined in the JSON schema will override the default ones.
 
+9. The COW CSVW schema builder creates identifieres for each column specification in the schema file itselfs. This allows us to trace back any triples generated to the column schema that informed the conversion to RDF.
+
+
+.. _short-overview:
+
+Short Overview
+--------------
+
+A very simple ``tableSchema`` may have the following structure::
+
+  "tableSchema": {
+    "aboutUrl": "{_row}",
+    "primaryKey": "Rank",
+    "columns": [
+      {
+       "@id": "http://example.com/resource/imf_gdppc.csv/column/Rank",
+       "dc:description": "Rank",
+       "datatype": "string",
+       "name": "Rank"
+      }
+    ]
+  }
+
+For the conversion to RDF, only the ``aboutUrl`` and ``columns`` attributes are of importance.
+
+``aboutUrl``
+^^^^^^^^^^^^
+
+The ``aboutUrl`` attribute defines a template for all URIs that occur in the *subject* position of triples generated by the converter. It may appear in the ``tableSchema`` or in one of the ``columns``.  If defined in the ``tableSchema``, it acts as a *global* template that may be overriden by individual columns.
+
+We explain URL template expansion :ref:`here <template-expansion>`.
+
+``columns``
+^^^^^^^^^^^
+
+The ``columns`` array defines a schema for each column, and any additional ``virtual`` columns. The distinction between the two is important, as non-virtual columns must actually be present in the CSV (schema compliance) while virtual columns only instruct the conversion to RDF.
+
+In the schema above, we state that the column identifiable with the ``name`` ``Rank`` specifies a literal value, with the ``datatype`` of ``string`` (a shorthand for ``xsd:string``). The ``titles`` array gives a number of alternative
+
+Every column is a dictionary that may have the following attributes.
+
+.. table:: Attributes usable in column specifications
+
+   ===================    ===========
+   Attribute              Explanation
+   ===================    ===========
+   ``name``               Specifies the column to which this column specification applies. If no ``propertyUrl`` is defined on the column, the value for ``name`` will be used to generate the URL for the *predicate* position of the triple generated.
+   ``virtual``            If set to ``true``, the column specification is not taken into account when validating a CSV file against this schema.
+   ``aboutUrl``           Overrides the *global* ``aboutUrl`` template defined for the schema. This template will be used to generate the *subject* URL of the triple.
+   ``valueUrl``           If present, this template will be used to generate the *object* URL of the triple. Otherwise, the value for ``name`` is used to retrieve the value for that cell, to generate a URL.
+   ``datatype``           Specifies that this column should result in a triple where the *object* is a ``Literal`` with the datatype specified here (for common XML Schema datatypes, it is possible to drop the ``xsd:`` prefix). The value of the literal is then the value of the cell in this row indicated by the value of ``name``. **Special case**: when the ``datatype`` is ``xsd:anyURI`` COW creates a URI rather than a literal value.
+   ``csvw:value``         Specifies that this column should result in a triple where the *object* is a ``Literal`` with the default ``xsd:string`` datatype (unless otherwise specified in the ``datatype`` attribute). The literal value for this cell is determined by applying the ref::`template expansion <template-expansion>` rule to this row. Can only be used in ``virtual`` columns.
+   ``csvw:parseOnEmpty``  When set to ``true``, specifies that this column should be processed even when the cell corresponding to this column in this row is empty.
+   ``null``               Specifies that this template does not apply if the cell in this column in this row corresponds to the value specified here. Can take a single value (as per the CSVW spec) or an array of values.
+   ``lang``               Specifies the language tag for the literal in the *object* position, but only if the ``datatype`` is set to be ``string``.
+   ``collectionUrl``      Specifies that the ``valueUrl`` (or equivalent) should be of type ``skos:Concept`` and that it is a ``skos:member`` of the URL generated by applying the ``collectionUrl`` template.
+   ``schemeUrl``      Specifies that the ``valueUrl`` (or equivalent) should be of type ``skos:Concept`` and that it is ``skos:inScheme`` the URL generated by applying the ``schemeUrl`` template.
+   ===================    ===========
+
+
+.. _template-expansion:
+Template Expansion
+^^^^^^^^^^^^^^^^^^
+
+When a CSV file is processed, COW does this row by row in the file, producing a dictionary where key/value pairs correspond to column headers and the value of the cell. So for::
+
+  Rank;Country;Int
+  1;Qatar;131063
+
+the first row becomes[#f5]_::
+
+  row = {'Rank': 1, 'Country': 'Qatar', 'Int': 131063}
+
+For each row, COW then applies each column definition in the ``columns`` array (i.e. not for each column in the CSV file).
+
+The URL templates in the attributes ``aboutUrl``, ``propertyUrl``, ``valueUrl``, and the regular template in the ``csvw:value`` are used to generate URLs and Literal values from the values of the cells in a specific row.
+
+The values for the URL templates that the parser receives are *interpreted as URLs*. This means that they are expanded relative to the ``@base`` URI of the CSVW JSON schema file, unless they are explicitly preceded by a defined namespace prefix.
+
+The names of Jinja2 or Python formatting field names should correspond to the keys of the dictionary (i.e. to the column names). COW supports a special CSVW field name ``_row`` that inserts the row number. This means that our row now becomes::
+
+  row = {'Rank': 1, 'Country': 'Qatar', 'Int': 131063, '_row': 1}
+
+COW always first applies the Jinja2 template, and then the Python formatting.
+
+For instance (assuming a ``@base`` of ``http://example.com/``), we define an ``aboutUrl`` with the special ``_row`` key as a Python string formatting field name, and ``Country`` as a Jinja2 field name::
+
+  "aboutUrl": "{_row}/{{Country}}"
+
+the JSON-LD parser interprets the value for ``aboutUrl`` as the following URI::
+
+  "http://example.com/{_row}/{{Country}}"
+
+we then apply the Jinja2 formatting (``Template("http://example.com/{_row}{{Country}}").render(**row)``)::
+
+  "http://example.com/{_row}/Qatar"
+
+followed by the Python formatting (``"http://example.com/{_row}/{{Country}}".format(**row)``)::
+
+  ""http://example.com/1/Qatar""
+
+For ``csvw:value`` attributes this works similarly, with the exception that the JSON-LD parser will not interpret these fields as URIs::
+
+  "csvw:value": "{_row}/{{Country}}"
+
+is parsed as::
+
+  "{_row}/{{Country}}"
+
+This means that one can use Jinja2 conditional formatting on ``csvw:value`` atributes in combination with an ``xsd:anyURI`` value for ``datatype`` to generate custom URIs that do not fit within a defined namespace.
+
+Jinja2 is a very expressive templating language. To give a small example, we could define a ``virtual`` column that allows us to specify whether a country is ``http://example.com/rich`` or ``http://example.com/poor`` depending on whether the GDP is over 100k.
+
+Our virtual column may look as follows::
+
+  {
+    "virtual": "true",
+    "aboutUrl": "{Country}"
+    "propertyUrl": "rdf:type",
+    "valueUrl": "{% if Int > 100000 %}rich{% else %}poor{% endif %}"
+  }
+
+This will produce, for Qatar and Singapore, the respective triples::
+
+  <http://example.com/Qatar>     rdf:type <http://example.com/rich> .
+  <http://example.com/Singapore> rdf:type <http://example.com/poor> .
 
 
 
@@ -412,3 +547,4 @@ Footnotes
 .. [#f1] These instructions use ``virtualenv`` but you can also install all packages globally, or use an alternative such as ``conda``.
 .. [#f3] In the future we may enable the Jinja2 plugin mechanism. This will allow running custom Python functions as filters over values.
 .. [#f4] https://en.wikipedia.org/wiki/List_of_countries_by_GDP_%28PPP%29_per_capita
+.. [#f5] Assuming that you have the proper locale settings that instructs Python to interpret the comma as a thousands separator.
