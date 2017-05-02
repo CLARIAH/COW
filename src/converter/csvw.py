@@ -534,6 +534,7 @@ class BurstConverter(object):
     #     logger.info("... done")
 
     def render_pattern(self, pattern, row):
+        """Takes a Jinja or Python formatted string, and applies it to the row value"""
         # Significant speedup by not re-instantiating Jinja templates for every
         # row.
         if pattern in self.templates:
@@ -556,6 +557,7 @@ class BurstConverter(object):
             return rendered_template
 
     def expandURL(self, url_pattern, row, datatype=False):
+        """Takes a Jinja or Python formatted string, applies it to the row values, and returns it as a URIRef"""
         url = self.render_pattern(unicode(url_pattern), row)
 
         # DEPRECATED
