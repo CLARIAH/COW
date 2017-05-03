@@ -18,7 +18,7 @@
 COW: Converter for CSV on the Web
 *********************************
 
-This package contains a comprehensive tool (COW [#f2]_) for batch conversion of multiple datasets expressed in CSV. It uses a JSON schema expressed using an extended version of the CSVW standard, to convert CSV files to RDF in scalable fashion.
+This package is a comprehensive tool (COW [#f2]_) for batch conversion of multiple datasets expressed in CSV. It uses a JSON schema expressed using an extended version of the CSVW standard, to convert CSV files to RDF in scalable fashion.
 
 `CSV on the Web (CSVW) <https://www.w3.org/ns/csvw>`_ is a W3C standard for metadata descriptions for tabular data. Typically, these data reside in CSV files. CSVW metadata is captured in ``.csv-metadata.json`` files that live alongside the CSV files that they describe. For instance, a CSV file called ``data.csv`` and its metadata ``data.csv-metadata.json`` would be hosted at::
 
@@ -72,7 +72,7 @@ Step by step instructions
 
 Open up a terminal, and clone this repository to a directory of your choice::
 
-  git clone https://github.com/CLARIAH/wp4-converters.git
+  git clone https://github.com/CLARIAH/COW.git
 
 Of course you can also use a git client with a UI.
 
