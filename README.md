@@ -9,4 +9,4 @@ COW is a comprehensive utility package for batch  conversion of multiple dataset
 
 ### Documentation & Installation
 
-Documentation and Installation instructions for COW are maintained in this GitHub repository (under <docs>), and published through [Read the Docs]<http://readthedocs.org> at <http://csvw-converter.readthedocs.io/en/latest/>
+Documentation and Installation instructions for COW are maintained in this GitHub repository (under <docs>), and published through [Read the Docs](http://readthedocs.org) at <http://csvw-converter.readthedocs.io/en/latest/>
