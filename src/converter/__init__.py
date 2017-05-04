@@ -32,13 +32,21 @@ def grouper(n, iterable, padvalue=None):
 
 
 class Converter(object):
+    """
+    Converter configuration object for **QBer**-style conversion. Is used to set parameters for a conversion,
+    and to initiate an actual conversion process (implemented in :class:`BurstConverter`)
+
+    Takes a dataset_description (in QBer format) and prepares:
+
+    * A dictionary for the :class:`BurstConverter` (either in one go, or in parallel)
+    * A nanopublication structure for publishing the converted data (using :class:`converter.util.Nanopublication`)
+    * A datastructure definition inside the nanopublication (using :class:`converter.util.DatastructureDefinition`)
+    """
+
 
     def __init__(self, dataset, dirname, author_profile, source=None, target='output.nq'):
         """
-        Takes a dataset_description (currently in QBer format) and prepares:
-
-        * A dictionary for the BurstConverter (either in one go, or in parallel)
-        * A nanopublication structure for publishing the converted data
+        Initialization
         """
 
         # Defaults
@@ -77,18 +85,23 @@ class Converter(object):
         self.addDatastructureDefinition()
 
     def setDelimiter(self, delimiter):
+        """Sets the delimiter for the CSV reader to ``delimiter`` """
         self._delimiter = delimiter
 
     def setQuotechar(self, quotechar):
+        """Sets the quote character for the CSV reader to ``quotechar``"""
         self._quotechar = quotechar
 
     def setProcesses(self, processes):
+        """Sets the number of processes to use for (parallel) conversion of the data"""
         self._processes = processes
 
     def setChunksize(self, chunksize):
+        """Sets the number of lines to pass to each process"""
         self._chunksize = chunksize
 
     def setTarget(self, target):
+        """Sets the output file to write the resulting RDF to (should be an N-Quads file)"""
         self._target = target
 
     def addProfile(self, author_profile):
@@ -103,6 +116,8 @@ class Converter(object):
         self.publication.pig.add((self.publication.uri, PROV['wasAttributedTo'], profile_graph.author_uri))
 
     def addDatastructureDefinition(self):
+        """Adds a datastructure definition to the nanopublication based on what we know about the current dataset"""
+
         print "Adding datastructure definition"
         # We add all triples from a DatastructureDefinition graph to the assertion graph of the nanopublication
         self.publication.ingest(DatastructureDefinition(self.dataset_uri, self.dataset_name, self._variables), self.publication.ag.identifier)
@@ -111,6 +126,8 @@ class Converter(object):
         self.publication.pg.add((self.dataset_uri, PROV['wasDerivedFrom'], self.publication.dataset_version_uri))
 
     def convert(self):
+        """Starts the conversion process based on the parameters passed to the :class:``Converter`` initalization."""
+
         logger.info("Using {} processes".format(self._processes))
 
         # Open the target file
@@ -137,6 +154,7 @@ class Converter(object):
                     self._simple(reader, headers, target_file)
 
     def _simple(self, reader, headers, target_file):
+        """Starts a converter in a single process"""
         # Initialize the BurstConverter with the dataset and headers
         c = BurstConverter(self.publication.ag.identifier, self._dataset, self._variables, headers)
         # Out will contain an N-Quads serialized representation of the converted CSV
@@ -145,6 +163,8 @@ class Converter(object):
         target_file.write(out)
 
     def _parallel(self, reader, headers, target_file):
+        """Starts the converter using multiple processes"""
+
         # Initialize a pool of processes (default=4)
         pool = mp.Pool(processes=self._processes)
 
@@ -169,6 +189,8 @@ class Converter(object):
 
 # This has to be a global method for the parallelization to work.
 def _burstConvert(enumerated_rows, graph_identifier, dataset, variables, headers, chunksize):
+    """The method used as partial for the parallel processing initiated in :func:`_parallel`."""
+
     count, rows = enumerated_rows
     c = BurstConverter(graph_identifier, dataset, variables, headers)
 
@@ -183,6 +205,8 @@ def _burstConvert(enumerated_rows, graph_identifier, dataset, variables, headers
 
 
 class BurstConverter(object):
+    """The actual converter, that processes the chunk of lines from the CSV file, and uses the instructions from the ``variables`` array to produce RDF."""
+
 
     _VOCAB_BASE = str(SDV)
     _RESOURCE_BASE = str(SDR)
@@ -238,6 +262,7 @@ class BurstConverter(object):
         self._dataset_uri = URIRef(dataset['uri'])
 
     def process(self, count, rows, chunksize):
+        """Process the ``rows`` read from the CSV file, and use ``count * chunksize`` to determine the absolute row number of the first row in ``rows``."""
         obs_count = count * chunksize
         for row in rows:
             # rows may be filled with None values (because of the izip_longest function)
@@ -385,12 +410,14 @@ class BurstConverter(object):
         return self.ds.serialize(format='nquads')
 
     def resource(self, resource_type, resource_name):
+        """Produce a resource-URI based on the ``_RESOURCE_URI_PATTERN`` constant"""
         raw_iri = self._RESOURCE_URI_PATTERN.format(resource_type, resource_name)
         iri = to_iri(raw_iri)
 
         return URIRef(iri)
 
     def vocab(self, concept_type, concept_name):
+        """Produce a vocab-URI based on the ``_VOCAB_URI_PATTERN`` constant"""
         raw_iri = self._VOCAB_URI_PATTERN.format(concept_type, concept_name)
         iri = to_iri(raw_iri)
 
