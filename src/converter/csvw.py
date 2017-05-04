@@ -25,6 +25,12 @@ logger.setLevel(logging.DEBUG)
 
 
 def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None, dataset_name=None, base="http://data.socialhistory.org/resource"):
+    """
+    Build a CSVW schema based on the ``infile`` CSV file, and write the resulting JSON CSVW schema to ``outfile``.
+
+    Takes various optional parameters for instructing the CSV reader, but is also quite good at guessing the right values.
+    """
+
     url = os.path.basename(infile)
     # Get the current date and time (UTC)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
@@ -144,6 +150,15 @@ class Item(Resource):
 
 
 class CSVWConverter(object):
+    """
+    Converter configuration object for **CSVW**-style conversion. Is used to set parameters for a conversion,
+    and to initiate an actual conversion process (implemented in :class:`BurstConverter`)
+
+    Takes a dataset_description (in CSVW format) and prepares:
+
+    * An array of dictionaries for the rows to pass to the :class:`BurstConverter` (either in one go, or in parallel)
+    * A nanopublication structure for publishing the converted data (using :class:`converter.util.Nanopublication`)
+    """
 
     def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8', processes=1, chunksize=5000):
         logger.info("Initializing converter for {}".format(file_name))
@@ -217,6 +232,8 @@ class CSVWConverter(object):
             self.metadata_graph, BNode(self.schema.csvw_column))
 
     def convert_info(self):
+        """Converts the CSVW JSON file to valid RDF for serializing into the Nanopublication publication info graph."""
+
         results = self.metadata_graph.query("""SELECT ?s ?p ?o
                                                WHERE { ?s ?p ?o .
                                                        FILTER(?p = csvw:valueUrl ||
@@ -243,6 +260,7 @@ class CSVWConverter(object):
         return
 
     def convert(self):
+        """Starts a conversion process (in parallel or as a single process) as defined in the arguments passed to the :class:`CSVWConverter` initialization"""
         logger.info("Starting conversion")
 
         # If the number of processes is set to 1, we start the 'simple' conversion (in a single thread)
@@ -267,6 +285,7 @@ class CSVWConverter(object):
             logger.error("Incorrect process count specification")
 
     def _simple(self):
+        """Starts a single process for converting the file"""
         with open(self.target_file, 'w') as target_file:
             with open(self.file_name, 'rb') as csvfile:
                 logger.info("Opening CSV file for reading")
@@ -289,6 +308,7 @@ class CSVWConverter(object):
             target_file.write(self.np.serialize(format='nquads'))
 
     def _parallel(self):
+        """Starts parallel processes for converting the file. Each process will receive max ``chunksize`` number of rows"""
         with open(self.target_file, 'w') as target_file:
             with open(self.file_name, 'rb') as csvfile:
                 logger.info("Opening CSV file for reading")
@@ -332,7 +352,7 @@ def grouper(n, iterable, padvalue=None):
 
 # This has to be a global method for the parallelization to work.
 def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, encoding, chunksize):
-
+    """The method used as partial for the parallel processing initiated in :func:`_parallel`."""
     try:
         count, rows = enumerated_rows
         c = BurstConverter(identifier, columns, schema,
@@ -351,6 +371,7 @@ def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, 
 
 
 class BurstConverter(object):
+    """The actual converter, that processes the chunk of lines from the CSV file, and uses the instructions from the ``schema`` graph to produce RDF."""
 
     def __init__(self, identifier, columns, schema, metadata_graph, encoding):
         self.ds = Dataset()

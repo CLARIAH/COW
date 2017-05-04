@@ -93,6 +93,7 @@ def apply_default_namespaces(graph):
 
 
 def get_namespaces():
+    """Return the global namespaces"""
     return namespaces
 
 
@@ -108,6 +109,7 @@ def safe_url(NS, local):
 
 
 def get_base_uri(dataset):
+    """Get a base uri for the ``dataset`` (name)"""
     return Namespace('{}{}/'.format(namespaces['sdr'], dataset))
 
 
@@ -280,8 +282,7 @@ class Nanopublication(Dataset):
     required Nanopublication graphs: np, pg, ag, pig, for nanopublication, provenance,
     assertion and publication info, respectively.
 
-    NOTE: Will only work if the required namespaces are specified in namespaces.yaml and the init()
-          function has been called
+    NOTE: Will only work if the required namespaces are specified in namespaces.yaml and the init() function has been called
     """
 
     def __init__(self, file_name):
@@ -370,8 +371,8 @@ class Nanopublication(Dataset):
 
     def ingest(self, graph, target_graph=None):
         """
-        Adds all triples in the RDFLib graph to this Dataset
-        If target_graph is None, then the triples are added to the default graph,
+        Adds all triples in the RDFLib ``graph`` to this :class:`Nanopublication` dataset.
+        If ``target_graph`` is ``None``, then the triples are added to the default graph,
         otherwise they are added to the indicated graph
         """
         if target_graph is None:

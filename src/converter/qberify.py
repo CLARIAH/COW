@@ -13,6 +13,8 @@ _RESOURCE_BASE = str(SDR)
 _RESOURCE_URI_PATTERN = "{0}{{}}/{{}}".format(_RESOURCE_BASE)
 
 def build_schema(infile, outfile, delimiter=',', quotechar='\"', dataset_name=None):
+    """Builds a basic QBer-style schema (probably deprecated)"""
+    
     if dataset_name is None:
         dataset_name = os.path.basename(infile)
 
