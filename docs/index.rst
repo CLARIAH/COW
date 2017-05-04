@@ -394,9 +394,6 @@ Differences and Extensions
 
 8. For convenience, COW uses a default set of namespaces, specified in the ``src/converter/namespaces.yaml`` file, that will be used to interpret namespace prefix use in the JSON schema. Any namespace prefixes defined in the JSON schema will override the default ones.
 
-9. The COW CSVW schema builder creates identifieres for each column specification in the schema file itselfs. This allows us to trace back any triples generated to the column schema that informed the conversion to RDF.
-
-
 .. _short-overview:
 
 Short Overview
