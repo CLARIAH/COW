@@ -11,7 +11,7 @@ parser.add_argument('--delimiter', dest='delimiter', default=None, type=str, hel
 parser.add_argument('--quotechar', dest='quotechar', default='\"', type=str, help="The character used as quotation character in the CSV file(s)")
 parser.add_argument('--processes', dest='processes', default='4', type=int, help="The number of processes the converter should use")
 parser.add_argument('--chunksize', dest='chunksize', default='5000', type=int, help="The number of rows processed at each time")
-parser.add_argument('--base', dest='base', default='http://iisg.amsterdam/resource/', type=str, help="The base for URIs generated with the schema (only relevant when `build`ing a schema)")
+parser.add_argument('--base', dest='base', default='https://iisg.amsterdam/resource/', type=str, help="The base for URIs generated with the schema (only relevant when `build`ing a schema)")
 
 if __name__ == '__main__':
     args = parser.parse_args()
