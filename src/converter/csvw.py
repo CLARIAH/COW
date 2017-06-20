@@ -85,7 +85,8 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
         "tableSchema": {
             "columns": [],
             "primaryKey": None,
-            "aboutUrl": "{_row}"
+            "aboutUrl": u"{}/".format(base) + u"{_row}"
+            #"aboutUrl": u"{_row}"
         }
     }
 
@@ -417,7 +418,7 @@ class BurstConverter(object):
 
             # set the '_row' value in case we need to generate 'default' URIs for each observation ()
             logger.debug("row: {}".format(obs_count))
-            row['_row'] = obs_count
+            row[u'_row'] = obs_count
             count += 1
 
             # The self.columns dictionary gives the mapping definition per column in the 'columns'
