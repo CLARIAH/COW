@@ -65,7 +65,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
 
     metadata = {
         "@id": iribaker.to_iri(u"{}/{}".format(base, url)),
-        "@context": ["http://www.w3.org/ns/csvw",
+        "@context": ["http://csvw.clariah-sdh.eculture.labs.vu.nl/csvw.json",
                      {"@language": "en",
                       "@base": "{}/".format(base)},
                      get_namespaces()],
@@ -85,8 +85,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
         "tableSchema": {
             "columns": [],
             "primaryKey": None,
-            "aboutUrl": u"{}/".format(base) + u"{_row}"
-            #"aboutUrl": u"{_row}"
+            "aboutUrl": "{_row}"
         }
     }
 
