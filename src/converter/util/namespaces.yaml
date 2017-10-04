@@ -1,7 +1,7 @@
 # Default namespaces for Vocabulary/Schema and Resource/Data items
-sdr: http://data.socialhistory.org/resource/
+iisg: http://iisg.amsterdam/
 sdv: http://data.socialhistory.org/vocab/
-sdp: http://data.socialhistory.org/resource/person/
+sdp: http://iisg.amsterdam/person/
 # Default W3C namespaces
 ldp: http://www.w3.org/ns/ldp#
 owl: http://www.w3.org/2002/07/owl#
@@ -32,29 +32,28 @@ sdmx-code: http://purl.org/linked-data/sdmx/2009/code#
 sdmx-dimension: http://purl.org/linked-data/sdmx/2009/dimension#
 sdmx-measure: http://purl.org/linked-data/sdmx/2009/measure#
 # ClioInfra
-clio: http://data.socialhistory.org/resource/clio/
-clioind: http://data.socialhistory.org/resource/clio/indicator/
-clioprop: http://data.socialhistory.org/resource/clio/property/
-clioctr: http://data.socialhistory.org/resource/clio/country/
+clio: http://iisg.amsterdam/clio/
+clioind: http://iisg.amsterdam/clio/indicator/
+clioprop: http://iisg.amsterdam/clio/property/
+clioctr: http://iisg.amsterdam/clio/country/
 # HISCO/HISCAM
-hisco: http://data.socialhistory.org/resource/hisco/
-hiscam: http://data.socialhistory.org/resource/hiscam/
-occhisco: http://data.socialhistory.org/resource/napp/OCCHISCO/
-hisco-entry: http://data.socialhistory.org/resource/hisco/entry/
-hisco-status: http://data.socialhistory.org/resource/hisco/status/
-hisco-relation: http://data.socialhistory.org/resource/hisco/relation/
-hisco-product: http://data.socialhistory.org/resource/hisco/product/
+hisco: http://iisg.amsterdam/hisco/
+hiscam: http://iisg.amsterdam/hiscam/
+occhisco: http://iisg.amsterdam/napp/OCCHISCO/
+hisco-status: http://iisg.amsterdam/hisco/status/
+hisco-relation: http://iisg.amsterdam/hisco/relation/
+hisco-product: http://iisg.amsterdam/hisco/product/
 # HSN
-hsn: http://data.socialhistory.org/resource/hsn2013a/
-hisclass: http://data.socialhistory.org/resource/hisclass/
-hisclass5: "http://data.socialhistory.org/resource/hisclass5/"
+hsn: http://iisg.amsterdam/hsn2013a/
+hisclass: http://iisg.amsterdam/hisclass/
+hisclass5: http://iisg.amsterdam/hisclass5/
 # Canadian Families
-canfam: http://data.socialhistory.org/resource/canfam/dataset/canada1901/
-canfam-auke: http://data.socialhistory.org/resource/canfam/auke/
+canfam: http://iisg.amsterdam/canfam/dataset/canada1901/
+canfam-auke: http://iisg.amsterdam/canfam/auke/
 canfam-dimension: http://data.socialhistory.org/vocab/canfam/dimension/
 # IPUMS NAPP data
-napp: http://data.socialhistory.org/resource/napp/
+napp: http://iisg.amsterdam/napp/
 napp-dimension: http://data.socialhistory.org/vocab/napp/dimension/
-napp-can91: http://data.socialhistory.org/resource/napp/dataset/canada1891/
-napp-sct81: http://data.socialhistory.org/resource/napp/dataset/scotland1881/
-napp-eng81: http://data.socialhistory.org/resource/napp/dataset/englandwales1881/
+napp-can91: http://iisg.amsterdam/napp/dataset/canada1891/
+napp-sct81: http://iisg.amsterdam/napp/dataset/scotland1881/
+napp-eng81: http://iisg.amsterdam/napp/dataset/englandwales1881/
