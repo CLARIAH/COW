@@ -1,0 +1,39 @@
+{
+    "dataset": {
+        "file": "utrecht_1829_clean_01.csv",
+        "name": "utrecht_1829_clean_01",
+        "uri": "http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01",
+        "variables": {
+            "achternaam": {
+                "category": "identifier",
+                "codelist": {
+                    "label": "Codelist generated from the values for 'achternaam'",
+                    "original": {
+                        "label": "Codelist generated from the values for 'achternaam'",
+                        "uri": "http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/codelist/achternaam"
+                    },
+                    "uri": "http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/codelist/achternaam"
+                },
+                "description": "The variable 'achternaam' as taken from the 'utrecht_1829_clean_01' dataset.",
+                "label": "achternaam",
+                "original": {
+                    "label": "achternaam",
+                    "uri": "http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/variable/achternaam"
+                },
+                "type": "http://purl.org/linked-data/cube#MeasureProperty",
+                "uri": "http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/variable/achternaam",
+                "values": [
+                    {
+                        "count": 9,
+                        "label": "janssen",
+                        "original": {
+                            "label": "janssen",
+                            "uri": "http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/value/achternaam/janssen"
+                        },
+                        "uri": "http://data.socialhistory.org/ns/resource/utrecht_1829_clean_01/value/achternaam/janssen"
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,124 @@
+{
+ "dcat:keyword": [],
+ "dc:license": {
+  "@id": "http://opendefinition.org/licenses/cc-by/"
+ },
+ "dc:publisher": {
+  "schema:name": "CLARIAH Structured Data Hub - Datalegend",
+  "schema:url": {
+   "@id": "http://datalegend.org"
+  }
+ },
+ "url": "se_CEDAR_HISCO_small.csv",
+ "dialect": {
+     "delimiter": ";",
+     "encoding": "iso-8859-1"
+ },
+ "@context": [
+  "http://www.w3.org/ns/csvw",
+  {
+   "@base": "http://data.socialhistory.org/ns/resource/seCEDAR/",
+   "@language": "en"
+  },
+  {
+   "owl": "http://www.w3.org/2002/07/owl#",
+   "clioctr": "http://data.socialhistory.org/ns/resource/clio/country/",
+   "hisclass": "http://data.socialhistory.org/ns/resource/hisclass/",
+   "hisco-product": "http://data.socialhistory.org/ns/resource/hisco/product/",
+   "hisco-entry": "http://data.socialhistory.org/ns/resource/hisco/entry/",
+   "ldp": "http://www.w3.org/ns/ldp#",
+   "clio": "http://data.socialhistory.org/ns/resource/clio/",
+   "occhisco": "http://data.socialhistory.org/ns/resource/napp/OCCHISCO/",
+   "skos": "http://www.w3.org/2004/02/skos/core#",
+   "xml": "http://www.w3.org/XML/1998/namespace/",
+   "bibo": "http://purl.org/ontology/bibo/",
+   "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+   "prov": "http://www.w3.org/ns/prov#",
+   "sdmx-code": "http://purl.org/linked-data/sdmx/2009/code#",
+   "napp-can91": "http://data.socialhistory.org/ns/resource/napp/dataset/canada1891/",
+   "hiscam": "http://data.socialhistory.org/ns/resource/hiscam/",
+   "np": "http://www.nanopub.org/nschema#",
+   "canfam-auke": "http://data.socialhistory.org/ns/resource/canfam/auke/",
+   "dcterms": "http://purl.org/dc/terms/",
+   "schema": "http://schema.org/",
+   "foaf": "http://xmls.com/foaf/0.1/",
+   "napp": "http://data.socialhistory.org/ns/resource/napp/",
+   "sdv": "http://data.socialhistory.org/ns/vocab/",
+   "hisco": "http://data.socialhistory.org/ns/resource/hisco/",
+   "sdp": "http://data.socialhistory.org/ns/resource/person/",
+   "sdr": "http://data.socialhistory.org/ns/resource/",
+   "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+   "time": "http://www.w3.org/2006/time#",
+   "hsn": "http://data.socialhistory.org/ns/resource/hsn2013a/",
+   "dc": "http://purl.org/dc/terms/",
+   "hisco-relation": "http://data.socialhistory.org/ns/resource/hisco/relation/",
+   "hisco-status": "http://data.socialhistory.org/ns/resource/hisco/status/",
+   "clioprop": "http://data.socialhistory.org/ns/resource/clio/property/",
+   "sdmx-concept": "http://purl.org/linked-data/sdmx/2009/concept#",
+   "csvw": "http://www.w3.org/ns/csvw#",
+   "clioind": "http://data.socialhistory.org/ns/resource/clio/indicator/",
+   "dc11": "http://purl.org/dc/elements/1.1/",
+   "canfam-dimension": "http://data.socialhistory.org/ns/vocab/canfam/dimension/",
+   "napp-eng81": "http://data.socialhistory.org/ns/resource/napp/dataset/englandwales1881/",
+   "canfam": "http://data.socialhistory.org/ns/resource/canfam/dataset/canada1901/",
+   "napp-sct81": "http://data.socialhistory.org/ns/resource/napp/dataset/scotland1881/",
+   "sdmx-measure": "http://purl.org/linked-data/sdmx/2009/measure#",
+   "qb": "http://purl.org/linked-data/cube#",
+   "hisclass5": "http://data.socialhistory.org/ns/resource/hisclass5/",
+   "xsd": "http://www.w3.org/2001/XMLSchema#",
+   "sdmx-dimension": "http://purl.org/linked-data/sdmx/2009/dimension#",
+   "napp-dimension": "http://data.socialhistory.org/ns/vocab/napp/dimension/",
+   "": "http://data.socialhistory.org/ns/resource/seCEDAR/",
+   "se-cedar": "http://data.socialhistory.org/ns/resource/seCEDAR/"
+  }
+ ],
+ "dc:title": "se_CEDAR_HISCO.csv",
+ "dc:modified": {
+  "@value": "2016-08-16",
+  "@type": "xsd:date"
+ },
+ "tableSchema": {
+  "aboutUrl": "{{OCCUPATION|capitalize()}}",
+  "columns": [
+   {
+    "@id": "OCCUPATION",
+    "datatype": "string",
+    "titles": [
+     "OCCUPATION"
+    ],
+    "name": "OCCUPATION",
+    "propertyUrl": "skos:prefLabel",
+    "lang": "se",
+    "dc:description": "OCCUPATION"
+   },
+   {
+    "virtual": true,
+    "propertyUrl": "rdf:type",
+    "valueUrl": "skos:Concept"
+   },
+   {
+    "virtual": true,
+    "aboutUrl": "se-cedar:CEDAR",
+    "propertyUrl": "skos:member",
+    "valueUrl": "{{OCCUPATION|capitalize()}}"
+   },
+   {
+    "virtual": true,
+    "aboutUrl": "se-cedar:CEDAR",
+    "propertyUrl": "rdf:type",
+    "valueUrl": "skos:Collection"
+   },
+   {
+    "virtual": true,
+    "titles": [
+     "HISCO"
+    ],
+    "aboutUrl": "hisco:{HISCO}",
+    "propertyUrl": "skos:example",
+    "valueUrl": "{{OCCUPATION|capitalize()}}",
+    "name": "HISCO",
+    "dc:description": "HISCO"
+   }
+  ]
+ }
+}

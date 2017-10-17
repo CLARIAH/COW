@@ -1,0 +1,10 @@
+PREFIX nappdim: <http://data.socialhistory.org/vocab/napp/dimension/>
+PREFIX auke-enrolled: <http://data.socialhistory.org/resource/napp/auke/enrolled/>
+INSERT { 
+	?personID auke-enrolled: ?enrolled . 
+}
+WHERE { 
+	?personID nappdim:SERIAL ?householdID .
+	?personID nappdim:OCCSTRNG ?occstring .
+	BIND(IF(REGEX(?occstring, "sch|^(sc|sh)[ao].?l|app|pup|[ (]ap[)]?$|^[(]?ap[ )]|apren|stud|apr|^sco?$|ysgol|[(]sc?r?[)]|apic|^s$", "i"), 1, 0) AS ?enrolled) .
+}

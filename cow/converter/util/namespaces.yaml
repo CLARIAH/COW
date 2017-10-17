@@ -1,0 +1,59 @@
+# Default namespaces for Vocabulary/Schema and Resource/Data items
+sdr: http://iisg.amsterdam/
+sdv: http://iisg.amsterdam/vocab/
+sdp: http://iisg.amsterdam/person/
+# Default W3C namespaces
+ldp: http://www.w3.org/ns/ldp#
+owl: http://www.w3.org/2002/07/owl#
+rdfs: http://www.w3.org/2000/01/rdf-schema#
+rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xml: http://www.w3.org/XML/1998/namespace/
+xsd: http://www.w3.org/2001/XMLSchema#
+prov: http://www.w3.org/ns/prov#
+skos: http://www.w3.org/2004/02/skos/core#
+schema: http://schema.org/
+csvw: http://www.w3.org/ns/csvw#
+dcterms: http://purl.org/dc/terms/
+dc: http://purl.org/dc/terms/
+dc11: http://purl.org/dc/elements/1.1/
+# Other standard namespaces
+qb: http://purl.org/linked-data/cube#
+foaf: http://xmlns.com/foaf/0.1/
+np: http://www.nanopub.org/nschema#
+bibo: http://purl.org/ontology/bibo/
+time: http://www.w3.org/2006/time#
+dbr: http://dbpedia.org/resource/
+dbpedia: http://dbpedia.org/resource/
+dbo: http://dbpedia.org/ontology/
+dbp: http://dbpedia.org/property/
+# Default SDMX namespaces
+sdmx-concept: http://purl.org/linked-data/sdmx/2009/concept#
+sdmx-code: http://purl.org/linked-data/sdmx/2009/code#
+sdmx-dimension: http://purl.org/linked-data/sdmx/2009/dimension#
+sdmx-measure: http://purl.org/linked-data/sdmx/2009/measure#
+# ClioInfra
+clio: http://iisg.amsterdam/clio/
+clioind: http://iisg.amsterdam/clio/indicator/
+clioprop: http://iisg.amsterdam/clio/property/
+clioctr: http://iisg.amsterdam/clio/country/
+# HISCO/HISCAM
+hisco: http://iisg.amsterdam/hisco/
+hiscam: http://iisg.amsterdam/hiscam/
+occhisco: http://iisg.amsterdam/napp/OCCHISCO/
+hisco-status: http://iisg.amsterdam/hisco/status/
+hisco-relation: http://iisg.amsterdam/hisco/relation/
+hisco-product: http://iisg.amsterdam/hisco/product/
+# HSN
+hsn: http://iisg.amsterdam/hsn2013a/
+hisclass: http://iisg.amsterdam/hisclass/
+hisclass5: http://iisg.amsterdam/hisclass5/
+# Canadian Families
+canfam: http://iisg.amsterdam/canfam/dataset/canada1901/
+canfam-auke: http://iisg.amsterdam/canfam/auke/
+canfam-dimension: http://data.socialhistory.org/vocab/canfam/dimension/
+# IPUMS NAPP data
+napp: http://iisg.amsterdam/napp/
+napp-dimension: http://data.socialhistory.org/vocab/napp/dimension/
+napp-can91: http://iisg.amsterdam/napp/dataset/canada1891/
+napp-sct81: http://iisg.amsterdam/napp/dataset/scotland1881/
+napp-eng81: http://iisg.amsterdam/napp/dataset/englandwales1881/

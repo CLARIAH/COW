@@ -1,0 +1,314 @@
+{
+ "dcat:keyword": [],
+ "dc:license": {
+  "@id": "http://opendefinition.org/licenses/cc-by/"
+ },
+ "dc:publisher": {
+  "schema:name": "CLARIAH Structured Data Hub - Datalegend",
+  "schema:url": {
+   "@id": "http://datalegend.org"
+  }
+ },
+ "dc:author": [{
+     "@id": "sdp:rlzijdeman@gmail.com",
+     "rdf:type": [{
+         "@id": "foaf:Person"
+     }, {
+         "@id": "prov:Person"
+     }],
+     "owl:sameAs": [{
+         "@id": "http://orcid.org/0000-0003-0782-2704"
+     }, {
+         "@id": "info:eu-repo/dai/nl/304832960"
+     }, {
+         "@id": "http://isni.org/isni/000000010711579X"
+     }],
+     "foaf:name": "Richard Zijdeman",
+     "foaf:givenName": "Richard",
+     "foaf:familyName": "Zijdeman",
+     "foaf:mbox": {
+         "@id": "mailto:richard.zijdeman@iisg.nl"
+     }
+ }, {
+     "@id": "sdp:rjhoekstr@gmail.com",
+     "rdf:type": [{
+         "@id": "foaf:Person"
+     }, {
+         "@id": "prov:Person"
+     }],
+     "owl:sameAs": {
+         "@id": "http://orcid.org/0000-0001-7076-9083"
+     },
+     "foaf:name": "Rinke Hoekstra",
+     "foaf:familyName": "Hoekstra",
+     "foaf:givenName": "Rinke",
+     "foaf:mbox": {
+         "@id": "mailto:rinke.hoekstra@vu.nl"
+     }
+ }],
+ "prov:wasDerivedFrom": {
+     "@id": "https://socialhistory.org/en/hsn/hsn-standardized-hisco-coded-and-classified-occupational-titles-release-201301"
+ },
+ "url": "hsn2013a_hisco_comma_short.csv",
+ "dialect": {
+     "delimiter": ",",
+     "encoding": "latin"
+ },
+ "@context": [
+  "http://www.w3.org/ns/csvw",
+  {
+   "@base": "http://data.socialhistory.org/ns/resource/hsn2013a/",
+   "@language": "en"
+  },
+  {
+   "owl": "http://www.w3.org/2002/07/owl#",
+   "clioctr": "http://data.socialhistory.org/ns/resource/clio/country/",
+   "hisco-product": "http://data.socialhistory.org/ns/resource/hisco/product/",
+   "hisco-entry": "http://data.socialhistory.org/ns/resource/hisco/entry/",
+   "ldp": "http://www.w3.org/ns/ldp#",
+   "clio": "http://data.socialhistory.org/ns/resource/clio/",
+   "occhisco": "http://data.socialhistory.org/ns/resource/napp/OCCHISCO/",
+   "skos": "http://www.w3.org/2004/02/skos/core#",
+   "xml": "http://www.w3.org/XML/1998/namespace/",
+   "bibo": "http://purl.org/ontology/bibo/",
+   "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+   "prov": "http://www.w3.org/ns/prov#",
+   "sdmx-code": "http://purl.org/linked-data/sdmx/2009/code#",
+   "napp-can91": "http://data.socialhistory.org/ns/resource/napp/dataset/canada1891/",
+   "hiscam": "http://data.socialhistory.org/ns/resource/hiscam/",
+   "np": "http://www.nanopub.org/nschema#",
+   "canfam-auke": "http://data.socialhistory.org/ns/resource/canfam/auke/",
+   "dcterms": "http://purl.org/dc/terms/",
+   "schema": "http://schema.org/",
+   "foaf": "http://xmls.com/foaf/0.1/",
+   "napp": "http://data.socialhistory.org/ns/resource/napp/",
+   "sdv": "http://data.socialhistory.org/ns/vocab/",
+   "hisco": "http://data.socialhistory.org/ns/resource/hisco/",
+   "sdp": "http://data.socialhistory.org/ns/resource/person/",
+   "sdr": "http://data.socialhistory.org/ns/resource/",
+   "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+   "time": "http://www.w3.org/2006/time#",
+   "dc": "http://purl.org/dc/terms/",
+   "hisco-relation": "http://data.socialhistory.org/ns/resource/hisco/relation/",
+   "hisco-status": "http://data.socialhistory.org/ns/resource/hisco/status/",
+   "clioprop": "http://data.socialhistory.org/ns/resource/clio/property/",
+   "sdmx-concept": "http://purl.org/linked-data/sdmx/2009/concept#",
+   "csvw": "http://www.w3.org/ns/csvw#",
+   "clioind": "http://data.socialhistory.org/ns/resource/clio/indicator/",
+   "dc11": "http://purl.org/dc/elements/1.1/",
+   "canfam-dimension": "http://data.socialhistory.org/ns/vocab/canfam/dimension/",
+   "napp-eng81": "http://data.socialhistory.org/ns/resource/napp/dataset/englandwales1881/",
+   "canfam": "http://data.socialhistory.org/ns/resource/canfam/dataset/canada1901/",
+   "napp-sct81": "http://data.socialhistory.org/ns/resource/napp/dataset/scotland1881/",
+   "sdmx-measure": "http://purl.org/linked-data/sdmx/2009/measure#",
+   "qb": "http://purl.org/linked-data/cube#",
+   "xsd": "http://www.w3.org/2001/XMLSchema#",
+   "sdmx-dimension": "http://purl.org/linked-data/sdmx/2009/dimension#",
+   "napp-dimension": "http://data.socialhistory.org/ns/vocab/napp/dimension/",
+   "": "http://data.socialhistory.org/ns/resource/hsn2013a",
+   "hsn": "http://data.socialhistory.org/ns/resource/hsn2013a/",
+   "hisclass": "http://data.socialhistory.org/ns/resource/hisclass/",
+   "hisclass5": "http://data.socialhistory.org/ns/resource/hisclass5/"
+  }
+ ],
+ "dc:title": "hsn2013a_hisco_comma.csv",
+ "dc:modified": {
+  "@value": "2016-08-15",
+  "@type": "xsd:date"
+ },
+ "tableSchema": {
+  "aboutUrl": "hsn:occupation/{Id}",
+  "primaryKey": "Id",
+  "columns": [
+    {
+     "virtual": true,
+     "name": "HISCO",
+     "aboutUrl": "hisco:{% if not HISCO in ['-1','-3','-2']%}{HISCO:0>5}{% else %}{HISCO}{% endif %}",
+     "propertyUrl": "skos:example",
+     "valueUrl": "hsn:occupation/{Id}",
+     "dc:description": "The HISCO occupational category",
+     "null": "99999"
+    },
+    {
+     "virtual": true,
+     "propertyUrl": "rdf:type",
+     "valueUrl": "skos:Concept"
+    },
+    {
+      "virtual": true,
+      "aboutUrl": "hsn:occupation",
+      "propertyUrl": "skos:member",
+      "valueUrl": "hsn:occupation/{Id}"
+    },
+    {
+      "virtual": true,
+      "propertyUrl": "rdf:type",
+      "aboutUrl": "hsn:member",
+      "valueUrl": "skos:Collection"
+    },
+   {
+    "datatype": "string",
+    "titles": [
+     "Standard"
+    ],
+    "name": "Standard",
+    "propertyUrl": "skos:prefLabel",
+    "lang": "nl",
+    "dc:description": "Preferred label (standardized)"
+   },
+   {
+    "datatype": "string",
+    "titles": [
+     "Original"
+    ],
+    "name": "Original",
+    "propertyUrl": "skos:altLabel",
+    "lang": "nl",
+    "dc:description": "Original label (non-standardized)"
+   },
+   {
+    "titles": [
+     "STATUS"
+    ],
+    "propertyUrl": "hsn:status",
+    "valueUrl": "hsn:status/{STATUS}",
+    "name": "STATUS",
+    "dc:description": "STATUS",
+    "null": "-9"
+   },
+   {
+    "virtual": true,
+    "aboutUrl": "hsn:status",
+    "propertyUrl": "skos:member",
+    "valueUrl": "hsn:status/{STATUS}",
+    "name": "STATUS",
+    "dc:description": "Each status is a member of the hsn:status collection",
+    "null": "-9"
+   },
+   {
+    "virtual": true,
+    "valueUrl": "skos:Collection",
+    "propertyUrl": "rdf:type",
+    "aboutUrl": "hsn:status"
+   },
+   {
+    "titles": [
+     "RELATION"
+    ],
+    "propertyUrl": "hsn:relation",
+    "valueUrl": "hsn:relation/{RELATION}",
+    "name": "RELATION",
+    "dc:description": "RELATION",
+    "null": "-9"
+   },
+   {
+    "virtual": true,
+    "aboutUrl": "hsn:relation",
+    "propertyUrl": "skos:member",
+    "valueUrl": "hsn:status/{RELATION}",
+    "name": "RELATION",
+    "dc:description": "Each relation is a member of the hsn:relation collection",
+    "null": "-9"
+   },
+   {
+    "virtual": true,
+    "valueUrl": "skos:Collection",
+    "propertyUrl": "rdf:type",
+    "aboutUrl": "hsn:relation"
+   },
+   {
+    "titles": [
+     "PRODUCT"
+    ],
+    "propertyUrl": "hsn:product",
+    "valueUrl": "hsn:product/{PRODUCT}",
+    "name": "PRODUCT",
+    "dc:description": "PRODUCT",
+    "null": "-9"
+   },
+   {
+    "virtual": true,
+    "aboutUrl": "hsn:product",
+    "propertyUrl": "skos:member",
+    "valueUrl": "hsn:status/{PRODUCT}",
+    "name": "PRODUCT",
+    "dc:description": "Each product is a member of the hsn:product collection",
+    "null": "-9"
+   },
+   {
+    "virtual": true,
+    "valueUrl": "skos:Collection",
+    "propertyUrl": "rdf:type",
+    "aboutUrl": "hsn:product"
+   },
+   {
+    "titles": [
+     "HISCLASS"
+    ],
+    "propertyUrl": "hsn:hisclass",
+    "valueUrl": "hisclass:{HISCLASS}",
+    "name": "HISCLASS",
+    "dc:description": "HISCLASS",
+    "null": "-1"
+   },
+   {
+    "virtual": true,
+    "aboutUrl": "hsn:hisclass",
+    "propertyUrl": "skos:member",
+    "valueUrl": "hisclass:{HISCLASS}",
+    "name": "HISCLASS",
+    "dc:description": "Each hisclass is a member of the hsn:hisclass collection",
+    "null": "-1"
+   },
+   {
+    "virtual": true,
+    "valueUrl": "skos:Collection",
+    "propertyUrl": "rdf:type",
+    "aboutUrl": "hsn:hisclass"
+   },
+   {
+    "titles": [
+     "HISCLASS_5"
+    ],
+    "propertyUrl": "hsn:hisclass5",
+    "valueUrl": "hisclass5:{HISCLASS}",
+    "name": "HISCLASS_5",
+    "dc:description": "HISCLASS_5",
+    "null": "-1"
+   },
+   {
+    "virtual": true,
+    "aboutUrl": "hsn:hisclass_5",
+    "propertyUrl": "skos:member",
+    "valueUrl": "hisclass5:{HISCLASS_5}",
+    "name": "HISCLASS_5",
+    "dc:description": "Each hisclass_5 is a member of the hsn:hisclass_5 collection",
+    "null": "-1"
+   },
+   {
+    "virtual": true,
+    "valueUrl": "skos:Collection",
+    "propertyUrl": "rdf:type",
+    "aboutUrl": "hsn:hisclass_5"
+   },
+   {
+    "datatype": "string",
+    "titles": [
+     "SOCPO"
+    ],
+    "name": "SOCPO",
+    "dc:description": "SOCPO",
+    "null": "999"
+   },
+   {
+    "titles": [
+     "Release"
+    ],
+    "name": "Release",
+    "propertyUrl": "hsn:release",
+    "valueUrl": "hsn:{Release}",
+    "dc:description": "Release"
+   }
+  ]
+ }
+}

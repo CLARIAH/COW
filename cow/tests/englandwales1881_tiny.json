@@ -1,0 +1,927 @@
+{
+ "dataset": {
+  "variables": {
+   "PERNUM": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'PERNUM' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/PERNUM/{PERNUM}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/PERNUM", 
+    "label": "PERNUM", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/PERNUM", 
+     "label": "PERNUM"
+    }
+   }, 
+   "BPLCNTRY": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'BPLCNTRY' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/BPLCNTRY/{BPLCNTRY}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/BPLCNTRY", 
+    "label": "BPLCNTRY", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/BPLCNTRY", 
+     "label": "BPLCNTRY"
+    }
+   }, 
+   "RELATE": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'RELATE' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/RELATE/{RELATE}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/RELATE", 
+    "label": "RELATE", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/RELATE", 
+     "label": "RELATE"
+    }
+   }, 
+   "AGE": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'AGE' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/AGE/{AGE}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/AGE", 
+    "label": "AGE", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/AGE", 
+     "label": "AGE"
+    }
+   }, 
+   "OCCSTRNG": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'OCCSTRNG' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/OCCSTRNG/{OCCSTRNG}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/OCCSTRNG", 
+    "label": "OCCSTRNG", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/OCCSTRNG", 
+     "label": "OCCSTRNG"
+    }
+   }, 
+   "NFAMS": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'NFAMS' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/NFAMS/{NFAMS}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/NFAMS", 
+    "label": "NFAMS", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/NFAMS", 
+     "label": "NFAMS"
+    }
+   }, 
+   "OCCGB": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'OCCGB' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/OCCGB/{OCCGB}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/OCCGB", 
+    "label": "OCCGB", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/OCCGB", 
+     "label": "OCCGB"
+    }
+   }, 
+   "BIRTHYR": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'BIRTHYR' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/BIRTHYR/{BIRTHYR}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/BIRTHYR", 
+    "label": "BIRTHYR", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/BIRTHYR", 
+     "label": "BIRTHYR"
+    }
+   }, 
+   "OCCHISCO": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'OCCHISCO' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/OCCHISCO/{OCCHISCO}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/OCCHISCO", 
+    "label": "OCCHISCO", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/OCCHISCO", 
+     "label": "OCCHISCO"
+    }
+   }, 
+   "NUMPERHH": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'NUMPERHH' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/NUMPERHH/{NUMPERHH}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/NUMPERHH", 
+    "label": "NUMPERHH", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/NUMPERHH", 
+     "label": "NUMPERHH"
+    }
+   }, 
+   "URBAN": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'URBAN' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/URBAN/{URBAN}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/URBAN", 
+    "label": "URBAN", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/URBAN", 
+     "label": "URBAN"
+    }
+   }, 
+   "RESIDENT": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'RESIDENT' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/RESIDENT/{RESIDENT}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/RESIDENT", 
+    "label": "RESIDENT", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/RESIDENT", 
+     "label": "RESIDENT"
+    }
+   }, 
+   "ORDERGB": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'ORDERGB' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/ORDERGB/{ORDERGB}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/ORDERGB", 
+    "label": "ORDERGB", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/ORDERGB", 
+     "label": "ORDERGB"
+    }
+   }, 
+   "LABFORCE": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'LABFORCE' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/LABFORCE/{LABFORCE}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/LABFORCE", 
+    "label": "LABFORCE", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/LABFORCE", 
+     "label": "LABFORCE"
+    }
+   }, 
+   "SEX": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'SEX' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/SEX/{SEX}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/SEX", 
+    "label": "SEX", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/SEX", 
+     "label": "SEX"
+    }
+   }, 
+   "RELIGION": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'RELIGION' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/RELIGION/{RELIGION}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/RELIGION", 
+    "label": "RELIGION", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/RELIGION", 
+     "label": "RELIGION"
+    }
+   }, 
+   "SERVANTS": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'SERVANTS' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/SERVANTS/{SERVANTS}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/SERVANTS", 
+    "label": "SERVANTS", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/SERVANTS", 
+     "label": "SERVANTS"
+    }
+   }, 
+   "PERWT": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'PERWT' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/PERWT/{PERWT}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/PERWT", 
+    "label": "PERWT", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/PERWT", 
+     "label": "PERWT"
+    }
+   }, 
+   "COUNTYGB": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'COUNTYGB' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/COUNTYGB/{COUNTYGB}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/COUNTYGB", 
+    "label": "COUNTYGB", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/COUNTYGB", 
+     "label": "COUNTYGB"
+    }
+   }, 
+   "GQ": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'GQ' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/GQ/{GQ}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/GQ", 
+    "label": "GQ", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/GQ", 
+     "label": "GQ"
+    }
+   }, 
+   "MARST": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'MARST' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/MARST/{MARST}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/MARST", 
+    "label": "MARST", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/MARST", 
+     "label": "MARST"
+    }
+   }, 
+   "AGEMONTH": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'AGEMONTH' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/AGEMONTH/{AGEMONTH}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/AGEMONTH", 
+    "label": "AGEMONTH", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/AGEMONTH", 
+     "label": "AGEMONTH"
+    }
+   }, 
+   "SAMPLE": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'SAMPLE' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/SAMPLE/{SAMPLE}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/SAMPLE", 
+    "label": "SAMPLE", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/SAMPLE", 
+     "label": "SAMPLE"
+    }
+   }, 
+   "DURMARR": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'DURMARR' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/DURMARR/{DURMARR}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/DURMARR", 
+    "label": "DURMARR", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/DURMARR", 
+     "label": "DURMARR"
+    }
+   }, 
+   "YEAR": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'YEAR' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/YEAR/{YEAR}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/YEAR", 
+    "label": "YEAR", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/YEAR", 
+     "label": "YEAR"
+    }
+   }, 
+   "SERIAL": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'SERIAL' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/SERIAL/{SERIAL}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/SERIAL", 
+    "label": "SERIAL", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/SERIAL", 
+     "label": "SERIAL"
+    }
+   }, 
+   "NCOUPLES": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'NCOUPLES' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/NCOUPLES/{NCOUPLES}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/NCOUPLES", 
+    "label": "NCOUPLES", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/NCOUPLES", 
+     "label": "NCOUPLES"
+    }
+   }, 
+   "OCSTATUS": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'OCSTATUS' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/OCSTATUS/{OCSTATUS}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/OCSTATUS", 
+    "label": "OCSTATUS", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/OCSTATUS", 
+     "label": "OCSTATUS"
+    }
+   }, 
+   "CNTRY": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'CNTRY' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/CNTRY/{CNTRY}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/CNTRY", 
+    "label": "CNTRY", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/CNTRY", 
+     "label": "CNTRY"
+    }
+   }, 
+   "DISTMS": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'DISTMS' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/DISTMS/{DISTMS}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/DISTMS", 
+    "label": "DISTMS", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/DISTMS", 
+     "label": "DISTMS"
+    }
+   }, 
+   "NFATHERS": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'NFATHERS' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/NFATHERS/{NFATHERS}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/NFATHERS", 
+    "label": "NFATHERS", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/NFATHERS", 
+     "label": "NFATHERS"
+    }
+   }, 
+   "COUNTYIS": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'COUNTYIS' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/COUNTYIS/{COUNTYIS}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/COUNTYIS", 
+    "label": "COUNTYIS", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/COUNTYIS", 
+     "label": "COUNTYIS"
+    }
+   }, 
+   "BPLCTYGB": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'BPLCTYGB' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/BPLCTYGB/{BPLCTYGB}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/BPLCTYGB", 
+    "label": "BPLCTYGB", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/BPLCTYGB", 
+     "label": "BPLCTYGB"
+    }
+   }, 
+   "NMOTHERS": {
+    "values_REMOVEME": [
+     {
+      "comment": "`values` is a list of variable values that has the form specified here", 
+      "count": "The frequency of this value for this variable", 
+      "uri": "The URI for the value, ignored in case of `other`", 
+      "original": {
+       "uri": "The original URI of the value (typically follows the `valueUrl` template)", 
+       "label": "The original value, in case of a mapped/modified value"
+      }, 
+      "label": "The value itself, used as Literal value or as label in case of `identifier` or `coded`"
+     }
+    ], 
+    "description": "The variable 'NMOTHERS' as taken from the 'englandwales1881' dataset.", 
+    "category_comment": "`category` can be one of identifier, coded or other", 
+    "datatype_REMOVEME": "Any XML Schema datatype, only applicable for variables of type `other`", 
+    "valueUrl": "http://data.socialhistory.org/ns/resource/variable/NMOTHERS/{NMOTHERS}", 
+    "category": "identifier", 
+    "transform_REMOVEME": "Any body of a JavaScript function, that returns some value based on an input `v`, the actual value of a variable", 
+    "uri": "http://data.socialhistory.org/ns/resource/variable/NMOTHERS", 
+    "label": "NMOTHERS", 
+    "type": "http://purl.org/linked-data/cube#DimensionProperty", 
+    "original": {
+     "uri": "http://data.socialhistory.org/ns/resource/variable/NMOTHERS", 
+     "label": "NMOTHERS"
+    }
+   }
+  }, 
+  "name": "englandwales1881", 
+  "file": "/Users/hoekstra/projects/clariah-converters/src/tests/englandwales1881_tiny.csv", 
+  "uri": "http://data.socialhistory.org/ns/resource/englandwales1881"
+ }
+}
