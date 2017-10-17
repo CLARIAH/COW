@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from converter.csvw import CSVWConverter, build_schema
 import os
 import datetime
