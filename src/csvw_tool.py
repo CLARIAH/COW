@@ -1,21 +1,19 @@
-#!/usr/bin/env python
-
 from converter.csvw import CSVWConverter, build_schema
 import os
 import datetime
 import argparse
 
-parser = argparse.ArgumentParser(description="Not nearly CSVW compliant schema builder and RDF converter")
-parser.add_argument('mode', choices=['convert','build'], default='convert', help='Use the schema of the `file` specified to convert it to RDF, or build a schema from scratch.')
-parser.add_argument('files', metavar='file', nargs='+', type=str, help="Path(s) of the file(s) that should be used for building or converting. Must be a CSV file.")
-parser.add_argument('--dataset', dest='dataset', type=str, help="A short name (slug) for the name of the dataset (will use input file name if not specified)")
-parser.add_argument('--delimiter', dest='delimiter', default=None, type=str, help="The delimiter used in the CSV file(s)")
-parser.add_argument('--quotechar', dest='quotechar', default='\"', type=str, help="The character used as quotation character in the CSV file(s)")
-parser.add_argument('--processes', dest='processes', default='4', type=int, help="The number of processes the converter should use")
-parser.add_argument('--chunksize', dest='chunksize', default='5000', type=int, help="The number of rows processed at each time")
-parser.add_argument('--base', dest='base', default='https://iisg.amsterdam/resource/', type=str, help="The base for URIs generated with the schema (only relevant when `build`ing a schema)")
+def main():
+    parser = argparse.ArgumentParser(description="Not nearly CSVW compliant schema builder and RDF converter")
+    parser.add_argument('mode', choices=['convert','build'], default='convert', help='Use the schema of the `file` specified to convert it to RDF, or build a schema from scratch.')
+    parser.add_argument('files', metavar='file', nargs='+', type=str, help="Path(s) of the file(s) that should be used for building or converting. Must be a CSV file.")
+    parser.add_argument('--dataset', dest='dataset', type=str, help="A short name (slug) for the name of the dataset (will use input file name if not specified)")
+    parser.add_argument('--delimiter', dest='delimiter', default=None, type=str, help="The delimiter used in the CSV file(s)")
+    parser.add_argument('--quotechar', dest='quotechar', default='\"', type=str, help="The character used as quotation character in the CSV file(s)")
+    parser.add_argument('--processes', dest='processes', default='4', type=int, help="The number of processes the converter should use")
+    parser.add_argument('--chunksize', dest='chunksize', default='5000', type=int, help="The number of rows processed at each time")
+    parser.add_argument('--base', dest='base', default='https://iisg.amsterdam/resource/', type=str, help="The base for URIs generated with the schema (only relevant when `build`ing a schema)")
 
-if __name__ == '__main__':
     args = parser.parse_args()
 
     for source_file in args.files:
@@ -43,6 +41,9 @@ if __name__ == '__main__':
                 print "Something went wrong, skipping {}.".format(source_file)
         else:
             print "Whoops for file {}".format(f)
+
+if __name__ == '__main__':
+    main()
 
 # FILE = '../sdh-private-hisco-datasets/hisco_45.csv'
 # SCHEMA = '../sdh-private-hisco-datasets/hisco_45.csv-metadata.json'
