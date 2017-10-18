@@ -9,7 +9,7 @@ with open('requirements.txt') as f:
 
 cow_base = 'src/'
 cow_data = [ root.replace(cow_base, '') + '/*' for root,dirs,files in os.walk(cow_base) ]
-cow_version = '0.10'
+cow_version = '0.11'
 
 setup(name = 'cow_csvw',
       version = cow_version,
@@ -21,7 +21,7 @@ setup(name = 'cow_csvw',
       packages = ['cow_csvw'],
       package_dir = {'cow_csvw': 'src'},
       package_data = {'cow_csvw': cow_data},
-      entry_points={'console_scripts' : [ 'cow_csvw = cow_csvw:main' ]},
+      entry_points={'console_scripts' : [ 'cow_tool = cow_csvw.cow_tool:main' ]},
       keywords = ['csv', 'rdf', 'csvw'],
       install_requires=required
 )
