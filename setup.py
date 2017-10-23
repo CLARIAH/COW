@@ -9,7 +9,7 @@ with open('requirements.txt') as f:
 
 cow_base = 'src/'
 cow_data = [ root.replace(cow_base, '') + '/*' for root,dirs,files in os.walk(cow_base) ]
-cow_version = '0.11'
+cow_version = '0.12'
 
 setup(name = 'cow_csvw',
       version = cow_version,

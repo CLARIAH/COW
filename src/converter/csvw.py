@@ -168,7 +168,7 @@ class CSVWConverter(object):
 
         if not os.path.exists(schema_file_name) or not os.path.exists(file_name):
             raise Exception(
-                "Could not find source file or necessary metadata file in path...")
+                "Could not find source or metadata file in path; make sure you called with a .csv file")
 
         self._processes = processes
         self._chunksize = chunksize

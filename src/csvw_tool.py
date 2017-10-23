@@ -2,6 +2,8 @@ from converter.csvw import CSVWConverter, build_schema
 import os
 import datetime
 import argparse
+import sys
+import traceback
 
 def main():
     parser = argparse.ArgumentParser(description="Not nearly CSVW compliant schema builder and RDF converter")
@@ -39,6 +41,7 @@ def main():
                 c.convert()
             except:
                 print "Something went wrong, skipping {}.".format(source_file)
+                traceback.print_exc(file=sys.stdout)
         else:
             print "Whoops for file {}".format(f)
 
