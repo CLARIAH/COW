@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None, dataset_name=None, base="http://data.socialhistory.org/resource"):
+def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None, dataset_name=None, base="https://iisg.amsterdam/"):
     """
     Build a CSVW schema based on the ``infile`` CSV file, and write the resulting JSON CSVW schema to ``outfile``.
 
@@ -78,7 +78,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
         "dcat:keyword": [],
         "dc:publisher": {
             "schema:name": "CLARIAH Structured Data Hub - Datalegend",
-            "schema:url": {"@id": "http://datalegend.org"}
+            "schema:url": {"@id": "http://datalegend.net"}
         },
         "dc:license": {"@id": "http://opendefinition.org/licenses/cc-by/"},
         "dc:modified": {"@value": today, "@type": "xsd:date"},
