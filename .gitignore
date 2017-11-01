@@ -25,3 +25,4 @@ TopBraid
 .metadata
 docs/_build
 src/iribaker/
+pip-selfcheck.json
