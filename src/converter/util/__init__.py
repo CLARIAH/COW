@@ -320,7 +320,7 @@ class Nanopublication(Dataset):
         # ----
         # The nanopublication graph
         # ----
-        name = (file_name.rsplit('/', 1)[-1]).split('.')[0]
+        name = (os.path.basename(file_name)).split('.')[0]
         self.uri = SDR[name + '/nanopublication/' + hash_part]
 
 
