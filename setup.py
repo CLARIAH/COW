@@ -3,13 +3,14 @@
 
 from distutils.core import setup
 import os
+import sys
 
 with open('requirements.txt') as f:
     required = f.read().splitlines()
 
 cow_base = 'src/'
 cow_data = [ root.replace(cow_base, '') + '/*' for root,dirs,files in os.walk(cow_base) ]
-cow_version = '0.12'
+cow_version = 'x.xx'
 
 setup(name = 'cow_csvw',
       version = cow_version,
