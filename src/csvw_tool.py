@@ -15,6 +15,7 @@ def main():
     parser.add_argument('--processes', dest='processes', default='4', type=int, help="The number of processes the converter should use")
     parser.add_argument('--chunksize', dest='chunksize', default='5000', type=int, help="The number of rows processed at each time")
     parser.add_argument('--base', dest='base', default='https://iisg.amsterdam/resource/', type=str, help="The base for URIs generated with the schema (only relevant when `build`ing a schema)")
+    parser.add_argument('--version', dest='versoin', action='version', version='x.xx')
 
     args = parser.parse_args()
 
