@@ -1,7 +1,7 @@
 # Default namespaces for Vocabulary/Schema and Resource/Data items
-sdr: http://iisg.amsterdam/
-sdv: http://iisg.amsterdam/vocab/
-sdp: http://iisg.amsterdam/person/
+sdr: https://iisg.amsterdam/
+sdv: https://iisg.amsterdam/vocab/
+sdp: https://iisg.amsterdam/person/
 # Default W3C namespaces
 ldp: http://www.w3.org/ns/ldp#
 owl: http://www.w3.org/2002/07/owl#
