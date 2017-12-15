@@ -179,7 +179,11 @@ class CSVWConverter(object):
         # self.metadata = json.load(open(schema_file_name, 'r'))
         self.metadata_graph = Graph()
         with open(schema_file_name) as f:
-            self.metadata_graph.load(f, format='json-ld')
+            try:
+                self.metadata_graph.load(f, format='json-ld')
+            except ValueError:
+                logger.error("Could not parse JSON schema file, please check your syntax")
+                traceback.print_exc()
 
         # Get the URI of the schema specification by looking for the subject
         # with a csvw:url property.
