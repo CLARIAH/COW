@@ -1,7 +1,7 @@
-from cow_csvw import csvw_tool
+from cow_csvw.csvw_tool import COW
 
 def main():
-    csvw_tool.main()
+    c = COW()
 
 if __name__ == '__main__':
-    csvw_tool.main()
+    main()

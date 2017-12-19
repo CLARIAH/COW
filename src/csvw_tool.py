@@ -5,7 +5,38 @@ import argparse
 import sys
 import traceback
 
-def main():
+class COW(object):
+    args = None
+
+    def __init__(self, args=None):
+        for source_file in args.files:
+
+            if args.mode == 'build':
+                print "Building schema for {}".format(source_file)
+                target_file = "{}-metadata.json".format(source_file)
+
+                if os.path.exists(target_file):
+                    modifiedTime = os.path.getmtime(target_file)
+                    timestamp = datetime.datetime.fromtimestamp(modifiedTime).isoformat()
+                    os.rename(target_file, target_file+"_"+timestamp)
+                    print "Backed up prior version of schema to {}".format(target_file+"_"+timestamp)
+
+                # print "Delimiter is: ", repr(args.delimiter)
+                build_schema(source_file, target_file, dataset_name=args.dataset, delimiter=args.delimiter, quotechar=args.quotechar, base=args.base)
+
+            elif args.mode == 'convert':
+                print "Converting {} to RDF".format(source_file)
+
+                try:
+                    c = CSVWConverter(source_file, delimiter=args.delimiter, quotechar=args.quotechar, processes=args.processes, chunksize=args.chunksize)
+                    c.convert()
+                except:
+                    print "Something went wrong, skipping {}.".format(source_file)
+                    traceback.print_exc(file=sys.stdout)
+            else:
+                print "Whoops for file {}".format(f)
+
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Not nearly CSVW compliant schema builder and RDF converter")
     parser.add_argument('mode', choices=['convert','build'], default='convert', help='Use the schema of the `file` specified to convert it to RDF, or build a schema from scratch.')
     parser.add_argument('files', metavar='file', nargs='+', type=str, help="Path(s) of the file(s) that should be used for building or converting. Must be a CSV file.")
@@ -19,35 +50,7 @@ def main():
 
     args = parser.parse_args()
 
-    for source_file in args.files:
-
-        if args.mode == 'build':
-            print "Building schema for {}".format(source_file)
-            target_file = "{}-metadata.json".format(source_file)
-
-            if os.path.exists(target_file):
-                modifiedTime = os.path.getmtime(target_file)
-                timestamp = datetime.datetime.fromtimestamp(modifiedTime).isoformat()
-                os.rename(target_file, target_file+"_"+timestamp)
-                print "Backed up prior version of schema to {}".format(target_file+"_"+timestamp)
-
-            # print "Delimiter is: ", repr(args.delimiter)
-            build_schema(source_file, target_file, dataset_name=args.dataset, delimiter=args.delimiter, quotechar=args.quotechar, base=args.base)
-
-        elif args.mode == 'convert':
-            print "Converting {} to RDF".format(source_file)
-
-            try:
-                c = CSVWConverter(source_file, delimiter=args.delimiter, quotechar=args.quotechar, processes=args.processes, chunksize=args.chunksize)
-                c.convert()
-            except:
-                print "Something went wrong, skipping {}.".format(source_file)
-                traceback.print_exc(file=sys.stdout)
-        else:
-            print "Whoops for file {}".format(f)
-
-if __name__ == '__main__':
-    main()
+    COW(args)
 
 # FILE = '../sdh-private-hisco-datasets/hisco_45.csv'
 # SCHEMA = '../sdh-private-hisco-datasets/hisco_45.csv-metadata.json'
