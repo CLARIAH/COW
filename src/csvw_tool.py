@@ -6,12 +6,14 @@ import sys
 import traceback
 
 class COW(object):
-    args = None
 
-    def __init__(self, args=None):
-        for source_file in args.files:
+    def __init__(self, mode=None, files=None, dataset=None, delimiter=None, quotechar='\"', processes=4, chunksize=5000, base="https://iisg.amsterdam/resource/"):
+        """
+        COW entry point
+        """
 
-            if args.mode == 'build':
+        for source_file in files:
+            if mode == 'build':
                 print "Building schema for {}".format(source_file)
                 target_file = "{}-metadata.json".format(source_file)
 
@@ -21,14 +23,13 @@ class COW(object):
                     os.rename(target_file, target_file+"_"+timestamp)
                     print "Backed up prior version of schema to {}".format(target_file+"_"+timestamp)
 
-                # print "Delimiter is: ", repr(args.delimiter)
-                build_schema(source_file, target_file, dataset_name=args.dataset, delimiter=args.delimiter, quotechar=args.quotechar, base=args.base)
+                build_schema(source_file, target_file, dataset_name=dataset, delimiter=delimiter, quotechar=quotechar, base=base)
 
-            elif args.mode == 'convert':
+            elif mode == 'convert':
                 print "Converting {} to RDF".format(source_file)
 
                 try:
-                    c = CSVWConverter(source_file, delimiter=args.delimiter, quotechar=args.quotechar, processes=args.processes, chunksize=args.chunksize)
+                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, processes=processes, chunksize=chunksize)
                     c.convert()
                 except:
                     print "Something went wrong, skipping {}.".format(source_file)
@@ -50,7 +51,7 @@ def main():
 
     args = parser.parse_args()
 
-    COW(args)
+    COW(args.mode, args.files, args.dataset, args.delimiter, args.quotechar, args.processes, args.chunksize, args.base)
 
 if __name__ == '__main__':
     main()
