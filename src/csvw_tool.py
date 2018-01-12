@@ -31,6 +31,8 @@ class COW(object):
                 try:
                     c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, processes=processes, chunksize=chunksize)
                     c.convert()
+                except ValueError:
+                    raise
                 except:
                     print "Something went wrong, skipping {}.".format(source_file)
                     traceback.print_exc(file=sys.stdout)
