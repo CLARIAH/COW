@@ -1,7 +1,7 @@
 # Default namespaces for Vocabulary/Schema and Resource/Data items
-sdr: http://iisg.amsterdam/
-sdv: http://iisg.amsterdam/vocab/
-sdp: http://iisg.amsterdam/person/
+sdr: https://iisg.amsterdam/
+sdv: https://iisg.amsterdam/vocab/
+sdp: https://iisg.amsterdam/person/
 # Default W3C namespaces
 ldp: http://www.w3.org/ns/ldp#
 owl: http://www.w3.org/2002/07/owl#
@@ -32,28 +32,28 @@ sdmx-code: http://purl.org/linked-data/sdmx/2009/code#
 sdmx-dimension: http://purl.org/linked-data/sdmx/2009/dimension#
 sdmx-measure: http://purl.org/linked-data/sdmx/2009/measure#
 # ClioInfra
-clio: http://iisg.amsterdam/clio/
-clioind: http://iisg.amsterdam/clio/indicator/
-clioprop: http://iisg.amsterdam/clio/property/
-clioctr: http://iisg.amsterdam/clio/country/
+clio: https://iisg.amsterdam/clio/
+clioind: https://iisg.amsterdam/clio/indicator/
+clioprop: https://iisg.amsterdam/clio/property/
+clioctr: https://iisg.amsterdam/clio/country/
 # HISCO/HISCAM
-hisco: http://iisg.amsterdam/hisco/
-hiscam: http://iisg.amsterdam/hiscam/
-occhisco: http://iisg.amsterdam/napp/OCCHISCO/
-hisco-status: http://iisg.amsterdam/hisco/status/
-hisco-relation: http://iisg.amsterdam/hisco/relation/
-hisco-product: http://iisg.amsterdam/hisco/product/
+hisco: https://iisg.amsterdam/hisco/
+hiscam: https://iisg.amsterdam/hiscam/
+occhisco: https://iisg.amsterdam/napp/OCCHISCO/
+hisco-status: https://iisg.amsterdam/hisco/status/
+hisco-relation: https://iisg.amsterdam/hisco/relation/
+hisco-product: https://iisg.amsterdam/hisco/product/
 # HSN
-hsn: http://iisg.amsterdam/hsn2013a/
-hisclass: http://iisg.amsterdam/hisclass/
-hisclass5: http://iisg.amsterdam/hisclass5/
+hsn: https://iisg.amsterdam/hsn2013a/
+hisclass: https://iisg.amsterdam/hisclass/
+hisclass5: https://iisg.amsterdam/hisclass5/
 # Canadian Families
-canfam: http://iisg.amsterdam/canfam/dataset/canada1901/
-canfam-auke: http://iisg.amsterdam/canfam/auke/
+canfam: https://iisg.amsterdam/canfam/dataset/canada1901/
+canfam-auke: https://iisg.amsterdam/canfam/auke/
 canfam-dimension: http://data.socialhistory.org/vocab/canfam/dimension/
 # IPUMS NAPP data
-napp: http://iisg.amsterdam/napp/
+napp: https://iisg.amsterdam/napp/
 napp-dimension: http://data.socialhistory.org/vocab/napp/dimension/
-napp-can91: http://iisg.amsterdam/napp/dataset/canada1891/
-napp-sct81: http://iisg.amsterdam/napp/dataset/scotland1881/
-napp-eng81: http://iisg.amsterdam/napp/dataset/englandwales1881/
+napp-can91: https://iisg.amsterdam/napp/dataset/canada1891/
+napp-sct81: https://iisg.amsterdam/napp/dataset/scotland1881/
+napp-eng81: https://iisg.amsterdam/napp/dataset/englandwales1881/
