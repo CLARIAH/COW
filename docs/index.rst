@@ -93,21 +93,21 @@ Change directory to ``src``, and optionally replace the author in the ``config.p
 Usage
 =====
 
-The primary command line script for CSVW-based conversion is ``csvw-tool.py``. It can be used for two tasks:
+The primary command line script for CSVW-based conversion is ``csvw_tool.py``. It can be used for two tasks:
 
 1. Generating a :ref:`skeleton CSVW JSON-Schema <skeleton-schema>` for a specific CSV file.
 2. Using such a schema to :ref:`convert a CSV file to RDF <converting-csv>` (in `NQuads format <https://www.w3.org/TR/n-quads/>`_)
 
-General usage instructions can be obtained by running ``python csvw-tool.py -h``::
+General usage instructions can be obtained by running ``python csvw_tool.py -h``::
 
-  usage: csvw-tool.py [-h] [--dataset DATASET] [--delimiter DELIMITER]
+  usage: csvw_tool.py [-h] [--dataset DATASET] [--delimiter DELIMITER]
                       [--quotechar QUOTECHAR] [--processes PROCESSES]
                       [--chunksize CHUNKSIZE] [--base BASE]
                       {convert,build} file [file ...]
 
 The table below gives a brief description of each of these options.
 
-.. table:: Commandline options for ``csvw-tool.py``
+.. table:: Commandline options for ``csvw_tool.py``
 
    ===================    ===========
    Option                 Explanation
@@ -143,7 +143,7 @@ Suppose you want to build a skeleton schema for a file ``imf_gdppc.csv`` (from [
 
 Make sure you have your virtual environment enabled (if applicable), and run::
 
-  python csvw-tool.py build imf_gdppc.csv --base=http://example.com/resource
+  python csvw_tool.py build imf_gdppc.csv --base=http://example.com/resource
 
 The ``--base`` option specifies the base for all URIs generated through the schema. This is ``http://data.socialhistory.org/resource`` by default (see http://datalegend.net)
 
@@ -229,13 +229,13 @@ Converting a CSV file
 
 If we now want to convert our example file ``imf_gdppc.csv``, you first make sure you have your virtual environment enabled (if applicable), and run::
 
-  python csvw-tool.py convert imf_gdppc.csv
+  python csvw_tool.py convert imf_gdppc.csv
 
 This will produce a file `imf_gdppc.csv.nq` that holds an NQuads serialization of the RDF.
 
 This is also the preferred method for converting multiple files at the same time. For instance, if you want to convert `all` CSV files in a specific directory, simply use unix-style wildcards::
 
-  python csvw-tool.py convert /path/to/some/directory/*.csv
+  python csvw_tool.py convert /path/to/some/directory/*.csv
 
 Going back to our running example, the resulting RDF looks like this (when serialized as TriG):
 
