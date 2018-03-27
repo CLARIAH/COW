@@ -4,6 +4,7 @@ import datetime
 import argparse
 import sys
 import traceback
+from glob import glob
 
 class COW(object):
 
@@ -53,7 +54,11 @@ def main():
 
     args = parser.parse_args()
 
-    COW(args.mode, args.files, args.dataset, args.delimiter, args.quotechar, args.processes, args.chunksize, args.base)
+    files = []
+    for f in args.files:
+        files += glob(f)
+    
+    COW(args.mode, files, args.dataset, args.delimiter, args.quotechar, args.processes, args.chunksize, args.base)
 
 if __name__ == '__main__':
     main()
