@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None, dataset_name=None, base="https://iisg.amsterdam/resource/"):
+def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None, dataset_name=None, base="https://iisg.amsterdam/"):
     """
     Build a CSVW schema based on the ``infile`` CSV file, and write the resulting JSON CSVW schema to ``outfile``.
 
@@ -68,7 +68,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
         "@context": ["http://csvw.clariah-sdh.eculture.labs.vu.nl/csvw.json",
                      {"@language": "en",
                       "@base": "{}/".format(base)},
-                     get_namespaces()],
+                     get_namespaces(base)],
         "url": url,
         "dialect": {"delimiter": delimiter,
                     "encoding": encoding,
@@ -511,7 +511,7 @@ class BurstConverter(object):
                                 propertyUrl = self.metadata_graph.namespaces()[""][
                                     unicode(c.csvw_name)]
                             else:
-                                propertyUrl = "https://iisg.amsterdam/resource/{}".format(
+                                propertyUrl = "{}{}".format(get_namespaces()['sdv'],
                                     unicode(c.csvw_name))
 
                             p = self.expandURL(propertyUrl, row)

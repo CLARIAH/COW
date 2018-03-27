@@ -1,59 +1,48 @@
-# Default namespaces for Vocabulary/Schema and Resource/Data items
-sdr: http://iisg.amsterdam/
-sdv: http://iisg.amsterdam/vocab/
-sdp: http://iisg.amsterdam/person/
-# Default W3C namespaces
-ldp: http://www.w3.org/ns/ldp#
-owl: http://www.w3.org/2002/07/owl#
-rdfs: http://www.w3.org/2000/01/rdf-schema#
-rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
-xml: http://www.w3.org/XML/1998/namespace/
-xsd: http://www.w3.org/2001/XMLSchema#
-prov: http://www.w3.org/ns/prov#
-skos: http://www.w3.org/2004/02/skos/core#
-schema: http://schema.org/
-csvw: http://www.w3.org/ns/csvw#
-dcterms: http://purl.org/dc/terms/
-dc: http://purl.org/dc/terms/
-dc11: http://purl.org/dc/elements/1.1/
-# Other standard namespaces
-qb: http://purl.org/linked-data/cube#
-foaf: http://xmlns.com/foaf/0.1/
-np: http://www.nanopub.org/nschema#
-bibo: http://purl.org/ontology/bibo/
-time: http://www.w3.org/2006/time#
-dbr: http://dbpedia.org/resource/
-dbpedia: http://dbpedia.org/resource/
-dbo: http://dbpedia.org/ontology/
-dbp: http://dbpedia.org/property/
-# Default SDMX namespaces
-sdmx-concept: http://purl.org/linked-data/sdmx/2009/concept#
-sdmx-code: http://purl.org/linked-data/sdmx/2009/code#
-sdmx-dimension: http://purl.org/linked-data/sdmx/2009/dimension#
-sdmx-measure: http://purl.org/linked-data/sdmx/2009/measure#
-# ClioInfra
-clio: http://iisg.amsterdam/clio/
-clioind: http://iisg.amsterdam/clio/indicator/
-clioprop: http://iisg.amsterdam/clio/property/
-clioctr: http://iisg.amsterdam/clio/country/
-# HISCO/HISCAM
-hisco: http://iisg.amsterdam/hisco/
-hiscam: http://iisg.amsterdam/hiscam/
-occhisco: http://iisg.amsterdam/napp/OCCHISCO/
-hisco-status: http://iisg.amsterdam/hisco/status/
-hisco-relation: http://iisg.amsterdam/hisco/relation/
-hisco-product: http://iisg.amsterdam/hisco/product/
-# HSN
-hsn: http://iisg.amsterdam/hsn2013a/
-hisclass: http://iisg.amsterdam/hisclass/
-hisclass5: http://iisg.amsterdam/hisclass5/
-# Canadian Families
-canfam: http://iisg.amsterdam/canfam/dataset/canada1901/
-canfam-auke: http://iisg.amsterdam/canfam/auke/
-canfam-dimension: http://data.socialhistory.org/vocab/canfam/dimension/
-# IPUMS NAPP data
-napp: http://iisg.amsterdam/napp/
-napp-dimension: http://data.socialhistory.org/vocab/napp/dimension/
-napp-can91: http://iisg.amsterdam/napp/dataset/canada1891/
-napp-sct81: http://iisg.amsterdam/napp/dataset/scotland1881/
-napp-eng81: http://iisg.amsterdam/napp/dataset/englandwales1881/
+{bibo: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://purl.org/ontology/bibo/'],
+  canfam: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/canfam/dataset/canada1901/'],
+  canfam-auke: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/canfam/auke/'],
+  canfam-dimension: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://data.socialhistory.org/vocab/canfam/dimension/'],
+  clio: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/clio/'],
+  clioctr: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/clio/country/'],
+  clioind: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/clio/indicator/'],
+  clioprop: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/clio/property/'],
+  csvw: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://www.w3.org/ns/csvw#'],
+  dbo: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://dbpedia.org/ontology/'],
+  dbp: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://dbpedia.org/property/'],
+  dbpedia: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://dbpedia.org/resource/'],
+  dbr: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://dbpedia.org/resource/'],
+  dc: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://purl.org/dc/terms/'],
+  dc11: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://purl.org/dc/elements/1.1/'],
+  dcterms: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://purl.org/dc/terms/'],
+  foaf: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://xmlns.com/foaf/0.1/'],
+  hiscam: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/hiscam/'],
+  hisclass: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/hisclass/'],
+  hisclass5: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/hisclass5/'],
+  hisco: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/hisco/'],
+  hisco-product: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/hisco/product/'],
+  hisco-relation: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/hisco/relation/'],
+  hisco-status: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/hisco/status/'],
+  hsn: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/hsn2013a/'],
+  ldp: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://www.w3.org/ns/ldp#'],
+  napp: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/napp/'],
+  napp-can91: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/napp/dataset/canada1891/'],
+  napp-dimension: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://data.socialhistory.org/vocab/napp/dimension/'],
+  napp-eng81: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/napp/dataset/englandwales1881/'],
+  napp-sct81: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/napp/dataset/scotland1881/'],
+  np: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://www.nanopub.org/nschema#'],
+  occhisco: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://iisg.amsterdam/napp/OCCHISCO/'],
+  owl: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://www.w3.org/2002/07/owl#'],
+  prov: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://www.w3.org/ns/prov#'],
+  qb: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://purl.org/linked-data/cube#'],
+  rdf: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'],
+  rdfs: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://www.w3.org/2000/01/rdf-schema#'],
+  schema: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://schema.org/'],
+  sdmx-code: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://purl.org/linked-data/sdmx/2009/code#'],
+  sdmx-concept: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://purl.org/linked-data/sdmx/2009/concept#'],
+  sdmx-dimension: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://purl.org/linked-data/sdmx/2009/dimension#'],
+  sdmx-measure: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://purl.org/linked-data/sdmx/2009/measure#'],
+  sdr: 'https://albermeronyo.org', sdv: 'https://albermeronyo.org/vocab/', skos: !!python/object/new:rdflib.namespace.Namespace [
+    !!python/unicode 'http://www.w3.org/2004/02/skos/core#'], time: !!python/object/new:rdflib.namespace.Namespace [
+    !!python/unicode 'http://www.w3.org/2006/time#'], xml: !!python/object/new:rdflib.namespace.Namespace [
+    !!python/unicode 'http://www.w3.org/XML/1998/namespace/'], xsd: !!python/object/new:rdflib.namespace.Namespace [
+    !!python/unicode 'http://www.w3.org/2001/XMLSchema#']}

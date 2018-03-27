@@ -92,8 +92,13 @@ def apply_default_namespaces(graph):
     return graph
 
 
-def get_namespaces():
+def get_namespaces(base=None):
     """Return the global namespaces"""
+    if base:
+        namespaces['sdr'] = "{}".format(base)
+        namespaces['sdv'] = "{}/vocab/".format(base)
+        with open(YAML_NAMESPACE_FILE, 'w') as outfile:
+            yaml.dump(namespaces, outfile, default_flow_style=True)
     return namespaces
 
 
