@@ -22,7 +22,7 @@ This package is a comprehensive tool (COW [#f2]_) for batch conversion of multip
 
 ====
 
-Instead of using the command line tool there is also the webservice `cattle <http://cattle.datalegend.net/>`_, providing the same functionality as does COW without installing it. CSV files can be uploaded to the service and a JSON schema will be created, using that JSON schema cattle is able to create a RDF structured graph. More information about cattle, including how to use it, can be found at: <https://github.com/CLARIAH/cattle>.
+Instead of using the command line tool there is also the webservice `cattle <http://cattle.datalegend.net/>`_, providing the same functionality as does COW without installing it. CSV files can be uploaded to the service and a JSON schema will be created, using that JSON schema cattle is able to create a RDF structured graph. More information about cattle, including how to use it, can be found at: https://github.com/CLARIAH/cattle.
 
 ====
 
