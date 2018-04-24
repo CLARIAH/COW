@@ -14,7 +14,8 @@ skos: http://www.w3.org/2004/02/skos/core#
 schema: http://schema.org/
 csvw: http://www.w3.org/ns/csvw#
 dcterms: http://purl.org/dc/terms/
-dc: http://purl.org/dc/terms/
+dct: http://purl.org/dc/terms/
+dc: http://purl.org/dc/elements/1.1/
 dc11: http://purl.org/dc/elements/1.1/
 # Other standard namespaces
 qb: http://purl.org/linked-data/cube#
