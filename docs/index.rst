@@ -20,6 +20,12 @@ COW: Converter for CSV on the Web
 
 This package is a comprehensive tool (COW [#f2]_) for batch conversion of multiple datasets expressed in CSV. It uses a JSON schema expressed using an extended version of the CSVW standard, to convert CSV files to RDF in scalable fashion.
 
+====
+
+Instead of using the command line tool there is also the webservice `cattle <http://cattle.datalegend.net/>`_, providing the same functionality as does COW without installing it. CSV files can be uploaded to the service and a JSON schema will be created, using that JSON schema cattle is able to create a RDF structured graph. More information about cattle, including how to use it, can be found at: <https://github.com/CLARIAH/cattle>.
+
+====
+
 `CSV on the Web (CSVW) <https://www.w3.org/ns/csvw>`_ is a W3C standard for metadata descriptions for tabular data. Typically, these data reside in CSV files. CSVW metadata is captured in ``.csv-metadata.json`` files that live alongside the CSV files that they describe. For instance, a CSV file called ``data.csv`` and its metadata ``data.csv-metadata.json`` would be hosted at::
 
   http://example.com/data.csv
@@ -30,6 +36,8 @@ Another feature of CSVW is that it allows the specification of a mapping (or int
 Interestingly, the JSON format used by CSVW metadata is an `extension of the JSON-LD specification <https://www.w3.org/TR/json-ld/>`_, a JSON-based serialization for Linked Data. As a consequence of this, the CSVW metadata can be directly attached (as provenance) to the RDF resulting from a CSVW-based conversion.
 
 This is exactly what the COW converter does.
+
+The rest of this documentation will be fairly technical, for some hands-on examples you can take a look at the `Wiki <https://github.com/CLARIAH/COW/wiki>`_.
 
 Features & Limitations
 ======================
@@ -147,7 +155,7 @@ Make sure you have your virtual environment enabled (if applicable), and run::
 
 The ``--base`` option specifies the base for all URIs generated through the schema. This is ``http://data.socialhistory.org/resource`` by default (see http://datalegend.net)
 
-This will genrate a file called ``imf_gdppc.csv-metadata.json`` with the following contents:
+This will generate a file called ``imf_gdppc.csv-metadata.json`` with the following contents:
 
 .. code-block:: json
   :linenos:
