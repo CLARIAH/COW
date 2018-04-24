@@ -507,7 +507,7 @@ class BurstConverter(object):
                                 propertyUrl = self.metadata_graph.namespaces()[""][
                                     unicode(c.csvw_name)]
                             else:
-                                propertyUrl = "http://data.socialhistory.org/resource/{}".format(
+                                propertyUrl = "https://iisg.amsterdam/vocab/{}".format(
                                     unicode(c.csvw_name))
 
                             p = self.expandURL(propertyUrl, row)
