@@ -52,7 +52,8 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
 
     if delimiter is None:
         with open(infile, 'rb') as csvfile:
-            dialect = csv.Sniffer().sniff(csvfile.read(1024), delimiters=";,$\t")
+            # dialect = csv.Sniffer().sniff(csvfile.read(1024), delimiters=";,$\t")
+            dialect = csv.Sniffer().sniff(csvfile.readline()) #read only the header instead of the entire file to determine delimiter
             csvfile.seek(0)
         logger.info("Detected dialect: {} (delimiter: '{}')".format(dialect, dialect.delimiter))
         delimiter = dialect.delimiter
@@ -78,7 +79,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
         "dcat:keyword": [],
         "dc:publisher": {
             "schema:name": "CLARIAH Structured Data Hub - Datalegend",
-            "schema:url": {"@id": "http://datalegend.org"}
+            "schema:url": {"@id": "http://datalegend.net"}
         },
         "dc:license": {"@id": "http://opendefinition.org/licenses/cc-by/"},
         "dc:modified": {"@value": today, "@type": "xsd:date"},
