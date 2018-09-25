@@ -95,8 +95,8 @@ def apply_default_namespaces(graph):
 def get_namespaces(base=None):
     """Return the global namespaces"""
     if base:
-        namespaces['sdr'] = Namespace(unicode(base))
-        namespaces['sdv'] = Namespace(unicode(base + u'/vocab/')))
+        namespaces['sdr'] = Namespace(unicode(base + u'/'))
+        namespaces['sdv'] = Namespace(unicode(base + u'/vocab/'))
         with open(YAML_NAMESPACE_FILE, 'w') as outfile:
             yaml.dump(namespaces, outfile, default_flow_style=True)
     return namespaces

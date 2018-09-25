@@ -5,6 +5,7 @@ import argparse
 import sys
 import traceback
 from glob import glob
+from werkzeug.utils import secure_filename
 
 class COW(object):
 
@@ -21,7 +22,7 @@ class COW(object):
                 if os.path.exists(target_file):
                     modifiedTime = os.path.getmtime(target_file)
                     timestamp = datetime.datetime.fromtimestamp(modifiedTime).isoformat()
-                    os.rename(target_file, target_file+"_"+timestamp)
+                    os.rename(target_file, secure_filename(target_file+"_"+timestamp))
                     print "Backed up prior version of schema to {}".format(target_file+"_"+timestamp)
 
                 build_schema(source_file, target_file, dataset_name=dataset, delimiter=delimiter, quotechar=quotechar, base=base)
