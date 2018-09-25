@@ -75,8 +75,29 @@ Prerequisites
 * ``pip``
 * ``virtualenv`` (simply `pip install virtualenv`) [#f1]_
 
-Step by step instructions
--------------------------
+Installing with pip (preferred)
+-------------------------------
+
+Open up a terminal, and type::
+
+  pip install cow_csvw
+
+To upgrade a previously installed version of COW, do::
+
+  pip install --upgrade cow_csvw
+
+(you might need permissions if you're installing outside a virtualenv).
+To check the version currently installed::
+
+  cow_tool --version
+
+
+To get help::
+
+  cow_tool
+
+Installing with git
+-------------------
 
 Open up a terminal, and clone this repository to a directory of your choice::
 
