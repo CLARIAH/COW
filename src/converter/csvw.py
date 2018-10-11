@@ -19,6 +19,8 @@ from rdflib.collection import Collection
 from functools import partial
 from itertools import izip_longest
 
+import io
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -90,7 +92,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
         }
     }
 
-    with open(infile, 'r') as infile_file:
+    with io.open(infile, 'r', encoding=encoding) as infile_file:
         r = csv.reader(infile_file, delimiter=delimiter, quotechar=quotechar)
 
         header = r.next()
