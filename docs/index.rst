@@ -540,7 +540,7 @@ Our virtual column may look as follows::
 
   {
     "virtual": "true",
-    "aboutUrl": "{Country}"
+    "aboutUrl": "{Country}",
     "propertyUrl": "rdf:type",
     "valueUrl": "{% if Int > 100000 %}rich{% else %}poor{% endif %}"
   }
