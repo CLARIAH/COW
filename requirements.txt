@@ -48,5 +48,5 @@ unicodecsv==0.14.1
 uritemplate==0.6
 watchdog==0.8.3
 webencodings==0.5
-Werkzeug==0.11.2
+Werkzeug==0.14.1
 xlrd==1.0.0
