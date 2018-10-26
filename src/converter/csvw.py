@@ -134,7 +134,7 @@ class Item(Resource):
         try:
             objects = list(self.objects(self._to_ref(*p.split('_', 1))))
         except:
-            logger.debug("Calling parent function for Item.__getattr__ ...")
+            # logger.debug("Calling parent function for Item.__getattr__ ...") #removed for readability
             super(Item, self).__getattr__(self, p)
             # raise Exception("Attribute {} does not specify namespace prefix/qname pair separated by an ".format(p) +
             #                 "underscore: e.g. `.csvw_tableSchema`")
@@ -163,7 +163,7 @@ class CSVWConverter(object):
     * A nanopublication structure for publishing the converted data (using :class:`converter.util.Nanopublication`)
     """
 
-    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8', processes=1, chunksize=5000):
+    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8', processes=4, chunksize=5000):
         logger.info("Initializing converter for {}".format(file_name))
         self.file_name = file_name
         self.target_file = self.file_name + '.nq'
@@ -412,18 +412,21 @@ class BurstConverter(object):
         current row number (needed for default observation identifiers)"""
         obs_count = count * chunksize
 
-        logger.info("Row: {}".format(obs_count))
+        # logger.info("Row: {}".format(obs_count)) #removed for readability
 
         # We iterate row by row, and then column by column, as given by the CSVW mapping file.
+        mult_proc_counter = 0
+        iter_error_counter= 0
         for row in rows:
             # This fixes issue:10
             if row is None:
-                logger.debug(
-                    "Skipping empty row caused by multiprocessing (multiple of chunksize exceeds number of rows in file)...")
+                mult_proc_counter += 1
+                # logger.debug( #removed for readability
+                #     "Skipping empty row caused by multiprocessing (multiple of chunksize exceeds number of rows in file)...")
                 continue
 
             # set the '_row' value in case we need to generate 'default' URIs for each observation ()
-            logger.debug("row: {}".format(obs_count))
+            # logger.debug("row: {}".format(obs_count)) #removed for readability
             row[u'_row'] = obs_count
             count += 1
 
@@ -458,7 +461,8 @@ class BurstConverter(object):
                             continue
                 except:
                     # No column name specified (virtual) because there clearly was no c.csvw_name key in the row.
-                    logger.debug(traceback.format_exc())
+                    # logger.debug(traceback.format_exc()) #removed for readability
+                    iter_error_counter +=1
                     if isinstance(c.csvw_null, Item):
                         nulls = Collection(self.metadata_graph, BNode(c.csvw_null))
                         if self.equal_to_null(nulls, row):
@@ -550,6 +554,10 @@ class BurstConverter(object):
             # We increment the observation (row number) with one
             obs_count += 1
 
+        logger.debug(
+            "{} row skips caused by multiprocessing (multiple of chunksize exceeds number of rows in file)...".format(mult_proc_counter))
+        logger.debug(
+            "{} errors encountered while trying to iterate over a NoneType...".format(mult_proc_counter))
         logger.info("... done")
         return self.ds.serialize(format='nquads')
 
