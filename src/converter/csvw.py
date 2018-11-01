@@ -535,7 +535,7 @@ class BurstConverter(object):
                                 o = Literal(value, lang=self.render_pattern(
                                     c.csvw_lang, row))
                             else:
-                                o = Literal(value, datatype=c.csvw_datatype)
+                                o = Literal(value, datatype=c.csvw_datatype, normalize=False)
                         else:
                             # It's just a plain literal without datatype.
                             o = Literal(value)
