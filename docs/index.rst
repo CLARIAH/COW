@@ -180,8 +180,6 @@ Suppose you want to build a skeleton schema for a file ``imf_gdppc.csv`` (from [
 
 Make sure you have your virtual environment enabled (if applicable), and run::
 
-.. Open up a terminal, and type::
-
   cow_tool build imf_gdppc.csv --base=http://example.com/resource
 
 The ``--base`` option specifies the base for all URIs generated through the schema. This is ``https://iisg.amsterdam/`` by default (see http://datalegend.net)
