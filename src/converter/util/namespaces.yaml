@@ -6,6 +6,7 @@
   clioctr: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'https://iisg.amsterdam/clio/country/'],
   clioind: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'https://iisg.amsterdam/clio/indicator/'],
   clioprop: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'https://iisg.amsterdam/clio/property/'],
+  microheights: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'https://iisg.amsterdam/microheights/'],
   csvw: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://www.w3.org/ns/csvw#'],
   dbo: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://dbpedia.org/ontology/'],
   dbp: !!python/object/new:rdflib.namespace.Namespace [!!python/unicode 'http://dbpedia.org/property/'],
