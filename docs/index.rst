@@ -78,7 +78,7 @@ Prerequisites
 Installing with pip (preferred)
 -------------------------------
 
-Open up a terminal and instantiate a virtual Python environment::
+Open up a terminal (or Command Prompt when you are using Windows) and instantiate a virtual Python environment::
 
   virtualenv .
 
@@ -107,7 +107,7 @@ To get help::
 .. Installing with git
 .. -------------------
 
-.. Open up a terminal, and clone this repository to a directory of your choice::
+.. Open up a terminal (or Command Prompt when you are using Windows), and clone this repository to a directory of your choice::
 
 ..   git clone https://github.com/CLARIAH/COW.git
 
@@ -125,7 +125,7 @@ To get help::
 
 ..   pip install -r requirements.txt
 
-.. Change directory to ``src``, and optionally replace the author in the ``config.py`` with your own data. When following the instructions in the next section always replace ``cow_tool`` with `python csvw_tool.py` when writing in the terminal.
+.. Change directory to ``src``, and optionally replace the author in the ``config.py`` with your own data. When following the instructions in the next section always replace ``cow_tool`` with `python csvw_tool.py` when writing in the terminal (or Command Prompt).
 
 Usage
 =====
