@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 
 class COW(object):
 
-    def __init__(self, mode=None, files=None, dataset=None, delimiter=None, quotechar='\"', processes=4, chunksize=5000, base="https://iisg.amsterdam/"):
+    def __init__(self, mode=None, files=None, dataset=None, delimiter=None, quotechar='\"', processes=4, chunksize=5000, base="https://iisg.amsterdam/", output_format='nquads'):
         """
         COW entry point
         """
@@ -31,7 +31,7 @@ class COW(object):
                 print "Converting {} to RDF".format(source_file)
 
                 try:
-                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, processes=processes, chunksize=chunksize)
+                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, processes=processes, chunksize=chunksize, output_format=output_format)
                     c.convert()
                 except ValueError:
                     raise
@@ -51,6 +51,8 @@ def main():
     parser.add_argument('--processes', dest='processes', default='4', type=int, help="The number of processes the converter should use")
     parser.add_argument('--chunksize', dest='chunksize', default='5000', type=int, help="The number of rows processed at each time")
     parser.add_argument('--base', dest='base', default='https://iisg.amsterdam/', type=str, help="The base for URIs generated with the schema (only relevant when `build`ing a schema)")
+    parser.add_argument('--format', '-f', dest='format', nargs='?', choices=['xml', 'n3', 'turtle', 'nt', 'pretty-xml', 'trix', 'trig', 'nquads'], default='nquads', help="RDF serialization format")
+
     parser.add_argument('--version', dest='versoin', action='version', version='x.xx')
 
     args = parser.parse_args()
@@ -58,8 +60,8 @@ def main():
     files = []
     for f in args.files:
         files += glob(f)
-    
-    COW(args.mode, files, args.dataset, args.delimiter, args.quotechar, args.processes, args.chunksize, args.base)
+
+    COW(args.mode, files, args.dataset, args.delimiter, args.quotechar, args.processes, args.chunksize, args.base, args.format)
 
 if __name__ == '__main__':
     main()

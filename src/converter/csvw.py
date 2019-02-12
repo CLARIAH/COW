@@ -26,6 +26,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
+# Serialization extension dictionary
+extensions = {'xml': 'xml', 'n3' : 'n3', 'turtle': 'ttl', 'nt' : 'nt', 'pretty-xml' : 'xml', 'trix' : 'trix', 'trig' : 'trig', 'nquads' : 'nq'}
+
+
 def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None, dataset_name=None, base="https://iisg.amsterdam/"):
     """
     Build a CSVW schema based on the ``infile`` CSV file, and write the resulting JSON CSVW schema to ``outfile``.
@@ -163,10 +167,11 @@ class CSVWConverter(object):
     * A nanopublication structure for publishing the converted data (using :class:`converter.util.Nanopublication`)
     """
 
-    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8', processes=4, chunksize=5000):
+    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding='utf-8', processes=4, chunksize=5000, output_format='nquads'):
         logger.info("Initializing converter for {}".format(file_name))
         self.file_name = file_name
-        self.target_file = self.file_name + '.nq'
+        self.output_format = output_format
+        self.target_file = self.file_name + '.' + extensions[self.output_format]
         schema_file_name = file_name + '-metadata.json'
 
         if not os.path.exists(schema_file_name) or not os.path.exists(file_name):
@@ -303,7 +308,7 @@ class CSVWConverter(object):
 
                 logger.info("Starting in a single process")
                 c = BurstConverter(self.np.ag.identifier, self.columns,
-                                   self.schema, self.metadata_graph, self.encoding)
+                                   self.schema, self.metadata_graph, self.encoding, self.output_format)
                 # Out will contain an N-Quads serialized representation of the
                 # converted CSV
                 out = c.process(0, reader, 1)
@@ -312,7 +317,7 @@ class CSVWConverter(object):
 
             self.convert_info()
             # Finally, write the nanopublication info to file
-            target_file.write(self.np.serialize(format='nquads'))
+            target_file.write(self.np.serialize(format=self.output_format))
 
     def _parallel(self):
         """Starts parallel processes for converting the file. Each process will receive max ``chunksize`` number of rows"""
@@ -336,7 +341,8 @@ class CSVWConverter(object):
                                                schema=self.schema,
                                                metadata_graph=self.metadata_graph,
                                                encoding=self.encoding,
-                                               chunksize=self._chunksize)
+                                               chunksize=self._chunksize,
+                                               output_format=self.output_format)
 
                 # The result of each chunksize run will be written to the
                 # target file
@@ -349,7 +355,7 @@ class CSVWConverter(object):
 
             self.convert_info()
             # Finally, write the nanopublication info to file
-            target_file.write(self.np.serialize(format='nquads'))
+            target_file.write(self.np.serialize(format=self.output_format))
 
 
 def grouper(n, iterable, padvalue=None):
@@ -358,12 +364,12 @@ def grouper(n, iterable, padvalue=None):
 
 
 # This has to be a global method for the parallelization to work.
-def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, encoding, chunksize):
+def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, encoding, chunksize, output_format):
     """The method used as partial for the parallel processing initiated in :func:`_parallel`."""
     try:
         count, rows = enumerated_rows
         c = BurstConverter(identifier, columns, schema,
-                           metadata_graph, encoding)
+                           metadata_graph, encoding, output_format)
 
         logger.info("Process {}, nr {}, {} rows".format(
             mp.current_process().name, count, len(rows)))
@@ -380,7 +386,7 @@ def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, 
 class BurstConverter(object):
     """The actual converter, that processes the chunk of lines from the CSV file, and uses the instructions from the ``schema`` graph to produce RDF."""
 
-    def __init__(self, identifier, columns, schema, metadata_graph, encoding):
+    def __init__(self, identifier, columns, schema, metadata_graph, encoding, output_format):
         self.ds = Dataset()
         # self.ds = apply_default_namespaces(Dataset())
         self.g = self.ds.graph(URIRef(identifier))
@@ -389,6 +395,7 @@ class BurstConverter(object):
         self.schema = schema
         self.metadata_graph = metadata_graph
         self.encoding = encoding
+        self.output_format = output_format
 
         self.templates = {}
 
@@ -484,7 +491,7 @@ class BurstConverter(object):
                             # Special case: this is a virtual column with object values that are URIs
                             # For now using a test special property
                             value = row[unicode(c.csvw_name)].encode('utf-8')
-                            o = URIRef(iribaker.to_iri(value))                            
+                            o = URIRef(iribaker.to_iri(value))
 
                         # For coded properties, the collectionUrl can be used to indicate that the
                         # value URL is a concept and a member of a SKOS Collection with that URL.
@@ -565,7 +572,7 @@ class BurstConverter(object):
         logger.debug(
             "{} errors encountered while trying to iterate over a NoneType...".format(mult_proc_counter))
         logger.info("... done")
-        return self.ds.serialize(format='nquads')
+        return self.ds.serialize(format=self.output_format)
 
     # def serialize(self):
     #     trig_file_name = self.file_name + '.trig'
