@@ -480,6 +480,12 @@ class BurstConverter(object):
                         p = self.expandURL(c.csvw_propertyUrl, row)
                         o = self.expandURL(c.csvw_valueUrl, row)
 
+                        if unicode(c.csvw_virtual) == u'true' and c.csvw_datatype is not None and URIRef(c.csvw_datatype) == XSD.anyURI:
+                            # Special case: this is a virtual column with object values that are URIs
+                            # For now using a test special property
+                            value = row[unicode(c.csvw_name)].encode('utf-8')
+                            o = URIRef(iribaker.to_iri(value))                            
+
                         # For coded properties, the collectionUrl can be used to indicate that the
                         # value URL is a concept and a member of a SKOS Collection with that URL.
                         if c.csvw_collectionUrl is not None:
