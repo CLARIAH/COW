@@ -1,10 +1,11 @@
-from converter.csvw import CSVWConverter, build_schema
+from converter.csvw import CSVWConverter, build_schema, extensions
 import os
 import datetime
 import argparse
 import sys
 import traceback
 from glob import glob
+from rdflib import ConjunctiveGraph
 from werkzeug.utils import secure_filename
 
 class COW(object):
@@ -31,8 +32,18 @@ class COW(object):
                 print "Converting {} to RDF".format(source_file)
 
                 try:
-                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, processes=processes, chunksize=chunksize, output_format=output_format)
+                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, processes=processes, chunksize=chunksize, output_format='nquads')
                     c.convert()
+
+                    # We convert the output serialization if different from nquads
+                    if output_format not in ['nquads']:
+                        with open(source_file + '.' + 'nq', 'rb') as nquads_file:
+                            g = ConjunctiveGraph()
+                            g.parse(nquads_file, format='nquads')                        
+                        # We serialize in the requested format
+                        with open(source_file + '.' + extensions[output_format], 'w') as output_file:
+                            output_file.write(g.serialize(format=output_format))
+
                 except ValueError:
                     raise
                 except:
