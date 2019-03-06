@@ -452,13 +452,9 @@ class BurstConverter(object):
                     # Get the raw value from the cell in the CSV file
                     value = row[unicode(c.csvw_name)]
                     # This checks whether we should continue parsing this cell, or skip it.
-                    if len(value) == 0 and unicode(c.csvw_parseOnEmpty) == u"true":
-                        print("Not skipping empty value")
-                    elif len(value) == 0 or value == unicode(c.csvw_null) or value in [unicode(n) for n in c.csvw_null] or value == unicode(self.schema.csvw_null):
-                        # Skip value if length is zero and equal to (one of) the null value(s)
-                        logger.debug(
-                            "Length is 0 or value is equal to specified 'null' value")
+                    if self.isValueNull(value, c):
                         continue
+
                     # If the null values are specified in an array, we need to parse it as a collection (list)
                     elif isinstance(c.csvw_null, Item):
                         nulls = Collection(self.metadata_graph, BNode(c.csvw_null))
@@ -486,6 +482,8 @@ class BurstConverter(object):
                         # This is an object property, because the value needs to be cast to a URL
                         p = self.expandURL(c.csvw_propertyUrl, row)
                         o = self.expandURL(c.csvw_valueUrl, row)
+                        if self.isValueNull(os.path.basename(unicode(o)), c):
+                            continue
 
                         if unicode(c.csvw_virtual) == u'true' and c.csvw_datatype is not None and URIRef(c.csvw_datatype) == XSD.anyURI:
                             # Special case: this is a virtual column with object values that are URIs
@@ -623,3 +621,17 @@ class BurstConverter(object):
 
         # print "Baked: ", iri
         return URIRef(iri)
+
+    def isValueNull(self, value, c):
+        """This checks whether we should continue parsing this cell, or skip it because it is empty or a null value."""
+        try:
+            if len(value) == 0 and unicode(c.csvw_parseOnEmpty) == u"true":
+                print("Not skipping empty value")
+            elif len(value) == 0 or value == unicode(c.csvw_null) or value in [unicode(n) for n in c.csvw_null] or value == unicode(self.schema.csvw_null):
+                # Skip value if length is zero and equal to (one of) the null value(s)
+                logger.debug(
+                    "Length is 0 or value is equal to specified 'null' value")
+                return True
+        except:
+            logger.debug("null does not exist or is not a list.")
+        return False
