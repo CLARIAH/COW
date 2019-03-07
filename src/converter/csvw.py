@@ -633,5 +633,5 @@ class BurstConverter(object):
                     "Length is 0 or value is equal to specified 'null' value")
                 return True
         except:
-            logger.debug("null does not exist or is not a list.")
+            return True
         return False
