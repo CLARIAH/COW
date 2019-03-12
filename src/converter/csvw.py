@@ -408,7 +408,7 @@ class BurstConverter(object):
             col = str(n.csvw_name)
             val = str(n.csvw_null)
             if row[col] == val:
-                print("Value of column {} ('{}') is equal to specified 'null' value: '{}'".format(col, unicode(row[col]).encode('utf-8'), val))
+                logger.debug("Value of column {} ('{}') is equal to specified 'null' value: '{}'".format(col, unicode(row[col]).encode('utf-8'), val))
                 # There is a match with null value
                 return True
         # There is no match with null value
@@ -483,6 +483,7 @@ class BurstConverter(object):
                         p = self.expandURL(c.csvw_propertyUrl, row)
                         o = self.expandURL(c.csvw_valueUrl, row)
                         if self.isValueNull(os.path.basename(unicode(o)), c):
+                            logger.debug("skipping empty value")
                             continue
 
                         if unicode(c.csvw_virtual) == u'true' and c.csvw_datatype is not None and URIRef(c.csvw_datatype) == XSD.anyURI:
@@ -627,6 +628,7 @@ class BurstConverter(object):
         try:
             if len(value) == 0 and unicode(c.csvw_parseOnEmpty) == u"true":
                 print("Not skipping empty value")
+                return False #because it should not be skipped
             elif len(value) == 0 or value == unicode(c.csvw_null) or value in [unicode(n) for n in c.csvw_null] or value == unicode(self.schema.csvw_null):
                 # Skip value if length is zero and equal to (one of) the null value(s)
                 logger.debug(
