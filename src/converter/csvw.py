@@ -492,6 +492,16 @@ class BurstConverter(object):
                             value = row[unicode(c.csvw_name)].encode('utf-8')
                             o = URIRef(iribaker.to_iri(value))
 
+                        if unicode(c.csvw_virtual) == u'true' and c.csvw_datatype is not None and URIRef(c.csvw_datatype) == XSD.linkURI:
+                            about_url = str(c.csvw_aboutUrl)
+                            about_url = about_url[about_url.find("{"):about_url.find("}")+1]
+                            s = self.expandURL(about_url, row)
+                            # logger.debug("s: {}".format(s))
+                            value_url = str(c.csvw_valueUrl)
+                            value_url = value_url[value_url.find("{"):value_url.find("}")+1]
+                            o = self.expandURL(value_url, row)
+                            # logger.debug("o: {}".format(o))
+
                         # For coded properties, the collectionUrl can be used to indicate that the
                         # value URL is a concept and a member of a SKOS Collection with that URL.
                         if c.csvw_collectionUrl is not None:
