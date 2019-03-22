@@ -32,7 +32,7 @@ def init():
     # Read the file into a dictionary
     with open(YAML_NAMESPACE_FILE, 'r') as nsfile:
         global namespaces
-        namespaces = yaml.load(nsfile)
+        namespaces = yaml.load(nsfile, Loader=yaml.FullLoader)
 
     # Replace each value with a Namespace object for that value
     for prefix, uri in namespaces.items():
