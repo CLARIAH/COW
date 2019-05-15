@@ -408,7 +408,7 @@ class BurstConverter(object):
             col = str(n.csvw_name)
             val = str(n.csvw_null)
             if row[col] == val:
-                logger.debug("Value of column {} ('{}') is equal to specified 'null' value: '{}'".format(col, unicode(row[col]).encode('utf-8'), val))
+                # logger.debug("Value of column {} ('{}') is equal to specified 'null' value: '{}'".format(col, unicode(row[col]).encode('utf-8'), val))
                 # There is a match with null value
                 return True
         # There is no match with null value
