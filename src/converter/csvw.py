@@ -12,12 +12,21 @@ from chardet.universaldetector import UniversalDetector
 import multiprocessing as mp
 import unicodecsv as csv
 from jinja2 import Template
-from util import get_namespaces, Nanopublication, CSVW, PROV, DC, SKOS, RDF
+try:
+    # Python 2
+    from util import get_namespaces, Nanopublication, CSVW, PROV, DC, SKOS, RDF
+except ImportError:
+    from .util import get_namespaces, Nanopublication, CSVW, PROV, DC, SKOS, RDF
 from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
 from rdflib.resource import Resource
 from rdflib.collection import Collection
 from functools import partial
-from itertools import izip_longest
+try:
+    # Python 3
+    from itertools import zip_longest
+except ImportError:
+    # Python 2
+    from itertools import izip_longest as zip_longest
 
 import io
 
@@ -46,7 +55,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
 
     if encoding is None:
         detector = UniversalDetector()
-        with open(infile, 'r') as f:
+        with open(infile, 'rb') as f:
             for line in f.readlines():
                 detector.feed(line)
                 if detector.done:
@@ -57,7 +66,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
                                                                    detector.result['confidence']))
 
     if delimiter is None:
-        with open(infile, 'rb') as csvfile:
+        with open(infile, 'r') as csvfile:
             # dialect = csv.Sniffer().sniff(csvfile.read(1024), delimiters=";,$\t")
             dialect = csv.Sniffer().sniff(csvfile.readline()) #read only the header instead of the entire file to determine delimiter
             csvfile.seek(0)
@@ -96,10 +105,15 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
         }
     }
 
-    with io.open(infile, 'r', encoding=encoding) as infile_file:
+    with io.open(infile, 'rb') as infile_file:
         r = csv.reader(infile_file, delimiter=delimiter, quotechar=quotechar)
 
-        header = r.next()
+        try:
+            # Python 2
+            header = r.next()
+        except AttributeError:
+            # Python 3
+            header = next(r)
 
         logger.info("Found headers: {}".format(header))
 
@@ -186,7 +200,7 @@ class CSVWConverter(object):
         self.np = Nanopublication(file_name)
         # self.metadata = json.load(open(schema_file_name, 'r'))
         self.metadata_graph = Graph()
-        with open(schema_file_name) as f:
+        with open(schema_file_name, 'rb') as f:
             try:
                 self.metadata_graph.load(f, format='json-ld')
             except ValueError as err:
@@ -195,7 +209,13 @@ class CSVWConverter(object):
 
         # Get the URI of the schema specification by looking for the subject
         # with a csvw:url property.
-        (self.metadata_uri, _) = self.metadata_graph.subject_objects(CSVW.url).next()
+        try:
+            # Python 2
+            (self.metadata_uri, _) = self.metadata_graph.subject_objects(CSVW.url).next()
+        except AttributeError:
+            # Python 3
+            (self.metadata_uri, _) = next(self.metadata_graph.subject_objects(CSVW.url))
+
 
         self.metadata = Item(self.metadata_graph, self.metadata_uri)
 
@@ -242,6 +262,8 @@ class CSVWConverter(object):
         # Cast the CSVW column rdf:List into an RDF collection
         self.columns = Collection(
             self.metadata_graph, BNode(self.schema.csvw_column))
+        print(self.schema.csvw_column)
+
 
     def convert_info(self):
         """Converts the CSVW JSON file to valid RDF for serializing into the Nanopublication publication info graph."""
@@ -254,16 +276,28 @@ class CSVWConverter(object):
 
         for (s, p, o) in results:
             # Use iribaker
-            escaped_object = URIRef(iribaker.to_iri(unicode(o)))
+            try:
+                # Python 2
+                escaped_object = URIRef(iribaker.to_iri(unicode(o)))
+            except NameError:
+                # Python 3
+                escaped_object = URIRef(iribaker.to_iri(str(o)))
 
             # If the escaped IRI of the object is different from the original,
             # update the graph.
             if escaped_object != o:
                 self.metadata_graph.set((s, p, escaped_object))
                 # Add the provenance of this operation.
-                self.np.pg.add((escaped_object,
+                try:
+                    # Python 2
+                    self.np.pg.add((escaped_object,
                                 PROV.wasDerivedFrom,
                                 Literal(unicode(o), datatype=XSD.string)))
+                except NameError:
+                    # Python 3
+                    self.np.pg.add((escaped_object,
+                                PROV.wasDerivedFrom,
+                                Literal(str(o), datatype=XSD.string)))
 
         # Add the information of the schema file to the provenance graph of the
         # nanopublication
@@ -298,7 +332,7 @@ class CSVWConverter(object):
 
     def _simple(self):
         """Starts a single process for converting the file"""
-        with open(self.target_file, 'w') as target_file:
+        with open(self.target_file, 'wb') as target_file:
             with open(self.file_name, 'rb') as csvfile:
                 logger.info("Opening CSV file for reading")
                 reader = csv.DictReader(csvfile,
@@ -313,7 +347,12 @@ class CSVWConverter(object):
                 # converted CSV
                 out = c.process(0, reader, 1)
                 # We then write it to the file
-                target_file.write(out)
+                try:
+                    # Python 2
+                    target_file.write(out)
+                except TypeError:
+                    # Python 3
+                    target_file.write(out.decode('utf-8'))
 
             self.convert_info()
             # Finally, write the nanopublication info to file
@@ -321,7 +360,7 @@ class CSVWConverter(object):
 
     def _parallel(self):
         """Starts parallel processes for converting the file. Each process will receive max ``chunksize`` number of rows"""
-        with open(self.target_file, 'w') as target_file:
+        with open(self.target_file, 'wb') as target_file:
             with open(self.file_name, 'rb') as csvfile:
                 logger.info("Opening CSV file for reading")
                 reader = csv.DictReader(csvfile,
@@ -360,7 +399,7 @@ class CSVWConverter(object):
 
 def grouper(n, iterable, padvalue=None):
     "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
-    return izip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
+    return zip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
 
 
 # This has to be a global method for the parallelization to work.
@@ -437,10 +476,13 @@ class BurstConverter(object):
             row[u'_row'] = obs_count
             count += 1
 
+            print(row)
+
             # The self.columns dictionary gives the mapping definition per column in the 'columns'
             # array of the CSVW tableSchema definition.
-            for c in self.columns:
 
+            print(self.columns)
+            for c in self.columns:
                 c = Item(self.metadata_graph, c)
                 # default about URL
                 s = self.expandURL(self.aboutURLSchema, row)
@@ -450,7 +492,13 @@ class BurstConverter(object):
                     # columns!
 
                     # Get the raw value from the cell in the CSV file
-                    value = row[unicode(c.csvw_name)]
+                    try:
+                        # Python 2
+                        value = row[unicode(c.csvw_name)]
+                    except NameError:
+                        # Python 3
+                        value = row[str(c.csvw_name)]
+
                     # This checks whether we should continue parsing this cell, or skip it.
                     if self.isValueNull(value, c):
                         continue
