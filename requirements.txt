@@ -11,7 +11,7 @@ html5lib==0.999999999
 imagesize==0.7.1
 iribaker==0.1.2
 isodate==0.5.4
-Jinja2==2.8
+Jinja2>=2.10.1
 Js2Py==0.31
 keepalive==0.5
 language-tags==0.4.1
