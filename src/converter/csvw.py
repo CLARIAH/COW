@@ -12,14 +12,26 @@ from chardet.universaldetector import UniversalDetector
 import multiprocessing as mp
 import unicodecsv as csv
 from jinja2 import Template
-from util import get_namespaces, Nanopublication, CSVW, PROV, DC, SKOS, RDF
+try:
+    # Python 2
+    from util import get_namespaces, Nanopublication, CSVW, PROV, DC, SKOS, RDF
+except ImportError:
+    from .util import get_namespaces, Nanopublication, CSVW, PROV, DC, SKOS, RDF
 from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
 from rdflib.resource import Resource
 from rdflib.collection import Collection
 from functools import partial
-from itertools import izip_longest
+try:
+    # Python 3
+    from itertools import zip_longest
+except ImportError:
+    # Python 2
+    from itertools import izip_longest as zip_longest
 
 import io
+
+# Python 2 and 3 compatible unicode
+# from builtins import str
 
 
 logger = logging.getLogger(__name__)
@@ -46,7 +58,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
 
     if encoding is None:
         detector = UniversalDetector()
-        with open(infile, 'r') as f:
+        with open(infile, 'rb') as f:
             for line in f.readlines():
                 detector.feed(line)
                 if detector.done:
@@ -57,7 +69,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
                                                                    detector.result['confidence']))
 
     if delimiter is None:
-        with open(infile, 'rb') as csvfile:
+        with open(infile, 'r') as csvfile:
             # dialect = csv.Sniffer().sniff(csvfile.read(1024), delimiters=";,$\t")
             dialect = csv.Sniffer().sniff(csvfile.readline()) #read only the header instead of the entire file to determine delimiter
             csvfile.seek(0)
@@ -71,37 +83,42 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
         base = base[:-1]
 
     metadata = {
-        "@id": iribaker.to_iri(u"{}/{}".format(base, url)),
-        "@context": ["https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json",
-                     {"@language": "en",
-                      "@base": "{}/".format(base)},
+        u"@id": iribaker.to_iri(u"{}/{}".format(base, url)),
+        u"@context": [u"https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json",
+                     {u"@language": u"en",
+                      u"@base": u"{}/".format(base)},
                      get_namespaces(base)],
-        "url": url,
-        "dialect": {"delimiter": delimiter,
-                    "encoding": encoding,
-                    "quoteChar": quotechar
+        u"url": url,
+        u"dialect": {u"delimiter": delimiter,
+                    u"encoding": encoding,
+                    u"quoteChar": quotechar
                     },
-        "dc:title": dataset_name,
-        "dcat:keyword": [],
-        "dc:publisher": {
-            "schema:name": "CLARIAH Structured Data Hub - Datalegend",
-            "schema:url": {"@id": "http://datalegend.net"}
+        u"dc:title": dataset_name,
+        u"dcat:keyword": [],
+        u"dc:publisher": {
+            u"schema:name": u"CLARIAH Structured Data Hub - Datalegend",
+            u"schema:url": {u"@id": u"http://datalegend.net"}
         },
-        "dc:license": {"@id": "http://opendefinition.org/licenses/cc-by/"},
-        "dc:modified": {"@value": today, "@type": "xsd:date"},
-        "tableSchema": {
-            "columns": [],
-            "primaryKey": None,
-            "aboutUrl": "{_row}"
+        u"dc:license": {u"@id": u"http://opendefinition.org/licenses/cc-by/"},
+        u"dc:modified": {u"@value": today, u"@type": u"xsd:date"},
+        u"tableSchema": {
+            u"columns": [],
+            u"primaryKey": None,
+            u"aboutUrl": u"{_row}"
         }
     }
 
-    with io.open(infile, 'r', encoding=encoding) as infile_file:
+    with io.open(infile, 'rb') as infile_file:
         r = csv.reader(infile_file, delimiter=delimiter, quotechar=quotechar)
 
-        header = r.next()
+        try:
+            # Python 2
+            header = r.next()
+        except AttributeError:
+            # Python 3
+            header = next(r)
 
-        logger.info("Found headers: {}".format(header))
+        logger.info(u"Found headers: {}".format(header))
 
         if u'' in header:
             logger.warning("WARNING: You have one or more empty column headers in your CSV file. Conversion might produce incorrect results because of conflated URIs or worse")
@@ -109,18 +126,18 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
             logger.warning("WARNING: You have two or more column headers that are syntactically the same. Conversion might produce incorrect results because of conflated URIs or worse")
 
         # First column is primary key
-        metadata['tableSchema']['primaryKey'] = header[0]
+        metadata[u'tableSchema'][u'primaryKey'] = header[0]
 
         for head in header:
             col = {
-                "@id": iribaker.to_iri("{}/{}/column/{}".format(base, url, head)),
-                "name": head,
-                "titles": [head],
-                "dc:description": head,
-                "datatype": "string"
+                u"@id": iribaker.to_iri(u"{}/{}/column/{}".format(base, url, head)),
+                u"name": head,
+                u"titles": [head],
+                u"dc:description": head,
+                u"datatype": u"string"
             }
 
-            metadata['tableSchema']['columns'].append(col)
+            metadata[u'tableSchema'][u'columns'].append(col)
 
     with open(outfile, 'w') as outfile_file:
         outfile_file.write(json.dumps(metadata, indent=True))
@@ -186,16 +203,25 @@ class CSVWConverter(object):
         self.np = Nanopublication(file_name)
         # self.metadata = json.load(open(schema_file_name, 'r'))
         self.metadata_graph = Graph()
-        with open(schema_file_name) as f:
+        with open(schema_file_name, 'rb') as f:
             try:
                 self.metadata_graph.load(f, format='json-ld')
             except ValueError as err:
                 err.message = err.message + " ; please check the syntax of your JSON-LD schema file"
                 raise
 
+        # from pprint import pprint
+        # pprint([term for term in sorted(self.metadata_graph)])
+
         # Get the URI of the schema specification by looking for the subject
         # with a csvw:url property.
-        (self.metadata_uri, _) = self.metadata_graph.subject_objects(CSVW.url).next()
+        try:
+            # Python 2
+            (self.metadata_uri, _) = self.metadata_graph.subject_objects(CSVW.url).next()
+        except AttributeError:
+            # Python 3
+            (self.metadata_uri, _) = next(self.metadata_graph.subject_objects(CSVW.url))
+
 
         self.metadata = Item(self.metadata_graph, self.metadata_uri)
 
@@ -240,8 +266,26 @@ class CSVWConverter(object):
         # namespaces.update({ns: url for ns, url in self.metadata['@context'][1].items() if not ns.startswith('@')})
 
         # Cast the CSVW column rdf:List into an RDF collection
-        self.columns = Collection(
-            self.metadata_graph, BNode(self.schema.csvw_column))
+        #print(self.schema.csvw_column)
+        # print(len(self.metadata_graph))
+
+        self.columns = Collection(self.metadata_graph, BNode(self.schema.csvw_column))
+        # Python 3 can't work out Item so we'll just SPARQL the graph
+
+        if not self.columns:
+            self.columns = [o for s,p,o in self.metadata_graph.triples((None, URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#first"), None))]
+        #
+        # from pprint import pprint
+        # pprint(self.columns)
+        # print("LOOOOOOOOOOOOOOOOOOOOOOO")
+        # from pprint import pprint
+        # # pprint(self.schema.csvw_column)
+        # pprint([term for term in self.schema])
+        # pprint('----------')
+        # pprint([term for term in self.schema.csvw_column])
+
+        #print(self.schema.csvw_column)
+
 
     def convert_info(self):
         """Converts the CSVW JSON file to valid RDF for serializing into the Nanopublication publication info graph."""
@@ -254,20 +298,37 @@ class CSVWConverter(object):
 
         for (s, p, o) in results:
             # Use iribaker
-            escaped_object = URIRef(iribaker.to_iri(unicode(o)))
+            try:
+                # Python 2
+                escaped_object = URIRef(iribaker.to_iri(unicode(o)))
+            except NameError:
+                # Python 3
+                escaped_object = URIRef(iribaker.to_iri(str(o)))
+                print(escaped_object)
 
             # If the escaped IRI of the object is different from the original,
             # update the graph.
             if escaped_object != o:
                 self.metadata_graph.set((s, p, escaped_object))
                 # Add the provenance of this operation.
-                self.np.pg.add((escaped_object,
+                try:
+                    # Python 2
+                    self.np.pg.add((escaped_object,
                                 PROV.wasDerivedFrom,
                                 Literal(unicode(o), datatype=XSD.string)))
+                except NameError:
+                    # Python 3
+                    self.np.pg.add((escaped_object,
+                                PROV.wasDerivedFrom,
+                                Literal(str(o), datatype=XSD.string)))
+                    print(str(o))
 
         # Add the information of the schema file to the provenance graph of the
         # nanopublication
         self.np.ingest(self.metadata_graph, self.np.pg.identifier)
+
+        # for s,p,o in self.np.triples((None,None,None)):
+        #     print(s.__repr__,p.__repr__,o.__repr__)
 
         return
 
@@ -298,7 +359,7 @@ class CSVWConverter(object):
 
     def _simple(self):
         """Starts a single process for converting the file"""
-        with open(self.target_file, 'w') as target_file:
+        with open(self.target_file, 'wb') as target_file:
             with open(self.file_name, 'rb') as csvfile:
                 logger.info("Opening CSV file for reading")
                 reader = csv.DictReader(csvfile,
@@ -313,7 +374,12 @@ class CSVWConverter(object):
                 # converted CSV
                 out = c.process(0, reader, 1)
                 # We then write it to the file
-                target_file.write(out)
+                try:
+                    # Python 2
+                    target_file.write(out)
+                except TypeError:
+                    # Python 3
+                    target_file.write(out.decode('utf-8'))
 
             self.convert_info()
             # Finally, write the nanopublication info to file
@@ -321,7 +387,7 @@ class CSVWConverter(object):
 
     def _parallel(self):
         """Starts parallel processes for converting the file. Each process will receive max ``chunksize`` number of rows"""
-        with open(self.target_file, 'w') as target_file:
+        with open(self.target_file, 'wb') as target_file:
             with open(self.file_name, 'rb') as csvfile:
                 logger.info("Opening CSV file for reading")
                 reader = csv.DictReader(csvfile,
@@ -335,6 +401,9 @@ class CSVWConverter(object):
 
                 # The _burstConvert function is partially instantiated, and will be successively called with
                 # chunksize rows from the CSV file
+                # print("LOOOOOOOOOOOOOOOOOOOOOOO")
+                # from pprint import pprint
+                # pprint([term.n3() for term in self.columns])
                 burstConvert_partial = partial(_burstConvert,
                                                identifier=self.np.ag.identifier,
                                                columns=self.columns,
@@ -360,7 +429,7 @@ class CSVWConverter(object):
 
 def grouper(n, iterable, padvalue=None):
     "grouper(3, 'abcdefg', 'x') --> ('a','b','c'), ('d','e','f'), ('g','x','x')"
-    return izip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
+    return zip_longest(*[iter(iterable)] * n, fillvalue=padvalue)
 
 
 # This has to be a global method for the parallelization to work.
@@ -437,10 +506,12 @@ class BurstConverter(object):
             row[u'_row'] = obs_count
             count += 1
 
+            # print(row)
+
             # The self.columns dictionary gives the mapping definition per column in the 'columns'
             # array of the CSVW tableSchema definition.
-            for c in self.columns:
 
+            for c in self.columns:
                 c = Item(self.metadata_graph, c)
                 # default about URL
                 s = self.expandURL(self.aboutURLSchema, row)
@@ -450,7 +521,13 @@ class BurstConverter(object):
                     # columns!
 
                     # Get the raw value from the cell in the CSV file
-                    value = row[unicode(c.csvw_name)]
+                    try:
+                        # Python 2
+                        value = row[unicode(c.csvw_name)]
+                    except NameError:
+                        # Python 3
+                        value = row[str(c.csvw_name)]
+
                     # This checks whether we should continue parsing this cell, or skip it.
                     if self.isValueNull(value, c):
                         continue
@@ -475,7 +552,21 @@ class BurstConverter(object):
                 try:
                     # This overrides the subject resource 's' that has been created earlier based on the
                     # schema wide aboutURLSchema specification.
-                    if unicode(c.csvw_virtual) == u'true' and c.csvw_aboutUrl is not None:
+
+                    try:
+                        csvw_virtual = unicode(c.csvw_virtual)
+                        csvw_name = unicode(c.csvw_name)
+                        csvw_value = unicode(c.csvw_value)
+                        about_url = unicode(c.csvw_aboutUrl)
+                        value_url = unicode(c.csvw_valueUrl)
+                    except NameError:
+                        csvw_virtual = str(c.csvw_virtual)
+                        csvw_name = str(c.csvw_name)
+                        csvw_value = str(c.csvw_value)
+                        about_url = str(c.csvw_aboutUrl)
+                        value_url = str(c.csvw_valueUrl)
+
+                    if csvw_virtual == u'true' and c.csvw_aboutUrl is not None:
                         s = self.expandURL(c.csvw_aboutUrl, row)
 
                     if c.csvw_valueUrl is not None:
@@ -486,18 +577,16 @@ class BurstConverter(object):
                             logger.debug("skipping empty value")
                             continue
 
-                        if unicode(c.csvw_virtual) == u'true' and c.csvw_datatype is not None and URIRef(c.csvw_datatype) == XSD.anyURI:
+                        if csvw_virtual == u'true' and c.csvw_datatype is not None and URIRef(c.csvw_datatype) == XSD.anyURI:
                             # Special case: this is a virtual column with object values that are URIs
                             # For now using a test special property
                             value = row[unicode(c.csvw_name)].encode('utf-8')
                             o = URIRef(iribaker.to_iri(value))
 
-                        if unicode(c.csvw_virtual) == u'true' and c.csvw_datatype is not None and URIRef(c.csvw_datatype) == XSD.linkURI:
-                            about_url = str(c.csvw_aboutUrl)
+                        if csvw_virtual == u'true' and c.csvw_datatype is not None and URIRef(c.csvw_datatype) == XSD.linkURI:
                             about_url = about_url[about_url.find("{"):about_url.find("}")+1]
                             s = self.expandURL(about_url, row)
                             # logger.debug("s: {}".format(s))
-                            value_url = str(c.csvw_valueUrl)
                             value_url = value_url[value_url.find("{"):value_url.find("}")+1]
                             o = self.expandURL(value_url, row)
                             # logger.debug("o: {}".format(o))
@@ -520,14 +609,14 @@ class BurstConverter(object):
                     else:
                         # This is a datatype property
                         if c.csvw_value is not None:
-                            value = self.render_pattern(unicode(c.csvw_value), row)
+                            value = self.render_pattern(csvw_value, row)
                         elif c.csvw_name is not None:
                             # print s
                             # print c.csvw_name, self.encoding
                             # print row[unicode(c.csvw_name)], type(row[unicode(c.csvw_name)])
                             # print row[unicode(c.csvw_name)].encode('utf-8')
                             # print '...'
-                            value = row[unicode(c.csvw_name)].encode('utf-8')
+                            value = row[csvw_name].encode('utf-8')
                         else:
                             raise Exception("No 'name' or 'csvw:value' attribute found for this column specification")
 
@@ -538,10 +627,10 @@ class BurstConverter(object):
                         else:
                             if "" in self.metadata_graph.namespaces():
                                 propertyUrl = self.metadata_graph.namespaces()[""][
-                                    unicode(c.csvw_name)]
+                                    csvw_name]
                             else:
                                 propertyUrl = "{}{}".format(get_namespaces()['sdv'],
-                                    unicode(c.csvw_name))
+                                    csvw_name)
 
                             p = self.expandURL(propertyUrl, row)
 
@@ -557,10 +646,17 @@ class BurstConverter(object):
                                 o = Literal(value, lang=self.render_pattern(
                                     c.csvw_lang, row))
                             else:
-                                o = Literal(value, datatype=c.csvw_datatype, normalize=False)
+                                try:
+                                    csvw_datatype = unicode(c.csvw_datatype)
+                                except NameError:
+                                    csvw_datatype = str(c.csvw_datatype).split(')')[0].split('(')[-1]
+                                # print(type(csvw_datatype))
+                                # print(csvw_datatype)
+                                o = Literal(value, datatype=csvw_datatype, normalize=False)
                         else:
                             # It's just a plain literal without datatype.
                             o = Literal(value)
+
 
                     # Add the triple to the assertion graph
                     self.g.add((s, p, o))
@@ -575,6 +671,9 @@ class BurstConverter(object):
 
             # We increment the observation (row number) with one
             obs_count += 1
+
+        # for s,p,o in self.g.triples((None,None,None)):
+        #     print(s.__repr__,p.__repr__,o.__repr__)
 
         logger.debug(
             "{} row skips caused by multiprocessing (multiple of chunksize exceeds number of rows in file)...".format(mult_proc_counter))
@@ -616,7 +715,14 @@ class BurstConverter(object):
 
     def expandURL(self, url_pattern, row, datatype=False):
         """Takes a Jinja or Python formatted string, applies it to the row values, and returns it as a URIRef"""
-        url = self.render_pattern(unicode(url_pattern), row)
+
+        try:
+            unicode_url_pattern = unicode(url_pattern)
+        except NameError:
+            unicode_url_pattern = str(url_pattern).split(')')[0].split('(')[-1]
+        # print(unicode_url_pattern)
+
+        url = self.render_pattern(unicode_url_pattern, row)
 
         # DEPRECATED
         # for ns, nsuri in namespaces.items():
@@ -630,7 +736,7 @@ class BurstConverter(object):
         except:
             raise Exception(u"Cannot convert `{}` to valid IRI".format(url))
 
-        # print "Baked: ", iri
+        # print(iri)
         return URIRef(iri)
 
     def isValueNull(self, value, c):

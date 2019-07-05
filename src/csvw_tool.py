@@ -17,19 +17,19 @@ class COW(object):
 
         for source_file in files:
             if mode == 'build':
-                print "Building schema for {}".format(source_file)
+                print("Building schema for {}".format(source_file))
                 target_file = "{}-metadata.json".format(source_file)
 
                 if os.path.exists(target_file):
                     modifiedTime = os.path.getmtime(target_file)
                     timestamp = datetime.datetime.fromtimestamp(modifiedTime).isoformat()
                     os.rename(target_file, secure_filename(target_file+"_"+timestamp))
-                    print "Backed up prior version of schema to {}".format(target_file+"_"+timestamp)
+                    print("Backed up prior version of schema to {}".format(target_file+"_"+timestamp))
 
                 build_schema(source_file, target_file, dataset_name=dataset, delimiter=delimiter, quotechar=quotechar, base=base)
 
             elif mode == 'convert':
-                print "Converting {} to RDF".format(source_file)
+                print("Converting {} to RDF".format(source_file))
 
                 try:
                     c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, processes=processes, chunksize=chunksize, output_format='nquads')
@@ -39,7 +39,7 @@ class COW(object):
                     if output_format not in ['nquads']:
                         with open(source_file + '.' + 'nq', 'rb') as nquads_file:
                             g = ConjunctiveGraph()
-                            g.parse(nquads_file, format='nquads')                        
+                            g.parse(nquads_file, format='nquads')
                         # We serialize in the requested format
                         with open(source_file + '.' + extensions[output_format], 'w') as output_file:
                             output_file.write(g.serialize(format=output_format))
@@ -47,10 +47,10 @@ class COW(object):
                 except ValueError:
                     raise
                 except:
-                    print "Something went wrong, skipping {}.".format(source_file)
+                    print("Something went wrong, skipping {}.".format(source_file))
                     traceback.print_exc(file=sys.stdout)
             else:
-                print "Whoops for file {}".format(f)
+                print("Whoops for file {}".format(f))
 
 def main():
     parser = argparse.ArgumentParser(description="Not nearly CSVW compliant schema builder and RDF converter")

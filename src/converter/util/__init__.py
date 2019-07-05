@@ -75,8 +75,9 @@ def git_hash(data):
     Generates a Git-compatible hash for identifying (the current version of) the data
     """
     s = sha1()
-    s.update("blob %u\0" % len(data))
-    s.update(data)
+    u = "blob {}\0".format(len(data))
+    s.update(u.encode('utf-8'))
+    s.update(data.encode('utf-8'))
     return s.hexdigest()
 
 
@@ -95,8 +96,14 @@ def apply_default_namespaces(graph):
 def get_namespaces(base=None):
     """Return the global namespaces"""
     if base:
-        namespaces['sdr'] = Namespace(unicode(base + u'/'))
-        namespaces['sdv'] = Namespace(unicode(base + u'/vocab/'))
+        try:
+            # Python 2
+            namespaces['sdr'] = Namespace(unicode(base + u'/'))
+            namespaces['sdv'] = Namespace(unicode(base + u'/vocab/'))
+        except NameError:
+            # Python 3
+            namespaces['sdr'] = Namespace(str(base + u'/'))
+            namespaces['sdv'] = Namespace(str(base + u'/vocab/'))
         with open(YAML_NAMESPACE_FILE, 'w') as outfile:
             yaml.dump(namespaces, outfile, default_flow_style=True)
     return namespaces
@@ -309,7 +316,7 @@ class Nanopublication(Dataset):
 
         # Obtain a hash of the source file used for the conversion.
         # TODO: Get this directly from GitLab
-        source_hash = git_hash(file(file_name).read())
+        source_hash = git_hash(open(file_name).read())
 
         # Shorten the source hash to 8 digits (similar to Github)
         short_hash = source_hash[:8]

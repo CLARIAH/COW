@@ -5,7 +5,6 @@ import csv
 import logging
 import multiprocessing as mp
 import uuid
-import mappings
 import datetime
 import json
 
@@ -13,11 +12,20 @@ import js2py
 
 from iribaker import to_iri
 from functools import partial
-from itertools import izip_longest
+try:
+    # Python 3
+    from itertools import zip_longest
+except ImportError:
+    # Python 2
+    from itertools import izip_longest as zip_longest
 
 from rdflib import Graph, Dataset, URIRef, Literal
 
-from util import Nanopublication, Profile, DatastructureDefinition, apply_default_namespaces, QB, RDF, XSD, SDV, SDR, PROV
+try:
+    # Python 2
+    from util import Nanopublication, Profile, DatastructureDefinition, apply_default_namespaces, QB, RDF, XSD, SDV, SDR, PROV
+except ImportError:
+    from .util import Nanopublication, Profile, DatastructureDefinition, apply_default_namespaces, QB, RDF, XSD, SDV, SDR, PROV
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -107,7 +115,7 @@ class Converter(object):
     def addProfile(self, author_profile):
         """Adds an author profile to the nanopublication"""
 
-        print "Adding profile"
+        print("Adding profile")
         # We add all triples from a Profile graph to the default graph of the nanopublication
         profile_graph = Profile(author_profile)
         self.publication.ingest(profile_graph)
@@ -118,7 +126,7 @@ class Converter(object):
     def addDatastructureDefinition(self):
         """Adds a datastructure definition to the nanopublication based on what we know about the current dataset"""
 
-        print "Adding datastructure definition"
+        print("Adding datastructure definition")
         # We add all triples from a DatastructureDefinition graph to the assertion graph of the nanopublication
         self.publication.ingest(DatastructureDefinition(self.dataset_uri, self.dataset_name, self._variables), self.publication.ag.identifier)
 
@@ -194,11 +202,11 @@ def _burstConvert(enumerated_rows, graph_identifier, dataset, variables, headers
     count, rows = enumerated_rows
     c = BurstConverter(graph_identifier, dataset, variables, headers)
 
-    print mp.current_process().name, count, len(rows)
+    print(mp.current_process().name, count, len(rows))
 
     result = c.process(count, rows, chunksize)
 
-    print mp.current_process().name, 'done'
+    print(mp.current_process().name, 'done')
 
     return result
 
@@ -376,7 +384,7 @@ class BurstConverter(object):
                                 # Add it to the graph
                                 self.g.add((observation_uri, original_variable_uri, URIRef(original_value)))
                         else:
-                            print "Category {} unknown".format(category)
+                            print("Category {} unknown".format(category))
 
                     except KeyError:
                         pass
