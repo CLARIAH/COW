@@ -1,4 +1,4 @@
-from rdflib import Dataset, Graph, Namespace, RDF, RDFS, OWL, XSD, Literal, URIRef
+from rdflib import Dataset, Graph, ConjunctiveGraph, Namespace, RDF, RDFS, OWL, XSD, Literal, URIRef
 import os
 import yaml
 import datetime
@@ -393,3 +393,24 @@ class Nanopublication(Dataset):
         else:
             for s, p, o in graph:
                 self.add((s, p, o, target_graph))
+
+    def as_string(self, output_format):
+        serialized = bytes()
+        x = ConjunctiveGraph()
+        for s,p,o,g in self.quads((None,None,None,self.default_context.identifier)):
+            x.add((s,p,o,self.default_context.identifier))
+        serialized += x.serialize(format=output_format)
+        x = ConjunctiveGraph()
+        for s,p,o,g in self.quads((None,None,None,self.ag.identifier)):
+            x.add((s,p,o,self.ag.identifier))
+        serialized += x.serialize(format=output_format)
+        x = ConjunctiveGraph()
+        for s,p,o,g in self.quads((None,None,None,self.pg.identifier)):
+            x.add((s,p,o,self.pg.identifier))
+        serialized += x.serialize(format=output_format)
+        x = ConjunctiveGraph()
+        for s,p,o,g in self.quads((None,None,None,self.pig.identifier)):
+             x.add((s,p,o,self.pig.identifier))
+        serialized += x.serialize(format=output_format)
+
+        return serialized

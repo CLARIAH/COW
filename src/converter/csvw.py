@@ -690,7 +690,8 @@ class BurstConverter(object):
                 self.np.pig.add((self.np.ag.identifier, DC['creator'], o))
 
 
-            nanopubs_string += self.np.serialize(format=self.output_format)
+            # nanopubs_string += self.np.serialize(format=self.output_format)
+            nanopubs_string += self.np.as_string(output_format=self.output_format)
 
         # for s,p,o in self.g.triples((None,None,None)):
         #     print(s.__repr__,p.__repr__,o.__repr__)
