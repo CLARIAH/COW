@@ -222,20 +222,8 @@ class CSVWConverter(object):
             # Python 3
             (self.metadata_uri, _) = next(self.metadata_graph.subject_objects(CSVW.url))
 
-        #
         self.metadata = Item(self.metadata_graph, self.metadata_uri)
-        #
-        # # Add a prov:wasDerivedFrom between the nanopublication assertion graph
-        # # and the metadata_uri
-        # self.np.pg.add((self.np.ag.identifier, PROV[
-        #                'wasDerivedFrom'], self.metadata_uri))
-        # # Add an attribution relation and dc:creator relation between the
-        # # nanopublication, the assertion graph and the authors of the schema
-        # for o in self.metadata_graph.objects(self.metadata_uri, DC['creator']):
-        #     self.np.pg.add((self.np.ag.identifier, PROV['wasAttributedTo'], o))
-        #     self.np.add((self.np.uri, PROV['wasAttributedTo'], o))
-        #     self.np.pig.add((self.np.ag.identifier, DC['creator'], o))
-        #
+
         self.schema = self.metadata.csvw_tableSchema
 
         # Taking defaults from init arguments
@@ -369,7 +357,7 @@ class CSVWConverter(object):
                                         quotechar=self.quotechar)
 
                 logger.info("Starting in a single process")
-                c = BurstConverter(self.np.ag.identifier, self.file_name, self.columns,
+                c = BurstConverter(self.np.ag.identifier, self.file_name, self.metadata_uri, self.columns,
                                    self.schema, self.metadata_graph, self.encoding, self.output_format)
                 # Out will contain an N-Quads serialized representation of the
                 # converted CSV
@@ -408,6 +396,7 @@ class CSVWConverter(object):
                 burstConvert_partial = partial(_burstConvert,
                                                identifier=self.np.ag.identifier,
                                                file_name=self.file_name,
+                                               metadata_uri=self.metadata_uri,
                                                columns=self.columns,
                                                schema=self.schema,
                                                metadata_graph=self.metadata_graph,
@@ -435,11 +424,11 @@ def grouper(n, iterable, padvalue=None):
 
 
 # This has to be a global method for the parallelization to work.
-def _burstConvert(enumerated_rows, identifier, file_name, columns, schema, metadata_graph, encoding, chunksize, output_format):
+def _burstConvert(enumerated_rows, identifier, file_name, metadata_uri, columns, schema, metadata_graph, encoding, chunksize, output_format):
     """The method used as partial for the parallel processing initiated in :func:`_parallel`."""
     try:
         count, rows = enumerated_rows
-        c = BurstConverter(identifier, file_name, columns, schema,
+        c = BurstConverter(identifier, file_name, metadata_uri, columns, schema,
                            metadata_graph, encoding, output_format)
 
         logger.info("Process {}, nr {}, {} rows".format(
@@ -457,13 +446,14 @@ def _burstConvert(enumerated_rows, identifier, file_name, columns, schema, metad
 class BurstConverter(object):
     """The actual converter, that processes the chunk of lines from the CSV file, and uses the instructions from the ``schema`` graph to produce RDF."""
 
-    def __init__(self, identifier, file_name, columns, schema, metadata_graph, encoding, output_format):
+    def __init__(self, identifier, file_name, metadata_uri, columns, schema, metadata_graph, encoding, output_format):
         # self.ds = Dataset()
         # # self.ds = apply_default_namespaces(Dataset())
         # self.g = self.ds.graph(URIRef(identifier))
 
         self.identifier = identifier
         self.file_name = file_name
+        self.metadata_uri = metadata_uri
 
         self.columns = columns
         self.schema = schema
@@ -684,6 +674,21 @@ class BurstConverter(object):
 
             # We increment the observation (row number) with one
             obs_count += 1
+
+
+            ### Provenance
+
+            # # Add a prov:wasDerivedFrom between the nanopublication assertion graph
+            # # and the metadata_uri
+            self.np.pg.add((self.np.ag.identifier, PROV[
+                           'wasDerivedFrom'], self.metadata_uri))
+            # Add an attribution relation and dc:creator relation between the
+            # # nanopublication, the assertion graph and the authors of the schema
+            for o in self.metadata_graph.objects(self.metadata_uri, DC['creator']):
+                self.np.pg.add((self.np.ag.identifier, PROV['wasAttributedTo'], o))
+                self.np.add((self.np.uri, PROV['wasAttributedTo'], o))
+                self.np.pig.add((self.np.ag.identifier, DC['creator'], o))
+
 
             nanopubs_string += self.np.serialize(format=self.output_format)
 
