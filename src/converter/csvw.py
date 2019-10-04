@@ -201,7 +201,7 @@ class CSVWConverter(object):
         logger.info("Chunksize: {}".format(self._chunksize))
 
         self.np = Nanopublication(file_name)
-        # self.metadata = json.load(open(schema_file_name, 'r'))
+        self.metadata = json.load(open(schema_file_name, 'r'))
         self.metadata_graph = Graph()
         with open(schema_file_name, 'rb') as f:
             try:
@@ -210,9 +210,9 @@ class CSVWConverter(object):
                 err.message = err.message + " ; please check the syntax of your JSON-LD schema file"
                 raise
 
-        # from pprint import pprint
-        # pprint([term for term in sorted(self.metadata_graph)])
-
+        # # from pprint import pprint
+        # # pprint([term for term in sorted(self.metadata_graph)])
+        #
         # Get the URI of the schema specification by looking for the subject
         # with a csvw:url property.
         try:
@@ -222,20 +222,20 @@ class CSVWConverter(object):
             # Python 3
             (self.metadata_uri, _) = next(self.metadata_graph.subject_objects(CSVW.url))
 
-
+        #
         self.metadata = Item(self.metadata_graph, self.metadata_uri)
-
-        # Add a prov:wasDerivedFrom between the nanopublication assertion graph
-        # and the metadata_uri
-        self.np.pg.add((self.np.ag.identifier, PROV[
-                       'wasDerivedFrom'], self.metadata_uri))
-        # Add an attribution relation and dc:creator relation between the
-        # nanopublication, the assertion graph and the authors of the schema
-        for o in self.metadata_graph.objects(self.metadata_uri, DC['creator']):
-            self.np.pg.add((self.np.ag.identifier, PROV['wasAttributedTo'], o))
-            self.np.add((self.np.uri, PROV['wasAttributedTo'], o))
-            self.np.pig.add((self.np.ag.identifier, DC['creator'], o))
-
+        #
+        # # Add a prov:wasDerivedFrom between the nanopublication assertion graph
+        # # and the metadata_uri
+        # self.np.pg.add((self.np.ag.identifier, PROV[
+        #                'wasDerivedFrom'], self.metadata_uri))
+        # # Add an attribution relation and dc:creator relation between the
+        # # nanopublication, the assertion graph and the authors of the schema
+        # for o in self.metadata_graph.objects(self.metadata_uri, DC['creator']):
+        #     self.np.pg.add((self.np.ag.identifier, PROV['wasAttributedTo'], o))
+        #     self.np.add((self.np.uri, PROV['wasAttributedTo'], o))
+        #     self.np.pig.add((self.np.ag.identifier, DC['creator'], o))
+        #
         self.schema = self.metadata.csvw_tableSchema
 
         # Taking defaults from init arguments
@@ -381,7 +381,7 @@ class CSVWConverter(object):
                     # Python 3
                     target_file.write(out.decode('utf-8'))
 
-            self.convert_info()
+            # self.convert_info()
             # Finally, write the nanopublication info to file
             target_file.write(self.np.serialize(format=self.output_format))
 
@@ -422,7 +422,7 @@ class CSVWConverter(object):
                 pool.close()
                 pool.join()
 
-            self.convert_info()
+            #  self.convert_info()
             # Finally, write the nanopublication info to file
             target_file.write(self.np.serialize(format=self.output_format))
 
@@ -456,9 +456,11 @@ class BurstConverter(object):
     """The actual converter, that processes the chunk of lines from the CSV file, and uses the instructions from the ``schema`` graph to produce RDF."""
 
     def __init__(self, identifier, columns, schema, metadata_graph, encoding, output_format):
-        self.ds = Dataset()
-        # self.ds = apply_default_namespaces(Dataset())
-        self.g = self.ds.graph(URIRef(identifier))
+        # self.ds = Dataset()
+        # # self.ds = apply_default_namespaces(Dataset())
+        # self.g = self.ds.graph(URIRef(identifier))
+
+        self.identifier = identifier
 
         self.columns = columns
         self.schema = schema
@@ -490,10 +492,16 @@ class BurstConverter(object):
 
         # logger.info("Row: {}".format(obs_count)) #removed for readability
 
+        nanopubs_string = bytes()
+
         # We iterate row by row, and then column by column, as given by the CSVW mapping file.
         mult_proc_counter = 0
         iter_error_counter= 0
         for row in rows:
+            # self.ds = apply_default_namespaces(Dataset())
+            self.ds = Dataset()
+            self.g = self.ds.graph(URIRef(self.identifier + '/' + str(obs_count)))
+
             # This fixes issue:10
             if row is None:
                 mult_proc_counter += 1
@@ -672,6 +680,8 @@ class BurstConverter(object):
             # We increment the observation (row number) with one
             obs_count += 1
 
+            nanopubs_string += self.ds.serialize(format=self.output_format)
+
         # for s,p,o in self.g.triples((None,None,None)):
         #     print(s.__repr__,p.__repr__,o.__repr__)
 
@@ -680,7 +690,8 @@ class BurstConverter(object):
         logger.debug(
             "{} errors encountered while trying to iterate over a NoneType...".format(mult_proc_counter))
         logger.info("... done")
-        return self.ds.serialize(format=self.output_format)
+        # return self.ds.serialize(format=self.output_format)
+        return nanopubs_string
 
     # def serialize(self):
     #     trig_file_name = self.file_name + '.trig'
