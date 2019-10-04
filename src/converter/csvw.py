@@ -325,7 +325,8 @@ class CSVWConverter(object):
 
         # Add the information of the schema file to the provenance graph of the
         # nanopublication
-        self.np.ingest(self.metadata_graph, self.np.pg.identifier)
+
+        # self.np.ingest(self.metadata_graph, self.np.pg.identifier)
 
         # for s,p,o in self.np.triples((None,None,None)):
         #     print(s.__repr__,p.__repr__,o.__repr__)
@@ -368,7 +369,7 @@ class CSVWConverter(object):
                                         quotechar=self.quotechar)
 
                 logger.info("Starting in a single process")
-                c = BurstConverter(self.np.ag.identifier, self.columns,
+                c = BurstConverter(self.np.ag.identifier, self.file_name, self.columns,
                                    self.schema, self.metadata_graph, self.encoding, self.output_format)
                 # Out will contain an N-Quads serialized representation of the
                 # converted CSV
@@ -406,6 +407,7 @@ class CSVWConverter(object):
                 # pprint([term.n3() for term in self.columns])
                 burstConvert_partial = partial(_burstConvert,
                                                identifier=self.np.ag.identifier,
+                                               file_name=self.file_name,
                                                columns=self.columns,
                                                schema=self.schema,
                                                metadata_graph=self.metadata_graph,
@@ -433,11 +435,11 @@ def grouper(n, iterable, padvalue=None):
 
 
 # This has to be a global method for the parallelization to work.
-def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, encoding, chunksize, output_format):
+def _burstConvert(enumerated_rows, identifier, file_name, columns, schema, metadata_graph, encoding, chunksize, output_format):
     """The method used as partial for the parallel processing initiated in :func:`_parallel`."""
     try:
         count, rows = enumerated_rows
-        c = BurstConverter(identifier, columns, schema,
+        c = BurstConverter(identifier, file_name, columns, schema,
                            metadata_graph, encoding, output_format)
 
         logger.info("Process {}, nr {}, {} rows".format(
@@ -455,12 +457,13 @@ def _burstConvert(enumerated_rows, identifier, columns, schema, metadata_graph, 
 class BurstConverter(object):
     """The actual converter, that processes the chunk of lines from the CSV file, and uses the instructions from the ``schema`` graph to produce RDF."""
 
-    def __init__(self, identifier, columns, schema, metadata_graph, encoding, output_format):
+    def __init__(self, identifier, file_name, columns, schema, metadata_graph, encoding, output_format):
         # self.ds = Dataset()
         # # self.ds = apply_default_namespaces(Dataset())
         # self.g = self.ds.graph(URIRef(identifier))
 
         self.identifier = identifier
+        self.file_name = file_name
 
         self.columns = columns
         self.schema = schema
@@ -498,9 +501,11 @@ class BurstConverter(object):
         mult_proc_counter = 0
         iter_error_counter= 0
         for row in rows:
+
+            self.np = Nanopublication(self.file_name)
             # self.ds = apply_default_namespaces(Dataset())
-            self.ds = Dataset()
-            self.g = self.ds.graph(URIRef(self.identifier + '/' + str(obs_count)))
+            # self.ds = Dataset()
+            # self.g = self.np.graph(URIRef(self.identifier + '/' + str(obs_count)))
 
             # This fixes issue:10
             if row is None:
@@ -603,17 +608,17 @@ class BurstConverter(object):
                         # value URL is a concept and a member of a SKOS Collection with that URL.
                         if c.csvw_collectionUrl is not None:
                             collection = self.expandURL(c.csvw_collectionUrl, row)
-                            self.g.add((collection, RDF.type, SKOS['Collection']))
-                            self.g.add((o, RDF.type, SKOS['Concept']))
-                            self.g.add((collection, SKOS['member'], o))
+                            self.np.ag.add((collection, RDF.type, SKOS['Collection']))
+                            self.np.ag.add((o, RDF.type, SKOS['Concept']))
+                            self.np.ag.add((collection, SKOS['member'], o))
 
                         # For coded properties, the schemeUrl can be used to indicate that the
                         # value URL is a concept and a member of a SKOS Scheme with that URL.
                         if c.csvw_schemeUrl is not None:
                             scheme = self.expandURL(c.csvw_schemeUrl, row)
-                            self.g.add((scheme, RDF.type, SKOS['Scheme']))
-                            self.g.add((o, RDF.type, SKOS['Concept']))
-                            self.g.add((o, SKOS['inScheme'], scheme))
+                            self.np.ag.add((scheme, RDF.type, SKOS['Scheme']))
+                            self.np.ag.add((o, RDF.type, SKOS['Concept']))
+                            self.np.ag.add((o, SKOS['inScheme'], scheme))
                     else:
                         # This is a datatype property
                         if c.csvw_value is not None:
@@ -667,11 +672,11 @@ class BurstConverter(object):
 
 
                     # Add the triple to the assertion graph
-                    self.g.add((s, p, o))
+                    self.np.ag.add((s, p, o))
 
                     # Add provenance relating the propertyUrl to the column id
                     if '@id' in c:
-                        self.g.add((p, PROV['wasDerivedFrom'], URIRef(c['@id'])))
+                        self.np.ag.add((p, PROV['wasDerivedFrom'], URIRef(c['@id'])))
 
                 except:
                     # print row[0], value
@@ -680,7 +685,7 @@ class BurstConverter(object):
             # We increment the observation (row number) with one
             obs_count += 1
 
-            nanopubs_string += self.ds.serialize(format=self.output_format)
+            nanopubs_string += self.np.serialize(format=self.output_format)
 
         # for s,p,o in self.g.triples((None,None,None)):
         #     print(s.__repr__,p.__repr__,o.__repr__)
