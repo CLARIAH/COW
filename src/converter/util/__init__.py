@@ -374,7 +374,7 @@ class Nanopublication(Dataset):
         # The URI of the latest version of this converter
         # TODO: should point to the actual latest commit of this converter.
         # TODO: consider linking to this as the plan of some activity, rather than an activity itself.
-        clariah_uri = URIRef('https://github.com/CLARIAH/wp4-converters')
+        clariah_uri = URIRef('https://github.com/CLARIAH/COW')
 
         self.pig.add((self.uri, PROV['wasGeneratedBy'], clariah_uri))
         self.pig.add((self.uri, PROV['generatedAtTime'],
