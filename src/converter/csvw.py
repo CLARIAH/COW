@@ -311,6 +311,13 @@ class CSVWConverter(object):
                                 Literal(str(o), datatype=XSD.string)))
                     print(str(o))
 
+        #walk through the metadata graph to remove illigal "Resource" blank node caused by python3 transition.
+        for s, p, o in self.metadata_graph.triples((None, None, None)):
+            if s.startswith("Resource("):
+                self.metadata_graph.remove((s,p,o))
+                self.metadata_graph.add((BNode(str(s)[9:-1]), p, o))
+                logger.debug("removed a triple because it was not formatted right. (started with \"Resource\")")
+
         # Add the information of the schema file to the provenance graph of the
         # nanopublication
 
