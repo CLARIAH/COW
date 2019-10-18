@@ -1,4 +1,9 @@
-from converter.csvw import CSVWConverter, build_schema, extensions
+try:
+    # git install
+    from converter.csvw import CSVWConverter, build_schema, extensions
+except ModuleNotFoundError:
+    # pip install
+    from cow_csvw.converter.csvw import CSVWConverter, build_schema, extensions
 import os
 import datetime
 import argparse
