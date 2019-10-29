@@ -750,13 +750,14 @@ class BurstConverter(object):
         """This checks whether we should continue parsing this cell, or skip it because it is empty or a null value."""
         try:
             if len(value) == 0 and unicode(c.csvw_parseOnEmpty) == u"true":
-                print("Not skipping empty value")
+                # print("Not skipping empty value")
                 return False #because it should not be skipped
             elif len(value) == 0 or value == unicode(c.csvw_null) or value in [unicode(n) for n in c.csvw_null] or value == unicode(self.schema.csvw_null):
                 # Skip value if length is zero and equal to (one of) the null value(s)
-                logger.debug(
-                    "Length is 0 or value is equal to specified 'null' value")
+                # logger.debug(
+                #     "Length is 0 or value is equal to specified 'null' value")
                 return True
         except:
-            logger.debug("null does not exist or is not a list.")
+            # logger.debug("null does not exist or is not a list.") #this line will print for every cell in a csv without a defined null value.
+            pass
         return False
