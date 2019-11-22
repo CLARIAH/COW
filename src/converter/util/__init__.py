@@ -316,7 +316,10 @@ class Nanopublication(Dataset):
 
         # Obtain a hash of the source file used for the conversion.
         # TODO: Get this directly from GitLab
-        source_hash = git_hash(open(file_name, 'r', errors='ignore').read())
+        try: #Python 3
+            source_hash = git_hash(open(file_name, 'r', errors='ignore').read())
+        except TypeError: #Python 2
+            source_hash = git_hash(open(file_name, 'r').read())
 
         # Shorten the source hash to 8 digits (similar to Github)
         short_hash = source_hash[:8]

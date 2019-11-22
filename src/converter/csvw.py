@@ -69,10 +69,16 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
                                                                    detector.result['confidence']))
 
     if delimiter is None:
-        with open(infile, 'r', errors='ignore') as csvfile:
-            # dialect = csv.Sniffer().sniff(csvfile.read(1024), delimiters=";,$\t")
-            dialect = csv.Sniffer().sniff(csvfile.readline()) #read only the header instead of the entire file to determine delimiter
-            csvfile.seek(0)
+        try: #Python 3
+            with open(infile, 'r', errors='ignore') as csvfile:
+                # dialect = csv.Sniffer().sniff(csvfile.read(1024), delimiters=";,$\t")
+                dialect = csv.Sniffer().sniff(csvfile.readline()) #read only the header instead of the entire file to determine delimiter
+                csvfile.seek(0)
+        except TypeError: #Python 2
+            with open(infile, 'r') as csvfile:
+                # dialect = csv.Sniffer().sniff(csvfile.read(1024), delimiters=";,$\t")
+                dialect = csv.Sniffer().sniff(csvfile.readline()) #read only the header instead of the entire file to determine delimiter
+                csvfile.seek(0)
         logger.info("Detected dialect: {} (delimiter: '{}')".format(dialect, dialect.delimiter))
         delimiter = dialect.delimiter
 
