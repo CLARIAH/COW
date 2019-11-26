@@ -9,7 +9,7 @@ import sys
 HERE = os.path.dirname(os.path.realpath(__file__))
 
 # The text of the README file
-README = (HERE / "README.md").read_text()
+README = os.path.join(HERE, 'README.md')
 
 with open('requirements.txt') as f:
     required = f.read().splitlines()
