@@ -2,12 +2,11 @@
 # -*- coding: iso-8859-15 -*-
 
 from setuptools import setup
-import pathlib
 import os
 import sys
 
 # The directory containing this file
-HERE = pathlib.Path(__file__).parent
+HERE = os.path.dirname(os.path.realpath(__file__))
 
 # The text of the README file
 README = (HERE / "README.md").read_text()
