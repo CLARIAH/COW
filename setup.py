@@ -5,6 +5,12 @@ from distutils.core import setup
 import os
 import sys
 
+# The directory containing this file
+HERE = pathlib.Path(__file__).parent
+
+# The text of the README file
+README = (HERE / "README.md").read_text()
+
 with open('requirements.txt') as f:
     required = f.read().splitlines()
 
@@ -16,6 +22,8 @@ cow_version = 'x.xx'
 setup(name = 'cow_csvw',
       version = cow_version,
       description = 'Batch converter of large CSVs into CSVW/RDF',
+      long_description=README,
+	  long_description_content_type="text/markdown",
       author = 'Rinke Hoekstra, Kathrin Dentler, Auke Rijpma, Richard Zijdeman, Albert Meroño-Peñuela',
       author_email = 'albert.merono@vu.nl',
       url = 'https://github.com/CLARIAH/COW',
