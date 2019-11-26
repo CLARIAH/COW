@@ -586,9 +586,14 @@ class BurstConverter(object):
                         # This is an object property, because the value needs to be cast to a URL
                         p = self.expandURL(c.csvw_propertyUrl, row)
                         o = self.expandURL(c.csvw_valueUrl, row)
-                        if self.isValueNull(os.path.basename(unicode(o)), c):
-                            logger.debug("skipping empty value")
-                            continue
+                        try:
+                            if self.isValueNull(os.path.basename(unicode(o)), c):
+                                logger.debug("skipping empty value")
+                                continue
+                        except NameError:
+                            if self.isValueNull(os.path.basename(str(o)), c):
+                                logger.debug("skipping empty value")
+                                continue
 
                         if csvw_virtual == u'true' and c.csvw_datatype is not None and URIRef(c.csvw_datatype) == XSD.anyURI:
                             # Special case: this is a virtual column with object values that are URIs
@@ -663,6 +668,7 @@ class BurstConverter(object):
                                     csvw_datatype = unicode(c.csvw_datatype)
                                 except NameError:
                                     csvw_datatype = str(c.csvw_datatype).split(')')[0].split('(')[-1]
+                                    # csvw_datatype = str(c.csvw_datatype)
                                 # print(type(csvw_datatype))
                                 # print(csvw_datatype)
                                 o = Literal(value, datatype=csvw_datatype, normalize=False)
@@ -707,6 +713,7 @@ class BurstConverter(object):
         """Takes a Jinja or Python formatted string, and applies it to the row value"""
         # Significant speedup by not re-instantiating Jinja templates for every
         # row.
+
         if pattern in self.templates:
             template = self.templates[pattern]
         else:
@@ -715,6 +722,14 @@ class BurstConverter(object):
         # TODO This should take into account the special CSVW instructions such as {_row}
         # First we interpret the url_pattern as a Jinja2 template, and pass all
         # column/value pairs as arguments
+        # row = {str('Int'): int('104906'), str('Country'): str('Luxembourg'), str('_row'): 1, str('Rank'): str('2')}
+
+        # print(pattern)
+        # print(type(pattern))
+        # print(row)
+        # print(type(row))
+        # rendered_template = template.render(Int=120000)
+
         rendered_template = template.render(**row)
 
         try:
