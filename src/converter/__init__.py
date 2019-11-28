@@ -8,8 +8,6 @@ import uuid
 import datetime
 import json
 
-import js2py
-
 from iribaker import to_iri
 from functools import partial
 try:
@@ -336,10 +334,12 @@ class BurstConverter(object):
                                 f = self._variables[variable]['transform_compiled']
                                 value = f(col)
                             elif 'transform' in self._variables[variable]:
+                                # -- Deprecating ingestion of JS value functions --
                                 # Otherwise, we evaluate the function definition
-                                f = js2py.eval_js("function f(v) {{ {} }}".format(self._variables[variable]['transform']))
-                                self._variables[variable]['transform_compiled'] = f
-                                value = f(col)
+                                # f = js2py.eval_js("function f(v) {{ {} }}".format(self._variables[variable]['transform']))
+                                # self._variables[variable]['transform_compiled'] = f
+                                # value = f(col)
+                                value = col
                             else:
                                 # We take the 'label' (i.e. the potentially mapped value) from the
                                 # corresponding value of the variable
