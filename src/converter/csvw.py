@@ -310,7 +310,7 @@ class CSVWConverter(object):
             except NameError:
                 # Python 3
                 escaped_object = URIRef(iribaker.to_iri(str(o)))
-                print(escaped_object)
+                # print(escaped_object)
 
             # If the escaped IRI of the object is different from the original,
             # update the graph.
@@ -327,7 +327,7 @@ class CSVWConverter(object):
                     self.np.pg.add((escaped_object,
                                 PROV.wasDerivedFrom,
                                 Literal(str(o), datatype=XSD.string)))
-                    print(str(o))
+                    # print(str(o))
 
         #walk through the metadata graph to remove illigal "Resource" blank node caused by python3 transition.
         for s, p, o in self.metadata_graph.triples((None, None, None)):
