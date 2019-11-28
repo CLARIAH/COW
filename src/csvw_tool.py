@@ -1,7 +1,7 @@
 try:
     # git install
     from converter.csvw import CSVWConverter, build_schema, extensions
-except ModuleNotFoundError:
+except ImportError:
     # pip install
     from cow_csvw.converter.csvw import CSVWConverter, build_schema, extensions
 import os
