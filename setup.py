@@ -1,15 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-15 -*-
 
+#from distutils.core import setup
 from setuptools import setup
 import os
 import sys
-
-# The directory containing this file
-HERE = os.path.dirname(os.path.realpath(__file__))
-
-# The text of the README file
-README = os.path.join(HERE, 'README.md')
 
 with open('requirements.txt') as f:
     required = f.read().splitlines()
@@ -21,13 +16,20 @@ cow_version = 'x.xx'
 
 setup(name = 'cow_csvw',
       version = cow_version,
-      description = 'Batch converter of large CSVs into CSVW/RDF',
-      long_description=README,
-	  long_description_content_type="text/markdown",
-      author = 'Rinke Hoekstra, Kathrin Dentler, Auke Rijpma, Richard Zijdeman, Albert Meroño-Peñuela',
+      description = 'Integrated CSV to RDF converter, using CSVW and nanopublications',
+      long_description = open('README.md').read(),
+      long_description_content_type="text/markdown",
+      author = 'Albert Meroño-Peñuela, Roderick van der Weerdt, Rinke Hoekstra, Kathrin Dentler, Auke Rijpma, Richard Zijdeman',
       author_email = 'albert.merono@vu.nl',
       url = 'https://github.com/CLARIAH/COW',
       download_url = 'https://github.com/CLARIAH/COW/archive/' + cow_version + '.tar.gz',
+      license = "MIT",
+      classifiers = [
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.7"
+        ],
       packages = ['cow_csvw'],
       package_dir = {'cow_csvw': 'src'},
       package_data = {'cow_csvw': cow_data},
