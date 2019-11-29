@@ -111,8 +111,16 @@ Beware of the web service limitations:
 
 #### Library
 
-TBW
+Once installed, COW can be used as a library as follows:
 
+```
+from cow_csvw.csvw_tool import COW
+import os
+
+COW(mode='build', files=[os.path.join(path, filename)], dataset='My dataset', delimiter=';', quotechar='\"')
+
+COW(mode='convert', files=[os.path.join(path, filename)], dataset='My dataset', delimiter=';', quotechar='\"', processes=4, chunksize=100, base='http://example.org/my-dataset', format='turtle')
+```
 
 ### Examples
 
