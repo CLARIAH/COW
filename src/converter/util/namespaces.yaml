@@ -1,4 +1,5 @@
 {bibo: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/ontology/bibo/'],
+  bio: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/vocab/bio/0.1/'],
   canfam: !!python/object/new:rdflib.namespace.Namespace ['https://iisg.amsterdam/canfam/dataset/canada1901/'],
   canfam-auke: !!python/object/new:rdflib.namespace.Namespace ['https://iisg.amsterdam/canfam/auke/'],
   canfam-dimension: !!python/object/new:rdflib.namespace.Namespace ['http://data.socialhistory.org/vocab/canfam/dimension/'],
