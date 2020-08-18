@@ -10,7 +10,6 @@ import uuid
 
 from hashlib import sha1
 
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
@@ -47,29 +46,8 @@ def init():
 init()
 
 
-def reindent(s, numSpaces):
-    s = s.split('\n')
-    s = [(numSpaces * ' ') + string.lstrip(line) for line in s]
-    s = "\n".join(s)
-    return s
 
-
-def serializeTrig(rdf_dataset):
-    turtles = []
-    for c in rdf_dataset.contexts():
-        if c.identifier != URIRef('urn:x-rdflib:default'):
-            turtle = "<{id}> {{\n".format(id=c.identifier)
-            turtle += reindent(c.serialize(format='turtle'), 4)
-            turtle += "}\n\n"
-        else:
-            turtle = c.serialize(format='turtle')
-            turtle += "\n\n"
-
-        turtles.append(turtle)
-
-    return "\n".join(turtles)
-
-
+# TODO: put in class as it is part of Nanopublication 
 def git_hash(data):
     """
     Generates a Git-compatible hash for identifying (the current version of) the data
@@ -81,212 +59,15 @@ def git_hash(data):
     return s.hexdigest()
 
 
-def apply_default_namespaces(graph):
-    """
-    Apply a set of default namespaces to the RDFLib graph
-    provided as argument and returns the graph.
-    """
-
-    for prefix, namespace in namespaces.items():
-        graph.bind(prefix, namespace)
-
-    return graph
-
-
+# Part of Burstconverter + build_schema
 def get_namespaces(base=None):
     """Return the global namespaces"""
     if base:
-        try:
-            # Python 2
-            namespaces['sdr'] = Namespace(unicode(base + u'/'))
-            namespaces['sdv'] = Namespace(unicode(base + u'/vocab/'))
-        except NameError:
-            # Python 3
-            namespaces['sdr'] = Namespace(str(base + u'/'))
-            namespaces['sdv'] = Namespace(str(base + u'/vocab/'))
+        namespaces['sdr'] = Namespace(str(base + u'/'))
+        namespaces['sdv'] = Namespace(str(base + u'/vocab/'))
         with open(YAML_NAMESPACE_FILE, 'w') as outfile:
             yaml.dump(namespaces, outfile, default_flow_style=True)
     return namespaces
-
-
-def safe_url(NS, local):
-    """Generates a URIRef from the namespace + local part that is safe for
-    use in RDF graphs
-
-    Arguments:
-    NS      -- a @Namespace object
-    local   -- the local name of the resource
-    """
-    return URIRef(iribaker.to_iri(NS[local]))
-
-
-def get_base_uri(dataset):
-    """Get a base uri for the ``dataset`` (name)"""
-    return Namespace('{}{}/'.format(namespaces['sdr'], dataset))
-
-
-def get_value_uri(dataset, variable, value):
-    """Generates a variable value IRI for a given combination of dataset, variable and value"""
-    BASE = get_base_uri(dataset)
-
-    return iribaker.to_iri(BASE['code/' + variable + '/' + value])
-
-
-def get_variable_uri(dataset, variable):
-    """Generates a variable IRI for a given combination of dataset and variable"""
-    BASE = get_base_uri(dataset)
-
-    return iribaker.to_iri(BASE[variable])
-
-
-class DatastructureDefinition(Graph):
-    """
-    An RDFLib Graph that contains a datastructure definition, as specified by a QBer JSON dataset structure
-    """
-
-    def __init__(self, dataset_uri, dataset_name, variables):
-        super(DatastructureDefinition, self).__init__()
-
-        # Use the dataset_uri as BASE namespace
-        BASE = Namespace("{}/".format(dataset_uri))
-
-        # The URI of the DatastructureDefinition
-        structure_uri = BASE['structure']
-
-        self.add((dataset_uri, RDF.type, QB['DataSet']))
-        self.add((dataset_uri, RDFS.label, Literal(dataset_name)))
-        self.add((structure_uri, RDF.type, QB['DataStructureDefinition']))
-
-        self.add((dataset_uri, QB['structure'], structure_uri))
-
-        for variable_id, variable in variables.items():
-            variable_uri = URIRef(variable['original']['uri'])
-            variable_label = Literal(variable['original']['label'])
-            variable_type = URIRef(variable['type'])
-
-
-            # The variable as component of the definition
-            component_uri = safe_url(BASE, 'component/' + variable['original']['label'])
-
-            # Add link between the definition and the component
-            self.add((structure_uri, QB['component'], component_uri))
-
-            # Add label to variable
-            # TODO: We may need to do something with a changed label for the variable
-            self.add((variable_uri, RDFS.label, variable_label))
-
-            if 'description' in variable and variable['description'] != "":
-                self.add((variable_uri, RDFS.comment, Literal(variable['description'])))
-
-            # If the variable URI is not the same as the original,
-            # it is a specialization of a prior variable property.
-            if variable['uri'] != str(variable_uri):
-                self.add((variable_uri,
-                          RDFS['subPropertyOf'],
-                          URIRef(variable['uri'])))
-
-            if variable_type == QB['DimensionProperty']:
-                self.add((variable_uri, RDF.type, variable_type))
-                self.add((component_uri, QB['dimension'], variable_uri))
-
-                # Coded variables are also of type coded property (a subproperty of dimension property)
-                if variable['category'] == 'coded':
-                    self.add((variable_uri, RDF.type, QB['CodedProperty']))
-
-            elif variable_type == QB['MeasureProperty']:
-                # The category 'other'
-                self.add((variable_uri, RDF.type, variable_type))
-                self.add((component_uri, QB['measure'], variable_uri))
-            elif variable_type == QB['AttributeProperty']:
-                # Actually never produced by QBer at this stage
-                self.add((variable_uri, RDF.type, variable_type))
-                self.add((component_uri, QB['attribute'], variable_uri))
-
-            # If this variable is of category 'coded', we add codelist and URIs for
-            # each variable (including mappings between value uris and etc....)
-            if variable['category'] == 'coded':
-                codelist_uri = URIRef(variable['codelist']['original']['uri'])
-                codelist_label = Literal(variable['codelist']['original']['label'])
-
-                self.add((codelist_uri, RDF.type, SKOS['Collection']))
-                self.add((codelist_uri, RDFS.label, Literal(codelist_label)))
-
-                # The variable should point to the codelist
-                self.add((variable_uri, QB['codeList'], codelist_uri))
-
-                # The variable is mapped onto an external code list.
-                # If the codelist uri is not the same as the original one, we
-                # have a derived codelist.
-                if variable['codelist']['uri'] != str(codelist_uri):
-                    self.add((codelist_uri,
-                              PROV['wasDerivedFrom'],
-                              URIRef(variable['codelist']['uri'])))
-
-                # Generate a SKOS concept for each of the values and map it to the
-                # assigned codelist
-                # But only if the 'values' are specified for this variable.
-                if 'values' not in variable:
-                    continue
-
-                for value in variable['values']:
-                    value_uri = URIRef(value['original']['uri'])
-                    value_label = Literal(value['original']['label'])
-
-                    self.add((value_uri, RDF.type, SKOS['Concept']))
-                    self.add((value_uri, SKOS['prefLabel'], Literal(value_label)))
-                    self.add((codelist_uri, SKOS['member'], value_uri))
-
-                    # The value has been changed, and therefore there is a mapping
-                    if value['original']['uri'] != value['uri']:
-                        self.add((value_uri, SKOS['exactMatch'], URIRef(value['uri'])))
-                        self.add((value_uri, RDFS.label, Literal(value['label'])))
-
-            elif variable['category'] == 'identifier':
-                # Generate a SKOS concept for each of the values
-                # But only if the variable has specified values
-                if 'values' not in variable:
-                    continue
-
-                for value in variable['values']:
-                    value_uri = URIRef(value['original']['uri'])
-                    value_label = Literal(value['original']['label'])
-
-                    self.add((value_uri, RDF.type, SKOS['Concept']))
-                    self.add((value_uri, SKOS['prefLabel'], value_label))
-
-                    # The value has been changed, and therefore there is a mapping
-                    if value['original']['uri'] != value['uri']:
-                        self.add((value_uri, SKOS['exactMatch'], URIRef(value['uri'])))
-                        self.add((value_uri, RDFS.label, Literal(value['label'])))
-
-            elif variable['category'] == 'other':
-                # Generate a literal for each of the values when converting the dataset (but not here)
-                pass
-
-
-class Profile(Graph):
-    """
-    An RDFLib Graph that contains author information based on a Google Profile
-    """
-
-    def __init__(self, profile):
-        # A URI that represents the author
-
-        # Virtuoso does not accept the @
-        self.author_uri = SDP[urllib.quote_plus(profile['email'])]
-
-        super(Profile, self).__init__(identifier=self.author_uri)
-
-        self.add((self.author_uri, RDF.type, FOAF['Person']))
-        self.add((self.author_uri, FOAF['name'], Literal(profile['name'])))
-        self.add((self.author_uri, FOAF['email'], Literal(profile['email'])))
-        self.add((self.author_uri, SDV['googleId'], Literal(profile['id'])))
-        try:
-            self.add((self.author_uri, FOAF['depiction'], URIRef(profile['image'])))
-        except KeyError:
-            logger.warning('No author depiction provided in author profile')
-
-
 
 class Nanopublication(Dataset):
     """
@@ -316,10 +97,7 @@ class Nanopublication(Dataset):
 
         # Obtain a hash of the source file used for the conversion.
         # TODO: Get this directly from GitLab
-        try: #Python 3
-            source_hash = git_hash(open(file_name, 'r', errors='ignore').read())
-        except TypeError: #Python 2
-            source_hash = git_hash(open(file_name, 'r').read())
+        source_hash = git_hash(open(file_name, 'r').read())
 
         # Shorten the source hash to 8 digits (similar to Github)
         short_hash = source_hash[:8]
