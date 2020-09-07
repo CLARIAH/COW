@@ -7,6 +7,9 @@ import logging
 import iribaker
 import urllib
 import uuid
+from jinja2 import Template
+import rfc3987
+import re
 
 from hashlib import sha1
 
@@ -48,26 +51,71 @@ init()
 
 
 # TODO: put in class as it is part of Nanopublication 
-def git_hash(data):
+
+def open_file_then_apply_git_hash(file_name):
     """
     Generates a Git-compatible hash for identifying (the current version of) the data
     """
-    s = sha1()
-    u = "blob {}\0".format(len(data))
-    s.update(u.encode('utf-8'))
-    s.update(data.encode('utf-8'))
-    return s.hexdigest()
+    file_hash = sha1()
+    file_size = 0
 
+    try:
+        file_size = os.path.getsize(file_name)
+    except OSError as e:
+        logger.error(f"Could not find the file: {file_name}\n")
+        raise e
+
+    git_specific_prefix = f"blob {file_size}\0"
+    file_hash.update(git_specific_prefix.encode('utf-8'))
+    with open(file_name, 'rb') as infile:
+        for line in infile:
+            file_hash.update(line)
+    return file_hash.hexdigest()
 
 # Part of Burstconverter + build_schema
 def get_namespaces(base=None):
     """Return the global namespaces"""
     if base:
-        namespaces['sdr'] = Namespace(str(base + u'/'))
-        namespaces['sdv'] = Namespace(str(base + u'/vocab/'))
+        namespaces['sdr'] = Namespace(str(base + '/'))
+        namespaces['sdv'] = Namespace(str(base + '/vocab/'))
         with open(YAML_NAMESPACE_FILE, 'w') as outfile:
             yaml.dump(namespaces, outfile, default_flow_style=True)
     return namespaces
+
+def validateTerm(term, headers):
+    # IRIs have a URIRef type
+    if type(term) == URIRef:
+        iri = None
+        template = Template(term)
+        #E.g. http://example.com/{{jinja_statement}} --> http://example.com/None
+
+        rendered_template = None
+        try:
+            rendered_template = template.render(**headers)
+            #E.g. http://example.com/{csv_column_name} --> http://example.com/None
+        except TypeError as e:
+            # This could happen when LD concepts interact with Jinja concepts, e.g. {{ _row + 'some_string' }}
+            # In that case we take the {{ }} out, and assume the template is fine
+            # In the rare cases it isn't, the conversion will fail
+            rendered_template = re.sub(r'/{{.+}}', '', str(term))
+
+        try:
+            potentially_valid_iri = rendered_template.format(**headers)
+            iri = iribaker.to_iri(potentially_valid_iri)
+            rfc3987.parse(iri, rule='IRI')
+        except ValueError as e:
+            logger.error(f"Found an invalid IRI: {iri}")
+            raise e
+
+def parse_value(value):
+    if value == None:
+        return value
+    elif hasattr(value, 'identifier'):
+        # See https://rdflib.readthedocs.io/en/stable/rdf_terms.html
+        return str(value.identifier)
+    else: # assuming value is a string
+        return str(value)
+
 
 class Nanopublication(Dataset):
     """
@@ -82,7 +130,7 @@ class Nanopublication(Dataset):
         """
         Initialize the graphs needed for the nanopublication
         """
-        super(Dataset, self).__init__()
+        super().__init__()
 
         # Virtuoso does not accept BNodes as graph names
         self.default_context = Graph(store=self.store, identifier=URIRef(uuid.uuid4().urn))
@@ -97,13 +145,13 @@ class Nanopublication(Dataset):
 
         # Obtain a hash of the source file used for the conversion.
         # TODO: Get this directly from GitLab
-        source_hash = git_hash(open(file_name, 'r').read())
+        source_hash = open_file_then_apply_git_hash(file_name)
 
         # Shorten the source hash to 8 digits (similar to Github)
         short_hash = source_hash[:8]
 
         # Determine a 'hash_part' for all timestamped URIs generated through this procedure
-        hash_part = short_hash + '/' + timestamp
+        hash_part = f"{short_hash}/{timestamp}"
 
         # A URI that represents the version of the file being converted
         self.dataset_version_uri = SDR[source_hash]
@@ -114,13 +162,13 @@ class Nanopublication(Dataset):
         # The nanopublication graph
         # ----
         name = (os.path.basename(file_name)).split('.')[0]
-        self.uri = SDR[name + '/nanopublication/' + hash_part]
+        self.uri = SDR[f"{name}/nanopublication/{hash_part}"]
 
 
         # The Nanopublication consists of three graphs
-        assertion_graph_uri = SDR[name + '/assertion/' + hash_part]
-        provenance_graph_uri = SDR[name + '/provenance/' + hash_part]
-        pubinfo_graph_uri = SDR[name + '/pubinfo/' + hash_part]
+        assertion_graph_uri = SDR[f"{name}/assertion/{hash_part}"]
+        provenance_graph_uri = SDR[f"{name}/provenance/{hash_part}"]
+        pubinfo_graph_uri = SDR[f"{name}/pubinfo/{hash_part}"]
 
         self.ag = self.graph(assertion_graph_uri)
         self.pg = self.graph(provenance_graph_uri)
