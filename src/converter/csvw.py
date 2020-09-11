@@ -22,7 +22,7 @@ from itertools import zip_longest
 import io
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
 logger.addHandler(ch)
@@ -245,7 +245,7 @@ class CSVWConverter(object):
         # All IRIs in the metadata_graph need to at least be valid, this validates them
         headersDict = {}
         with io.open(self.file_name, 'rb') as f:
-            r = csv.reader(f, delimiter=self.delimiter, quotechar=self.quotechar, encoding=UTF8)
+            r = csv.reader(f, delimiter=self.delimiter, quotechar=self.quotechar, encoding=self.encoding)
             headers = next(r)
             headersDict = dict.fromkeys(headers)
 
@@ -500,10 +500,11 @@ class BurstConverter(object):
             # The self.columns dictionary gives the mapping definition per column in the 'columns'
             # array of the CSVW tableSchema definition.
 
+            # default about URL
+            s = self.expandURL(self.aboutURLSchema, row)
+
             for c in self.columns:
                 c = Item(self.metadata_graph, c)
-                # default about URL
-                s = self.expandURL(self.aboutURLSchema, row)
 
                 try:
                     # Can also be used to prevent the triggering of virtual
@@ -518,7 +519,7 @@ class BurstConverter(object):
 
                     # If the null values are specified in an array, we need to parse it as a collection (list)
                     elif isinstance(c.csvw_null, Item):
-                        nulls = Collection(self.metadata_graph, BNode(c.csvw_null))
+                        nulls = Collection(self.metadata_graph, BNode(c.csvw_null.identifier))
 
                         if self.equal_to_null(nulls, row):
                             # Continue to next column specification in this row, if the value is equal to (one of) the null values.
@@ -528,7 +529,7 @@ class BurstConverter(object):
                     # logger.debug(traceback.format_exc()) #removed for readability
                     iter_error_counter +=1
                     if isinstance(c.csvw_null, Item):
-                        nulls = Collection(self.metadata_graph, BNode(c.csvw_null))
+                        nulls = Collection(self.metadata_graph, BNode(c.csvw_null.identifier))
                         if self.equal_to_null(nulls, row):
                             # Continue to next column specification in this row, if the value is equal to (one of) the null values.
                             continue

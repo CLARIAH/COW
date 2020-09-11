@@ -15,14 +15,14 @@
 
 
 *********************************
-COW: Converter for CSV on the Web
+CoW: Converter for CSV on the Web
 *********************************
 
-This package is a comprehensive tool (COW [#f2]_) for batch conversion of multiple datasets expressed in CSV. It uses a JSON schema expressed using an extended version of the CSVW standard, to convert CSV files to RDF in scalable fashion.
+This package is a comprehensive tool (CoW [#f2]_) for batch conversion of multiple datasets expressed in CSV. It uses a JSON schema expressed using an extended version of the CSVW standard, to convert CSV files to RDF in scalable fashion.
 
 ====
 
-Instead of using the command line tool there is also the webservice `cattle <http://cattle.datalegend.net/>`_, providing the same functionality that COW provides without having to install it. CSV files can be uploaded to the service and a JSON schema will be created, using that JSON schema cattle is able to create a RDF structured graph. More information about cattle, including how to use it, can be found at: https://github.com/CLARIAH/cattle.
+Instead of using the command line tool there is also the webservice `cattle <http://cattle.datalegend.net/>`_, providing the same functionality that CoW provides without having to install it. CSV files can be uploaded to the service and a JSON schema will be created, using that JSON schema cattle is able to create a RDF structured graph. More information about cattle, including how to use it, can be found at: https://github.com/CLARIAH/cattle.
 
 ====
 
@@ -35,18 +35,18 @@ Another feature of CSVW is that it allows the specification of a mapping (or int
 
 Interestingly, the JSON format used by CSVW metadata is an `extension of the JSON-LD specification <https://www.w3.org/TR/json-ld/>`_, a JSON-based serialization for Linked Data. As a consequence of this, the CSVW metadata can be directly attached (as provenance) to the RDF resulting from a CSVW-based conversion.
 
-This is exactly what the COW converter does.
+This is exactly what the CoW converter does.
 
-The rest of this documentation will be fairly technical, for some hands-on examples you can take a look at the `Wiki <https://github.com/CLARIAH/COW/wiki>`_.
+The rest of this documentation will be fairly technical, for some hands-on examples you can take a look at the `Wiki <https://github.com/CLARIAH/CoW/wiki>`_.
 
 Features & Limitations
 ======================
 
 Compared to the CSVW specification, the converter has a number of limitations and extra features. These are:
 
-1. COW *does not* perform any schema checking, and ignores any and all parts of the `CSVW Specification <https://www.w3.org/ns/csvw>`_ that are not directly needed for the RDF conversion.
+1. CoW *does not* perform any schema checking, and ignores any and all parts of the `CSVW Specification <https://www.w3.org/ns/csvw>`_ that are not directly needed for the RDF conversion.
 
-2. COW extends the CSVW specification in several ways:
+2. CoW extends the CSVW specification in several ways:
 
   * Advanced formatting of URLs and values
   * Dealing with multiple null values and null values for one or more other columns.
@@ -54,13 +54,13 @@ Compared to the CSVW specification, the converter has a number of limitations an
   * Optionally skipping/not skipping empty cells
   * A default set of namespace prefixes
 
-3. COW does some smart guessing:
+3. CoW does some smart guessing:
 
   * Determining file encoding
   * Determining the delimiter
   * Generating a skeleton schema for any CSV file (see :ref:`here <skeleton-schema>`)
 
-4. COW produces extensive provenance:
+4. CoW produces extensive provenance:
 
   * Converted data is encapsulated in a `Nanopublication <http://nanopub.org>`_
   * The original CSVW schema is encapsulated in the `np:hasProvenance` graph associated with the nanopublication.
@@ -71,9 +71,9 @@ Installation
 Prerequisites
 -------------
 
-* Python 2.7 (installed on most systems)
-* ``pip``
-* ``virtualenv`` (simply `pip install virtualenv`) [#f1]_
+* Python 3.8 (installed on most systems)
+* ``pip3``
+* ``virtualenv`` (simply `pip3 install virtualenv`) [#f1]_
 
 Installing with pip (preferred)
 -------------------------------
@@ -86,13 +86,13 @@ Activate the virtual environment::
 
   source bin/activate
 
-Install cow in the new environment::
+Install CoW in the new environment::
 
-  pip install cow_csvw
+  pip3 install cow_csvw
 
-To upgrade a previously installed version of COW, do::
+To upgrade a previously installed version of CoW, do::
 
-  pip install --upgrade cow_csvw
+  pip3 install --upgrade cow_csvw
 
 (you might need permissions if you're installing outside a virtualenv).
 To check the version currently installed::
@@ -109,7 +109,7 @@ To get help::
 
 .. Open up a terminal (or Command Prompt when you are using Windows), and clone this repository to a directory of your choice::
 
-..   git clone https://github.com/CLARIAH/COW.git
+..   git clone https://github.com/CLARIAH/CoW.git
 
 .. Of course you can also use a git client with a UI.
 
@@ -123,7 +123,7 @@ To get help::
 
 .. Install the required packages::
 
-..   pip install -r requirements.txt
+..   pip3 install -r requirements.txt
 
 .. Change directory to ``src``, and optionally replace the author in the ``config.py`` with your own data. When following the instructions in the next section always replace ``cow_tool`` with `python csvw_tool.py` when writing in the terminal (or Command Prompt).
 
@@ -152,6 +152,7 @@ The table below gives a brief description of each of these options.
    ``dataset``            Specifies the name of the dataset, if it is different from the filename with the ``.csv`` extension stripped.
    ``delimiter``          Forces the use of a specific delimiter when parsing the CSV file (only used with ``build`` option)
    ``quotechar``          Forces the use of a specific quote character (default is ``"``, only used with ``build`` option)
+   ``encoding``           Forces the use of a specific file encoding when parsing the CSV file (only used with ``build`` option)
    ``processes``          Specifies the number of parallel processes to use when converting a CSV file (default is 4)
    ``chunksize``          Specifies the number of lines that will be passed to each process (default is 5000)
    ``base``               The base for URIs generated with the schema (only used with ``build`` option, the default is ``http://data.socialhistory.org``)
@@ -164,11 +165,11 @@ The table below gives a brief description of each of these options.
 Generating a Skeleton Schema
 ----------------------------
 
-Since JSON is a rather verbose language, and we currently do not have a convenient UI for constructing CSVW schema files, COW allows you to generate a skeleton schema for any CSV file.
+Since JSON is a rather verbose language, and we currently do not have a convenient UI for constructing CSVW schema files, CoW allows you to generate a skeleton schema for any CSV file.
 
 Suppose you want to build a skeleton schema for a file ``imf_gdppc.csv`` (from [#f4]_) that looks like::
 
-  Rank;Country;Int
+  Rank;Country;GDP_Per_Capita
   1;Qatar;131,063
   2;Luxembourg;104,906
   3;Macau;96,832
@@ -295,11 +296,11 @@ This will generate a file called ``imf_gdppc.csv-metadata.json`` with the follow
      {
       "datatype": "string", 
       "titles": [
-       "Int"
+       "GDP_Per_Capita"
       ], 
-      "@id": "http://example.com/resource/imf_gdppc.csv/column/Int", 
-      "name": "Int", 
-      "dc:description": "Int"
+      "@id": "http://example.com/resource/imf_gdppc.csv/column/GDP_Per_Capita", 
+      "name": "GDP_Per_Capita", 
+      "dc:description": "GDP_Per_Capita"
      }
     ]
    }
@@ -360,7 +361,7 @@ Going back to our running example, the resulting RDF will be serialized as N-Qua
                   ns2:encoding "ascii" ;
                   ns2:quoteChar "\"" ] ;
           ns2:tableSchema [ ns2:aboutUrl <http://example.com/resource/__row_> ;
-                  ns2:column ( <http://example.com/resource/imf_gdppc.csv/column/Rank> <http://example.com/resource/imf_gdppc.csv/column/Country> <http://example.com/resource/imf_gdppc.csv/column/Int> ) ;
+                  ns2:column ( <http://example.com/resource/imf_gdppc.csv/column/Rank> <http://example.com/resource/imf_gdppc.csv/column/Country> <http://example.com/resource/imf_gdppc.csv/column/GDP_Per_Capita> ) ;
                   ns2:primaryKey "Rank" ] ;
           ns2:url "imf_gdppc.csv"^^xsd:anyURI .
 
@@ -369,10 +370,10 @@ Going back to our running example, the resulting RDF will be serialized as N-Qua
           ns2:name "Country" ;
           ns2:title "Country"@en .
 
-      <http://example.com/resource/imf_gdppc.csv/column/Int> ns4:description "Int"@en ;
+      <http://example.com/resource/imf_gdppc.csv/column/GDP_Per_Capita> ns4:description "GDP_Per_Capita"@en ;
           ns2:datatype xsd:string ;
-          ns2:name "Int" ;
-          ns2:title "Int"@en .
+          ns2:name "GDP_Per_Capita" ;
+          ns2:title "GDP_Per_Capita"@en .
 
       <http://example.com/resource/imf_gdppc.csv/column/Rank> ns4:description "Rank"@en ;
           ns2:datatype xsd:string ;
@@ -398,35 +399,35 @@ Going back to our running example, the resulting RDF will be serialized as N-Qua
 
   <https://iisg.amsterdam/imf_gdppc/assertion/48422b27/2018-11-14T10:59> {
       <http://example.com/resource/0> ns7:Country "Qatar"^^xsd:string ;
-          ns7:Int "131,063"^^xsd:string ;
+          ns7:GDP_Per_Capita "131,063"^^xsd:string ;
           ns7:Rank "1"^^xsd:string .
 
       <http://example.com/resource/1> ns7:Country "Luxembourg"^^xsd:string ;
-          ns7:Int "104,906"^^xsd:string ;
+          ns7:GDP_Per_Capita "104,906"^^xsd:string ;
           ns7:Rank "2"^^xsd:string .
 
       <http://example.com/resource/2> ns7:Country "Macau"^^xsd:string ;
-          ns7:Int "96,832"^^xsd:string ;
+          ns7:GDP_Per_Capita "96,832"^^xsd:string ;
           ns7:Rank "3"^^xsd:string .
 
       <http://example.com/resource/3> ns7:Country "Singapore"^^xsd:string ;
-          ns7:Int "90,249"^^xsd:string ;
+          ns7:GDP_Per_Capita "90,249"^^xsd:string ;
           ns7:Rank "4"^^xsd:string .
 
       <http://example.com/resource/4> ns7:Country "Brunei Darussalam"^^xsd:string ;
-          ns7:Int "83,513"^^xsd:string ;
+          ns7:GDP_Per_Capita "83,513"^^xsd:string ;
           ns7:Rank "5"^^xsd:string .
 
       <http://example.com/resource/5> ns7:Country "Kuwait"^^xsd:string ;
-          ns7:Int "72,675"^^xsd:string ;
+          ns7:GDP_Per_Capita "72,675"^^xsd:string ;
           ns7:Rank "6"^^xsd:string .
 
       <http://example.com/resource/6> ns7:Country "Ireland"^^xsd:string ;
-          ns7:Int "72,524"^^xsd:string ;
+          ns7:GDP_Per_Capita "72,524"^^xsd:string ;
           ns7:Rank "7"^^xsd:string .
 
       <http://example.com/resource/7> ns7:Country "Norway"^^xsd:string ;
-          ns7:Int "70,645"^^xsd:string ;
+          ns7:GDP_Per_Capita "70,645"^^xsd:string ;
           ns7:Rank "8"^^xsd:string .
   }
 
@@ -447,38 +448,38 @@ What does this mean?
 The Schema
 ==========
 
-The COW converter uses the CSWV standard syntax for defining mappings from CSV to RDF graphs. These mappings are all defined in the ``tableSchema`` dictionary. For a full reference of the things you can do, we refer to the `CSV on the Web (CSVW) <https://www.w3.org/ns/csvw>`_ specification and in particular to the document on `Generating RDF from Tabular Data on the Web <http://www.w3.org/TR/csv2rdf/>`_.
+The CoW converter uses the CSWV standard syntax for defining mappings from CSV to RDF graphs. These mappings are all defined in the ``tableSchema`` dictionary. For a full reference of the things you can do, we refer to the `CSV on the Web (CSVW) <https://www.w3.org/ns/csvw>`_ specification and in particular to the document on `Generating RDF from Tabular Data on the Web <http://www.w3.org/TR/csv2rdf/>`_.
 
-**Important**: COW does not purport to implement the full CSVW specification, nor has it been tested against the `official test suite <http://www.w3.org/2013/csvw/tests/>`_. In fact, COW extends and deviates from the CSVW specification in several important ways.
+**Important**: CoW does not purport to implement the full CSVW specification, nor has it been tested against the `official test suite <http://www.w3.org/2013/csvw/tests/>`_. In fact, CoW extends and deviates from the CSVW specification in several important ways.
 
 We document the most important differences in the section below, and give a :ref:`short overview <short-overview>` of how schemas can be defined.
 
 Differences and Extensions
 --------------------------
 
-1. While CSVW allows only for simple references to values in a column using the curly-brackets syntax (e.g. ``{name}`` to refer to the value of the name column at the current row), COW interprets the strings containing these references in two ways:
+1. While CSVW allows only for simple references to values in a column using the curly-brackets syntax (e.g. ``{name}`` to refer to the value of the name column at the current row), CoW interprets the strings containing these references in two ways:
 
-  1. as `Python Format Strings <https://docs.python.org/2/library/string.html#formatstrings>`_, and
-  2. as `Jinja2 Templates <http://jinja.pocoo.org>`_
+  1. as `Python Format Strings <https://docs.python.org/3/library/string.html#formatstrings>`_, and
+  2. as `Jinja2 Templates <https://jinja.palletsprojects.com/en/2.11.x/>`_
 
   This allows for very elaborate operations on row contents (e.g. containing conditionals, loops, and string operations.) [#f3]_.
 
-2. CSVW allows only to specify a single ``null`` value for a column; when the cell in that column is equal to the null value, it is ignored for RDF conversion. COW extends the CSVW treatment of ``null`` values in two ways:
+2. CSVW allows only to specify a single ``null`` value for a column; when the cell in that column is equal to the null value, it is ignored for RDF conversion. CoW extends the CSVW treatment of ``null`` values in two ways:
 
   1. multiple potential ``null`` values for a column, expressed as a JSON list, and
   2. conditional on values in *another* column, as a JSON-LD list (using the ``@list`` keyword)
 
-3. COW allows the use of ``csvw:collectionUrl`` and ``csvw:schemeUrl`` on column specifications. This will automatically cast the value for ``valueUrl`` to a ``skos:Concept``, and adds it to the collection or scheme respectively indicated by these urls using a ``skos:member`` or ``skos:inScheme`` predicate.
+3. CoW allows the use of ``csvw:collectionUrl`` and ``csvw:schemeUrl`` on column specifications. This will automatically cast the value for ``valueUrl`` to a ``skos:Concept``, and adds it to the collection or scheme respectively indicated by these urls using a ``skos:member`` or ``skos:inScheme`` predicate.
 
-4. By default COW skips cells that are empty (as per the CSVW specification), setting the ``csvw:parseOnEmpty`` attribute to ``true`` overrides this setting. This is useful when an empty cell has a specific meaning.
+4. By default CoW skips cells that are empty (as per the CSVW specification), setting the ``csvw:parseOnEmpty`` attribute to ``true`` overrides this setting. This is useful when an empty cell has a specific meaning.
 
 5. Column specifications with a ``xsd:anyURI`` datatype are converted to proper URIs rather than Literals with the ``xsd:anyURI`` datatype. This allows for conditionally generating URIs across multiple namespaces using Jinja2 templates, see `issue #13 <https://github.com/CLARIAH/wp4-converters/issues/13>`_ .
 
-6. Column specifications in COW should have a JSON-LD style ``@id`` attribute. This ensures that all predicates generated through the conversion are linked back to the RDF representation of the CSVW JSON schema that informed the conversion.
+6. Column specifications in CoW should have a JSON-LD style ``@id`` attribute. This ensures that all predicates generated through the conversion are linked back to the RDF representation of the CSVW JSON schema that informed the conversion.
 
-7. COW converts column names to valid Python dictionary keys. In general this means that spaces in column names will be replaced with underscores.
+7. CoW converts column names to valid Python dictionary keys. In general this means that spaces in column names will be replaced with underscores.
 
-8. For convenience, COW uses a default set of namespaces, specified in the ``src/converter/namespaces.yaml`` file, that will be used to interpret namespace prefix use in the JSON schema. Any namespace prefixes defined in the JSON schema will override the default ones.
+8. For convenience, CoW uses a default set of namespaces, specified in the ``src/converter/namespaces.yaml`` file, that will be used to interpret namespace prefix use in the JSON schema. Any namespace prefixes defined in the JSON schema will override the default ones.
 
 .. _short-overview:
 
@@ -541,29 +542,31 @@ Every column is a dictionary that may have the following attributes.
 
 .. _template-expansion:
 
-Template Expansion
-^^^^^^^^^^^^^^^^^^
+Template Expansion with Jinja2 templates and Python format strings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When a CSV file is processed, COW does this row by row in the file, producing a dictionary where key/value pairs correspond to column headers and the value of the cell. So for::
+When a CSV file is processed, CoW does this row by row in the file, producing a dictionary where key/value pairs correspond to column headers and the value of the cell. So for::
 
-  Rank;Country;Int
+  Rank;Country;GDP_Per_Capita
   1;Qatar;131063
 
 the first row becomes [#f5]_ ::
 
-  row = {'Rank': 1, 'Country': 'Qatar', 'Int': 131063}
+  row = {'Rank': 1, 'Country': 'Qatar', 'GDP_Per_Capita': 131063}
 
-For each row, COW then applies each column definition in the ``columns`` array (i.e. not for each column in the CSV file).
+For each row, CoW then applies each column definition in the ``columns`` array in the JSON-LD file (i.e. which does not have to mean each column in the CSV file).
 
 The URL templates in the attributes ``aboutUrl``, ``propertyUrl``, ``valueUrl``, and the regular template in the ``csvw:value`` are used to generate URLs and Literal values from the values of the cells in a specific row.
 
 The values for the URL templates that the parser receives are *interpreted as URLs*. This means that they are expanded relative to the ``@base`` URI of the CSVW JSON schema file, unless they are explicitly preceded by a defined namespace prefix.
 
-The names of Jinja2 or Python formatting field names should correspond to the keys of the dictionary (i.e. to the column names). COW supports a special CSVW field name ``_row`` that inserts the row number. This means that our row now becomes::
+The names of Jinja2 or Python formatting field names should correspond to the keys of the dictionary (i.e. to the column names). CoW supports a special CSVW field name ``_row`` that inserts the row number. This means that our row now becomes::
 
-  row = {'Rank': 1, 'Country': 'Qatar', 'Int': 131063, '_row': 1}
+  row = {'Rank': 1, 'Country': 'Qatar', 'GDP_Per_Capita': 131063, '_row': 1}
 
-COW always first applies the Jinja2 template, and then the Python formatting.
+With this preparation of the row data the template expansion can begin. CoW always first applies: 
+* the Jinja2 template (`see documentation <https://jinja.palletsprojects.com/en/2.11.x/>`_), 
+* and then the Python format strings (`see documentation <https://docs.python.org/3/library/string.html#formatstrings>`_).
 
 For instance (assuming a ``@base`` of ``http://example.com/``), we define an ``aboutUrl`` with the special ``_row`` key as a Python string formatting field name, and ``Country`` as a Jinja2 field name::
 
@@ -599,13 +602,26 @@ Our virtual column may look as follows::
     "virtual": "true",
     "aboutUrl": "{Country}",
     "propertyUrl": "rdf:type",
-    "valueUrl": "{% if Int > 100000 %}rich{% else %}poor{% endif %}"
+    "valueUrl": "{% if GDP_Per_Capita > 100000 %}rich{% else %}poor{% endif %}"
   }
 
 This will produce, for Qatar and Singapore, the respective triples::
 
   <http://example.com/Qatar>     rdf:type <http://example.com/rich> .
   <http://example.com/Singapore> rdf:type <http://example.com/poor> .
+
+If you happen to be a bit experienced with the Python3 or ipython shell, then you could also quickly test Jinja templates like so:
+
+.. code-block:: python
+  :linenos:
+
+  from jinja2 import Template
+  my_jinja_template = "{% if GDP_Per_Capita > 100000 %}rich{% else %}poor{% endif %}"
+  row = {'Rank': 1, 'Country': 'Qatar', 'GDP_Per_Capita': 131063}
+  Template(my_jinja_template).render(row)
+  # returns 'rich'
+
+
 
 FAQ: Frequently Asked Questions
 ==========================
@@ -660,6 +676,9 @@ When converting, I get the following error: ``"Exception: Could not find source 
 
 I've added a language tag using ``"lang": "whatever_language"``, but why doesn't show ``@whatever_language`` in the n-quads file?
   The ``"lang":`` part should be placed directly after the specification of the skos:pref/hidden/altLabel.
+
+I get ``TypeError: '>' not supported between instances of 'int' and 'str'`` when doing the convert step, what does that mean?
+  It might be the case that in your Jinja template there is a string and an int. You need to cast the string to an int or float if you're doing a numerical comparison. For example, if ``GDP_Per_Capita`` happens to be a string, then the correct Jinja template would be: ``"{% if GDP_Per_Capita|int > 100000 %}rich{% else %}poor{% endif %}"``. The wrong template would leave out the `|int` part.
 
 .. _common-jinja2:
 

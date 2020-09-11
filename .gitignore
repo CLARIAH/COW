@@ -33,3 +33,4 @@ docs/_build
 src/iribaker/
 pip-selfcheck.json
 iribaker
+.vscode
