@@ -15,13 +15,18 @@ A practical performance tip that I found is the following though:
 Find out how many threads you have on your computer (I use htop , you can get it by doing `sudo apt-get install htop`)
 And then run CoW with one process less than you have threads. Example: I have 12 threads, so I run CoW with 11 --processes
 
-So I run CoW with: python3 `../cow/src/csvw_tool.py convert openarch_persons_deaths_v2.csv --processes 11`
+So I run CoW with: 
+
+`python3 ../cow/src/csvw_tool.py convert openarch_persons_deaths_v2.csv --processes 11`
 
 A rule of thumb is that 5000 rows takes about 40 seconds
 
-wc -l openarch_persons_deaths_v2.csv gives 36054733 rows
+`wc -l openarch_persons_deaths_v2.csv gives 36054733 rows`
+
 So that should take (with 11 --processes)
+
 `> ((36054733 / (11 * 5000) ) * 40) / 3600`
+
 `[1] 7.283784`
 about 7+ hours
 
@@ -35,9 +40,13 @@ PyPy
 A fast, compliant alternative implementation of Python Download PyPy What is PyPy ? Documentation (external link) On average, PyPy is 4.2 times faster than CPython PyPy trunk (with JIT)
 
 Here's what I did (you probably need to adapt it a bit)
-# Download it https://www.pypy.org/download.html
+# Download it 
+https://www.pypy.org/download.html
 # Extract it
 `/home/melvin/Downloads/pypy3.7-v7.3.2-linux64/bin/pypy3 -m ensurepip`
+
 `~/Downloads/pypy3.7-v7.3.2-linux64/bin/pypy3 -mpip install -r requirements.txt`
+
 #Convert 
+
 `~/Downloads/pypy3.7-v7.3.2-linux64/bin/pypy3.7 ~/clariah/cow/src/csvw_tool.py convert ~/clariah/examples/deaths_50000.csv`
