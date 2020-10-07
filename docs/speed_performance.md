@@ -2,13 +2,14 @@
 
 So upon this initial analysis it seems hard to make major improvements for CoW. I think the speedup gains that I saw are in the range of 25% to 75% faster (e.g. instead of 5000 lines taking 35 seconds, I think it's possible to get that to 25 seconds). Though, it's still a guess whether it's actually possible, but it seems quite promising that it's possible. (edited) 
 
-So upon this initial analysis it seems hard to make major improvements for CoW. I think the speedup gains that I saw are in the range of 25% to 75% faster (e.g. instead of 5000 lines taking 35 seconds, I think it's possible to get that to 25 seconds). Though, it's still a guess whether it's actually possible, but it seems quite promising that it's possible. (edited) 
-
-So upon this initial analysis it seems hard to make major improvements for CoW. I think the speedup gains that I saw are in the range of 25% to 75% faster (e.g. instead of 5000 lines taking 35 seconds, I think it's possible to get that to 25 seconds). Though, it's still a guess whether it's actually possible, but it seems quite promising that it's possible. (edited) 
-
 Another thing I found is that if you give it twice as much input, then it takes twice as long to complete. This shows that there are no big performance bugs in CoW
 
 The bulk of the performance happens in the process function, so that's the place to look for optimization
+
+25% to 50% of the full performance seems to be fully there because of Jinja and IRIBaker
+For example, if get_property_url (that uses a lot of Jinja and IRIBaker) returns something simple, the time drops from 35 seconds on the file that I'm testing to 23 seconds (edited) 
+
+
 
 # Practical recommendation
 A practical performance tip that I found is the following though:
