@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 try:
     # git install
     from converter.csvw import CSVWConverter, build_schema, extensions
@@ -12,10 +14,11 @@ import traceback
 from glob import glob
 from rdflib import ConjunctiveGraph
 from werkzeug.utils import secure_filename
+import codecs
 
 class COW(object):
 
-    def __init__(self, mode=None, files=None, dataset=None, delimiter=None, quotechar='\"', processes=4, chunksize=5000, base="https://iisg.amsterdam/", output_format='nquads'):
+    def __init__(self, mode=None, files=None, dataset=None, delimiter=None, encoding=None, quotechar='\"', processes=4, chunksize=5000, base="https://iisg.amsterdam/", output_format='nquads'):
         """
         COW entry point
         """
@@ -31,13 +34,13 @@ class COW(object):
                     os.rename(target_file, secure_filename(target_file+"_"+timestamp))
                     print("Backed up prior version of schema to {}".format(target_file+"_"+timestamp))
 
-                build_schema(source_file, target_file, dataset_name=dataset, delimiter=delimiter, quotechar=quotechar, base=base)
+                build_schema(source_file, target_file, dataset_name=dataset, delimiter=delimiter, encoding=encoding, quotechar=quotechar, base=base)
 
             elif mode == 'convert':
                 print("Converting {} to RDF".format(source_file))
 
                 try:
-                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, processes=processes, chunksize=chunksize, output_format='nquads')
+                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, encoding=encoding, processes=processes, chunksize=chunksize, output_format='nquads')
                     c.convert()
 
                     # We convert the output serialization if different from nquads
@@ -55,7 +58,7 @@ class COW(object):
                     print("Something went wrong, skipping {}.".format(source_file))
                     traceback.print_exc(file=sys.stdout)
             else:
-                print("Whoops for file {}".format(f))
+                print("Whoops for file {}".format(source_file))
 
 def main():
     parser = argparse.ArgumentParser(description="Not nearly CSVW compliant schema builder and RDF converter")
@@ -64,6 +67,7 @@ def main():
     parser.add_argument('--dataset', dest='dataset', type=str, help="A short name (slug) for the name of the dataset (will use input file name if not specified)")
     parser.add_argument('--delimiter', dest='delimiter', default=None, type=str, help="The delimiter used in the CSV file(s)")
     parser.add_argument('--quotechar', dest='quotechar', default='\"', type=str, help="The character used as quotation character in the CSV file(s)")
+    parser.add_argument('--encoding', dest='encoding', default=None, type=str, help="The character encoding used in the CSV file(s)")
     parser.add_argument('--processes', dest='processes', default='4', type=int, help="The number of processes the converter should use")
     parser.add_argument('--chunksize', dest='chunksize', default='5000', type=int, help="The number of rows processed at each time")
     parser.add_argument('--base', dest='base', default='https://iisg.amsterdam/', type=str, help="The base for URIs generated with the schema (only relevant when `build`ing a schema)")
@@ -77,7 +81,14 @@ def main():
     for f in args.files:
         files += glob(f)
 
-    COW(args.mode, files, args.dataset, args.delimiter, args.quotechar, args.processes, args.chunksize, args.base, args.format)
+    if args.encoding:
+        try:
+            codecs.lookup(args.encoding)
+        except LookupError:
+            print("Invalid character encoding. See https://docs.python.org/3.8/library/codecs.html#standard-encodings to see which encodings are possible.")
+            sys.exit(1)
+
+    COW(args.mode, files, args.dataset, args.delimiter, args.encoding, args.quotechar, args.processes, args.chunksize, args.base, args.format)
 
 if __name__ == '__main__':
     main()
