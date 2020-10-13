@@ -626,66 +626,14 @@ If you happen to be a bit experienced with the Python3 or ipython shell, then yo
 FAQ: Frequently Asked Questions
 ==========================
 
-What's the general structure of the resulting ``.csv-schema.json`` file?
-    - block 1 contains information on the csv file such as delimiter and encoding
-    - block 2 provides information on the licensing
-    - block 3 provides information on the publisher (you)
-    - block 4 contains the reference to the file, your base URI, language and short-hand uri definitions, and finally some provenance info, such as date first created
-    - block 5 starts with ``tableSchema``. This is the section that you will want to focus on, as this is where you'll describe your variables in RDF. Note that the ``aboutUrl`` just under tableSchema is the default ``aboutUrl``.
-
-After I build my file I get all kinds of ``@id`` rows. What should I do with those?
-  The purpose of these rows is that they identify the schema instruction itself. This way we can explicitly refer generated RDF back to the part of the schema that produced it.
-
-How can I expand the description of my variable in RDF?
-  You can add information by adding a 'virtual block'. For example, suppose we started out with the block above, we could expand on it in the follow way::
-
-    {
-     "datatype": "string",
-     "titles": [
-     "institution"
-     ],
-     "name": "institution",
-     "dc:description": "The research institute providing the study"
-     },
-     {
-     "virtual": true,
-     "propertyUrl": "foaf:Organization",
-     "valueUrl": "institute/{institution}"
-    }
-
-  If our base url would be ``http://example.com``, it would create a series of URI's representing all the different values (institutes) in the dataset, like so: ``http://example.com/institute/Institute4AwesomeResearch``, ``http://example.com/institute/StarWarsAcademy``, etc..
-
-My variable contains web addresses (URLs). How can I have them as proper addresses rather than strings?
-  Change the datatype to: ``xsd:anyURI``
-
-Can I assign values conditionally, i.e. use an if-statement?
-  Indeed you can. For example, HISCO codes ought to be 5 digits, but sometimes the first digit is a zero and then gets 'lost'. So we want to add that zero back, when HISCO has less than 5 digits. However, we don't want to add a zero, to the codes indicating missing HISCO's: (-1, -2 (and -3 in the Dutch Historical Sample version of HISCO)). Ergo::
-
-    "aboutUrl": "hisco:{% if not HISCO in ['-1','-3','-2']%}{HISCO:0>5}{% else %}{HISCO}{% endif %}"
-
-  Also see the section :ref:`common-jinja2`
-
-What does ``ValueError: Expecting , delimiter: line 161 column 5 (char 5716)`` mean?
-  This might happen when you use the csvw-tool to convert a dataset. It indicates that you probably forgot a comma (or other delimiter) in the line before.
-
-What does ``ValueError:"No JSON object could be decoded"`` mean?
-  In general it means that the Json schema is not syntactically valid. This could mean anything from missing commas, brackets, closing quotes, incorrect string quotes or invalid structure. E.g. this error occurs when your second to final `}` is followed by a comma.
-
-When converting, I get the following error: ``"Exception: Could not find source file or necessary metadata file in path..."``
-  It's likely your trying to convert the ``.csv-metadata.json`` file rather than the ``.csv`` file itself.
-
-I've added a language tag using ``"lang": "whatever_language"``, but why doesn't show ``@whatever_language`` in the n-quads file?
-  The ``"lang":`` part should be placed directly after the specification of the skos:pref/hidden/altLabel.
-
-I get ``TypeError: '>' not supported between instances of 'int' and 'str'`` when doing the convert step, what does that mean?
-  It might be the case that in your Jinja template there is a string and an int. You need to cast the string to an int or float if you're doing a numerical comparison. For example, if ``GDP_Per_Capita`` happens to be a string, then the correct Jinja template would be: ``"{% if GDP_Per_Capita|int > 100000 %}rich{% else %}poor{% endif %}"``. The wrong template would leave out the `|int` part.
+Please refer to our [wiki](https://github.com/clariah/cow/wiki) for questions on specific topics.
 
 .. _common-jinja2:
 
 Commonly used Template Formatting
 ----------------------------------------
 
-* Leading zeroes: ``{variable:0>N}``, where ``N`` is the number of digits to fill up to.
+* Leading zeroes: ``{{'%05d'|format(variable|int)}}``, where ``5`` is the number of digits to fill up to.
 * If-else statements: ``{% if conditional_variable=="something" %} value_if {% else %} value_else {% endif %}``.
 * Convert to string and concatenate: ``{{variable ~ 'string'}}``, e.g. if variable has value "Hello" then the result would be "Hello string". Note the double braces.
 * Arithmetic: use double braces and cast as numeric first, e.g. ``{{variable|float() * 1000}}``.
