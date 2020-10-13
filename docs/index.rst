@@ -626,7 +626,7 @@ If you happen to be a bit experienced with the Python3 or ipython shell, then yo
 FAQ: Frequently Asked Questions
 ==========================
 
-Please refer to our [wiki](https://github.com/clariah/cow/wiki) for questions on specific topics.
+Please refer to our `wiki <https://github.com/clariah/cow/wiki>`_ for questions on specific topics.
 
 .. _common-jinja2:
 
