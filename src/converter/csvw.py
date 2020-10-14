@@ -500,10 +500,10 @@ class BurstConverter(object):
             # The self.columns dictionary gives the mapping definition per column in the 'columns'
             # array of the CSVW tableSchema definition.
 
-            # default about URL
-            s = self.expandURL(self.aboutURLSchema, row)
+            default_subject = self.expandURL(self.aboutURLSchema, row)
 
             for c in self.columns:
+                s = None
                 c = Item(self.metadata_graph, c)
 
                 try:
@@ -628,6 +628,7 @@ class BurstConverter(object):
 
 
                     # Add the triple to the assertion graph
+                    s = s if s else default_subject
                     self.g.add((s, p, o))
 
                     # Add provenance relating the propertyUrl to the column id
