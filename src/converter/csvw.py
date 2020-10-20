@@ -271,7 +271,7 @@ class CSVWConverter(object):
         # self.columns = Collection(self.metadata_graph, BNode(self.schema.csvw_column))
         # Python 3 can't work out Item so we'll just SPARQL the graph
 
-        self.columns = [o for s,p,o in self.metadata_graph.triples((None, URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#first"), None))]
+        self.columns = [column_item.identifier for column_item in self.schema.csvw_column.items()]
         #
         # from pprint import pprint
         # pprint(self.columns)
