@@ -15,6 +15,7 @@ from glob import glob
 from rdflib import ConjunctiveGraph
 from werkzeug.utils import secure_filename
 import codecs
+from pathlib import Path
 
 class COW(object):
 
@@ -29,10 +30,13 @@ class COW(object):
                 target_file = "{}-metadata.json".format(source_file)
 
                 if os.path.exists(target_file):
-                    modifiedTime = os.path.getmtime(target_file)
+                    path = Path(target_file)
+                    modifiedTime = os.path.getmtime(path)
                     timestamp = datetime.datetime.fromtimestamp(modifiedTime).isoformat()
-                    os.rename(target_file, secure_filename(target_file+"_"+timestamp))
-                    print("Backed up prior version of schema to {}".format(target_file+"_"+timestamp))
+                    filename = secure_filename(f"{path.name} {timestamp}")
+                    new_path = path.joinpath(path.parent, filename)
+                    os.rename(path, new_path)
+                    print(f"Backed up prior version of schema to {new_path}")
 
                 build_schema(source_file, target_file, dataset_name=dataset, delimiter=delimiter, encoding=encoding, quotechar=quotechar, base=base)
 
