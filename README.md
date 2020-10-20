@@ -139,7 +139,7 @@ MIT License (see [license.txt](license.txt))
 
 **Authors:**    Albert Meroño-Peñuela, Roderick van der Weerdt, Rinke Hoekstra, Kathrin Dentler, Auke Rijpma, Richard Zijdeman, Melvin Roest
 
-**Copyright:**  Vrije Universiteit Amsterdam, Utrecht University, International Institute for Social History
+**Copyright:**  Vrije Universiteit Amsterdam, Utrecht University, International Institute of Social History
 
 
 CoW is developed and maintained by the CLARIAH project and funded by NWO.
