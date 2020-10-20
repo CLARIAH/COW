@@ -542,18 +542,18 @@ class BurstConverter(object):
                     csvw_virtual = parse_value(c.csvw_virtual)
                     csvw_name = parse_value(c.csvw_name)
                     csvw_value = parse_value(c.csvw_value)
-                    about_url = parse_value(c.csvw_aboutUrl)
-                    value_url = parse_value(c.csvw_valueUrl)
+                    csvw_about_url = parse_value(c.csvw_aboutUrl)
+                    csvw_value_url = parse_value(c.csvw_valueUrl)
                     csvw_datatype = parse_value(c.csvw_datatype)
 
-                    if csvw_virtual == 'true' and c.csvw_aboutUrl is not None:
-                        s = self.expandURL(c.csvw_aboutUrl, row)
+                    if csvw_about_url is not None:
+                        s = self.expandURL(csvw_about_url, row)
 
                     p = self.get_property_url(c.csvw_propertyUrl, csvw_name, row)
 
-                    if c.csvw_valueUrl is not None:
+                    if csvw_value_url is not None:
                         # This is an object property, because the value needs to be cast to a URL
-                        o = self.expandURL(c.csvw_valueUrl, row)
+                        o = self.expandURL(csvw_value_url, row)
                         object_value = str(o)
                         if self.isValueNull(os.path.basename(object_value), c):
                             logger.debug("skipping empty value")
@@ -568,11 +568,11 @@ class BurstConverter(object):
                                 o = URIRef(iribaker.to_iri(value))
 
                             if URIRef(csvw_datatype) == XSD.linkURI:
-                                about_url = about_url[about_url.find("{"):about_url.find("}")+1]
-                                s = self.expandURL(about_url, row)
+                                csvw_about_url = csvw_about_url[csvw_about_url.find("{"):csvw_about_url.find("}")+1]
+                                s = self.expandURL(csvw_about_url, row)
                                 # logger.debug("s: {}".format(s))
-                                value_url = value_url[value_url.find("{"):value_url.find("}")+1]
-                                o = self.expandURL(value_url, row)
+                                csvw_value_url = csvw_value_url[csvw_value_url.find("{"):csvw_value_url.find("}")+1]
+                                o = self.expandURL(csvw_value_url, row)
                                 # logger.debug("o: {}".format(o))
 
                         # For coded properties, the collectionUrl can be used to indicate that the
@@ -592,9 +592,9 @@ class BurstConverter(object):
                             self.g.add((o, SKOS['inScheme'], scheme))
                     else:
                         # This is a datatype property
-                        if c.csvw_value is not None:
+                        if csvw_value is not None:
                             value = self.render_pattern(csvw_value, row)
-                        elif c.csvw_name is not None:
+                        elif csvw_name is not None:
                             # print s
                             # print c.csvw_name, self.encoding
                             # print row[unicode(c.csvw_name)], type(row[unicode(c.csvw_name)])
