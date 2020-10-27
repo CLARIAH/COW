@@ -34,7 +34,7 @@ class COW(object):
                     modifiedTime = os.path.getmtime(path)
                     timestamp = datetime.datetime.fromtimestamp(modifiedTime).isoformat()
                     filename = secure_filename(f"{path.name} {timestamp}")
-                    new_path = path.joinpath(path.parent, filename)
+                    new_path = Path(path.parent, filename)
                     os.rename(path, new_path)
                     print(f"Backed up prior version of schema to {new_path}")
 
