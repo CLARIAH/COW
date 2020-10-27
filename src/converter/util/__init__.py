@@ -1,4 +1,5 @@
 from rdflib import Dataset, Graph, Namespace, RDF, RDFS, OWL, XSD, Literal, URIRef
+import converter.csvw as csvw
 import os
 import yaml
 import datetime
@@ -10,7 +11,6 @@ import uuid
 from jinja2 import Template
 import rfc3987
 import re
-
 from hashlib import sha1
 
 logger = logging.getLogger(__name__)
@@ -110,10 +110,10 @@ def validateTerm(term, headers):
 def parse_value(value):
     if value == None:
         return value
-    elif hasattr(value, 'identifier'):
+    elif type(value) is csvw.Item:
         # See https://rdflib.readthedocs.io/en/stable/rdf_terms.html
         return str(value.identifier)
-    else: # assuming value is a string
+    else: # assuming value is a string or can be coerced as such (i.e. rdflib.term)
         return str(value)
 
 
