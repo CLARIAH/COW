@@ -12,7 +12,7 @@ from chardet.universaldetector import UniversalDetector
 import multiprocessing as mp
 import unicodecsv as csv
 from jinja2 import Template
-from .util import get_namespaces, Nanopublication, validateTerm, parse_value, CSVW, PROV, DC, SKOS, RDF
+from .util import patch_namespaces_to_disk, process_namespaces, get_namespaces, Nanopublication, validateTerm, parse_value, CSVW, PROV, DC, SKOS, RDF
 from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
 from rdflib.resource import Resource
 from rdflib.collection import Collection
@@ -80,7 +80,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
         "@context": ["https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json",
                      {"@language": "en",
                       "@base": "{}/".format(base)},
-                     get_namespaces(base)],
+                     process_namespaces(base)],
         "url": url,
         "dialect": {"delimiter": delimiter,
                     "encoding": encoding,
@@ -172,7 +172,7 @@ class CSVWConverter(object):
     * A nanopublication structure for publishing the converted data (using :class:`converter.util.Nanopublication`)
     """
 
-    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding=UTF8, processes=4, chunksize=5000, output_format='nquads'):
+    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding=UTF8, processes=4, chunksize=5000, output_format='nquads', base="https://iisg.amsterdam/"):
         logger.info("Initializing converter for {}".format(file_name))
         self.file_name = file_name
         self.output_format = output_format
@@ -187,6 +187,17 @@ class CSVWConverter(object):
         self._chunksize = chunksize
         logger.info("Processes: {}".format(self._processes))
         logger.info("Chunksize: {}".format(self._chunksize))
+
+        # Get @base from the metadata.json file
+        with open(schema_file_name, 'r') as f:
+            schema = json.load(f)
+            self.base = schema['@context'][1]['@base']
+            if self.base == None or self.base == "":
+                self.base = base
+            patch_namespaces_to_disk({
+                'sdr' : str(self.base + '/'), 
+                'sdv' : str(self.base + '/vocab/')
+            })
 
         self.np = Nanopublication(file_name)
         # self.metadata = json.load(open(schema_file_name, 'r'))

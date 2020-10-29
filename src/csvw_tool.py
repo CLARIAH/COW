@@ -44,7 +44,7 @@ class COW(object):
                 print("Converting {} to RDF".format(source_file))
 
                 try:
-                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, encoding=encoding, processes=processes, chunksize=chunksize, output_format='nquads')
+                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, encoding=encoding, processes=processes, chunksize=chunksize, output_format='nquads', base=base)
                     c.convert()
 
                     # We convert the output serialization if different from nquads

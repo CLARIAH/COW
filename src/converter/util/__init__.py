@@ -73,14 +73,28 @@ def open_file_then_apply_git_hash(file_name):
     return file_hash.hexdigest()
 
 # Part of Burstconverter + build_schema
-def get_namespaces(base=None):
-    """Return the global namespaces"""
+def process_namespaces(base=None):
+    """Return the global namespaces and process the base IRI if needed"""
     if base:
         namespaces['sdr'] = Namespace(str(base + '/'))
         namespaces['sdv'] = Namespace(str(base + '/vocab/'))
         with open(YAML_NAMESPACE_FILE, 'w') as outfile:
             yaml.dump(namespaces, outfile, default_flow_style=True)
     return namespaces
+
+def get_namespaces():
+    """Return the global namespaces with no frills"""
+    return namespaces
+
+def patch_namespaces_to_disk(nameSpaceDict):
+    """Patch any namespace(s) in memory without writing to file.
+    Namespaces that require to be lazily loaded, instead of being loaded on startup, can be called with this function."""
+    # TODO refactor to lazily load the namespaces YAML file, so that this function isn't needed
+    for prefix, value in nameSpaceDict.items():
+        namespaces[prefix] = Namespace(value)
+        globals()[prefix.upper()] = namespaces[prefix]
+    with open(YAML_NAMESPACE_FILE, 'w') as outfile:
+        yaml.dump(namespaces, outfile, default_flow_style=True)
 
 def validateTerm(term, headers):
     # IRIs have a URIRef type
