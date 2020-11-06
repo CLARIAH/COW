@@ -1,5 +1,12 @@
 from rdflib import Dataset, Graph, Namespace, RDF, RDFS, OWL, XSD, Literal, URIRef
-import converter.csvw as csvw
+
+try:
+    # git install
+    import converter.csvw as csvw
+except ImportError:
+    # pip install
+    import cow_csvw.converter.csvw as csvw
+
 import os
 import yaml
 import datetime
