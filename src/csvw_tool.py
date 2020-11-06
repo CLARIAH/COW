@@ -15,6 +15,7 @@ from glob import glob
 from rdflib import ConjunctiveGraph
 from werkzeug.utils import secure_filename
 import codecs
+from pathlib import Path
 
 class COW(object):
 
@@ -29,10 +30,13 @@ class COW(object):
                 target_file = "{}-metadata.json".format(source_file)
 
                 if os.path.exists(target_file):
-                    modifiedTime = os.path.getmtime(target_file)
+                    path = Path(target_file)
+                    modifiedTime = os.path.getmtime(path)
                     timestamp = datetime.datetime.fromtimestamp(modifiedTime).isoformat()
-                    os.rename(target_file, secure_filename(target_file+"_"+timestamp))
-                    print("Backed up prior version of schema to {}".format(target_file+"_"+timestamp))
+                    filename = secure_filename(f"{path.name} {timestamp}")
+                    new_path = Path(path.parent, filename)
+                    os.rename(path, new_path)
+                    print(f"Backed up prior version of schema to {new_path}")
 
                 build_schema(source_file, target_file, dataset_name=dataset, delimiter=delimiter, encoding=encoding, quotechar=quotechar, base=base)
 
@@ -40,7 +44,7 @@ class COW(object):
                 print("Converting {} to RDF".format(source_file))
 
                 try:
-                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, encoding=encoding, processes=processes, chunksize=chunksize, output_format='nquads')
+                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, encoding=encoding, processes=processes, chunksize=chunksize, output_format='nquads', base=base)
                     c.convert()
 
                     # We convert the output serialization if different from nquads
@@ -50,7 +54,7 @@ class COW(object):
                             g.parse(nquads_file, format='nquads')
                         # We serialize in the requested format
                         with open(source_file + '.' + extensions[output_format], 'w') as output_file:
-                            output_file.write(g.serialize(format=output_format))
+                            output_file.write(g.serialize(format=output_format).decode())
 
                 except ValueError:
                     raise

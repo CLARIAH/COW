@@ -12,7 +12,7 @@ from chardet.universaldetector import UniversalDetector
 import multiprocessing as mp
 import unicodecsv as csv
 from jinja2 import Template
-from .util import get_namespaces, Nanopublication, validateTerm, parse_value, CSVW, PROV, DC, SKOS, RDF
+from .util import patch_namespaces_to_disk, process_namespaces, get_namespaces, Nanopublication, validateTerm, parse_value, CSVW, PROV, DC, SKOS, RDF
 from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
 from rdflib.resource import Resource
 from rdflib.collection import Collection
@@ -80,7 +80,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None,
         "@context": ["https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json",
                      {"@language": "en",
                       "@base": "{}/".format(base)},
-                     get_namespaces(base)],
+                     process_namespaces(base)],
         "url": url,
         "dialect": {"delimiter": delimiter,
                     "encoding": encoding,
@@ -172,7 +172,7 @@ class CSVWConverter(object):
     * A nanopublication structure for publishing the converted data (using :class:`converter.util.Nanopublication`)
     """
 
-    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding=UTF8, processes=4, chunksize=5000, output_format='nquads'):
+    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding=UTF8, processes=4, chunksize=5000, output_format='nquads', base="https://iisg.amsterdam/"):
         logger.info("Initializing converter for {}".format(file_name))
         self.file_name = file_name
         self.output_format = output_format
@@ -187,6 +187,17 @@ class CSVWConverter(object):
         self._chunksize = chunksize
         logger.info("Processes: {}".format(self._processes))
         logger.info("Chunksize: {}".format(self._chunksize))
+
+        # Get @base from the metadata.json file
+        with open(schema_file_name, 'r') as f:
+            schema = json.load(f)
+            self.base = schema['@context'][1]['@base']
+            if self.base == None or self.base == "":
+                self.base = base
+            patch_namespaces_to_disk({
+                'sdr' : str(self.base + '/'), 
+                'sdv' : str(self.base + '/vocab/')
+            })
 
         self.np = Nanopublication(file_name)
         # self.metadata = json.load(open(schema_file_name, 'r'))
@@ -271,7 +282,7 @@ class CSVWConverter(object):
         # self.columns = Collection(self.metadata_graph, BNode(self.schema.csvw_column))
         # Python 3 can't work out Item so we'll just SPARQL the graph
 
-        self.columns = [o for s,p,o in self.metadata_graph.triples((None, URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#first"), None))]
+        self.columns = [column_item.identifier for column_item in self.schema.csvw_column.items()]
         #
         # from pprint import pprint
         # pprint(self.columns)
@@ -542,18 +553,18 @@ class BurstConverter(object):
                     csvw_virtual = parse_value(c.csvw_virtual)
                     csvw_name = parse_value(c.csvw_name)
                     csvw_value = parse_value(c.csvw_value)
-                    about_url = parse_value(c.csvw_aboutUrl)
-                    value_url = parse_value(c.csvw_valueUrl)
+                    csvw_about_url = parse_value(c.csvw_aboutUrl)
+                    csvw_value_url = parse_value(c.csvw_valueUrl)
                     csvw_datatype = parse_value(c.csvw_datatype)
 
-                    if csvw_virtual == 'true' and c.csvw_aboutUrl is not None:
-                        s = self.expandURL(c.csvw_aboutUrl, row)
+                    if csvw_about_url is not None:
+                        s = self.expandURL(csvw_about_url, row)
 
                     p = self.get_property_url(c.csvw_propertyUrl, csvw_name, row)
 
-                    if c.csvw_valueUrl is not None:
+                    if csvw_value_url is not None:
                         # This is an object property, because the value needs to be cast to a URL
-                        o = self.expandURL(c.csvw_valueUrl, row)
+                        o = self.expandURL(csvw_value_url, row)
                         object_value = str(o)
                         if self.isValueNull(os.path.basename(object_value), c):
                             logger.debug("skipping empty value")
@@ -568,11 +579,11 @@ class BurstConverter(object):
                                 o = URIRef(iribaker.to_iri(value))
 
                             if URIRef(csvw_datatype) == XSD.linkURI:
-                                about_url = about_url[about_url.find("{"):about_url.find("}")+1]
-                                s = self.expandURL(about_url, row)
+                                csvw_about_url = csvw_about_url[csvw_about_url.find("{"):csvw_about_url.find("}")+1]
+                                s = self.expandURL(csvw_about_url, row)
                                 # logger.debug("s: {}".format(s))
-                                value_url = value_url[value_url.find("{"):value_url.find("}")+1]
-                                o = self.expandURL(value_url, row)
+                                csvw_value_url = csvw_value_url[csvw_value_url.find("{"):csvw_value_url.find("}")+1]
+                                o = self.expandURL(csvw_value_url, row)
                                 # logger.debug("o: {}".format(o))
 
                         # For coded properties, the collectionUrl can be used to indicate that the
@@ -592,9 +603,9 @@ class BurstConverter(object):
                             self.g.add((o, SKOS['inScheme'], scheme))
                     else:
                         # This is a datatype property
-                        if c.csvw_value is not None:
+                        if csvw_value is not None:
                             value = self.render_pattern(csvw_value, row)
-                        elif c.csvw_name is not None:
+                        elif csvw_name is not None:
                             # print s
                             # print c.csvw_name, self.encoding
                             # print row[unicode(c.csvw_name)], type(row[unicode(c.csvw_name)])

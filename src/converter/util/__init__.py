@@ -1,4 +1,5 @@
 from rdflib import Dataset, Graph, Namespace, RDF, RDFS, OWL, XSD, Literal, URIRef
+import converter.csvw as csvw
 import os
 import yaml
 import datetime
@@ -10,7 +11,6 @@ import uuid
 from jinja2 import Template
 import rfc3987
 import re
-
 from hashlib import sha1
 
 logger = logging.getLogger(__name__)
@@ -73,14 +73,28 @@ def open_file_then_apply_git_hash(file_name):
     return file_hash.hexdigest()
 
 # Part of Burstconverter + build_schema
-def get_namespaces(base=None):
-    """Return the global namespaces"""
+def process_namespaces(base=None):
+    """Return the global namespaces and process the base IRI if needed"""
     if base:
         namespaces['sdr'] = Namespace(str(base + '/'))
         namespaces['sdv'] = Namespace(str(base + '/vocab/'))
         with open(YAML_NAMESPACE_FILE, 'w') as outfile:
             yaml.dump(namespaces, outfile, default_flow_style=True)
     return namespaces
+
+def get_namespaces():
+    """Return the global namespaces with no frills"""
+    return namespaces
+
+def patch_namespaces_to_disk(nameSpaceDict):
+    """Patch any namespace(s) in memory and write it to the yaml namespace file
+    Namespaces that require to be lazily loaded, instead of being loaded on startup, can be called with this function."""
+    # TODO refactor to lazily load the namespaces YAML file, so that this function isn't needed
+    for prefix, value in nameSpaceDict.items():
+        namespaces[prefix] = Namespace(value)
+        globals()[prefix.upper()] = namespaces[prefix]
+    with open(YAML_NAMESPACE_FILE, 'w') as outfile:
+        yaml.dump(namespaces, outfile, default_flow_style=True)
 
 def validateTerm(term, headers):
     # IRIs have a URIRef type
@@ -110,10 +124,10 @@ def validateTerm(term, headers):
 def parse_value(value):
     if value == None:
         return value
-    elif hasattr(value, 'identifier'):
+    elif type(value) is csvw.Item:
         # See https://rdflib.readthedocs.io/en/stable/rdf_terms.html
         return str(value.identifier)
-    else: # assuming value is a string
+    else: # assuming value is a string or can be coerced as such (i.e. rdflib.term)
         return str(value)
 
 
