@@ -87,7 +87,7 @@ def get_namespaces():
     return namespaces
 
 def patch_namespaces_to_disk(nameSpaceDict):
-    """Patch any namespace(s) in memory without writing to file.
+    """Patch any namespace(s) in memory and write it to the yaml namespace file
     Namespaces that require to be lazily loaded, instead of being loaded on startup, can be called with this function."""
     # TODO refactor to lazily load the namespaces YAML file, so that this function isn't needed
     for prefix, value in nameSpaceDict.items():
