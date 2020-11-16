@@ -195,8 +195,8 @@ class CSVWConverter(object):
             if self.base == None or self.base == "":
                 self.base = base
             patch_namespaces_to_disk({
-                'sdr' : str(self.base + '/'), 
-                'sdv' : str(self.base + '/vocab/')
+                'sdr' : str(self.base),
+                'sdv' : str(self.base + 'vocab/')
             })
 
         self.np = Nanopublication(file_name)
