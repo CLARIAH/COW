@@ -17,9 +17,12 @@ from werkzeug.utils import secure_filename
 import codecs
 from pathlib import Path
 
+
 class COW(object):
 
-    def __init__(self, mode=None, files=None, dataset=None, delimiter=None, encoding=None, quotechar='\"', processes=4, chunksize=5000, base="https://iisg.amsterdam/", output_format='nquads'):
+    def __init__(self, mode=None, files=None, dataset=None, delimiter=None,
+                 encoding=None, quotechar='\"', processes=4, chunksize=5000,
+                 base="https://iisg.amsterdam/", output_format='nquads'):
         """
         COW entry point
         """
@@ -32,29 +35,39 @@ class COW(object):
                 if os.path.exists(target_file):
                     path = Path(target_file)
                     modifiedTime = os.path.getmtime(path)
-                    timestamp = datetime.datetime.fromtimestamp(modifiedTime).isoformat()
+                    timestamp = datetime.datetime.fromtimestamp(modifiedTime)
+                    timestamp = timestamp.isoformat()
                     filename = secure_filename(f"{path.name} {timestamp}")
                     new_path = Path(path.parent, filename)
                     os.rename(path, new_path)
                     print(f"Backed up prior version of schema to {new_path}")
 
-                build_schema(source_file, target_file, dataset_name=dataset, delimiter=delimiter, encoding=encoding, quotechar=quotechar, base=base)
+                build_schema(source_file, target_file, dataset_name=dataset,
+                             delimiter=delimiter, encoding=encoding,
+                             quotechar=quotechar, base=base)
 
             elif mode == 'convert':
                 print("Converting {} to RDF".format(source_file))
 
                 try:
-                    c = CSVWConverter(source_file, delimiter=delimiter, quotechar=quotechar, encoding=encoding, processes=processes, chunksize=chunksize, output_format='nquads', base=base)
+                    c = CSVWConverter(source_file, delimiter=delimiter,
+                                      quotechar=quotechar, encoding=encoding,
+                                      processes=processes, chunksize=chunksize,
+                                      output_format='nquads', base=base)
                     c.convert()
 
                     # We convert the output serialization if different from nquads
                     if output_format not in ['nquads']:
-                        with open(source_file + '.' + 'nq', 'rb') as nquads_file:
+                        quads_filename = source_file + '.' + 'nq'
+                        with open(quads_filename, 'rb') as nquads_file:
                             g = ConjunctiveGraph()
                             g.parse(nquads_file, format='nquads')
                         # We serialize in the requested format
-                        with open(source_file + '.' + extensions[output_format], 'w') as output_file:
-                            output_file.write(g.serialize(format=output_format).decode())
+                        filename = source_file + '.' + extensions[output_format]
+                        with open(filename, 'w') as output_file:
+                            g.serialize(destination=filename,
+                                        format=output_format)
+                            #utput_file.write(g.serialize(format=output_format).decode())
 
                 except ValueError:
                     raise
@@ -92,7 +105,9 @@ def main():
             print("Invalid character encoding. See https://docs.python.org/3.8/library/codecs.html#standard-encodings to see which encodings are possible.")
             sys.exit(1)
 
-    COW(args.mode, files, args.dataset, args.delimiter, args.encoding, args.quotechar, args.processes, args.chunksize, args.base, args.format)
+    COW(args.mode, files, args.dataset, args.delimiter, args.encoding,
+        args.quotechar, args.processes, args.chunksize, args.base,
+        args.format)
 
 if __name__ == '__main__':
     main()

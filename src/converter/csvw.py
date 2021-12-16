@@ -12,7 +12,9 @@ from chardet.universaldetector import UniversalDetector
 import multiprocessing as mp
 import unicodecsv as csv
 from jinja2 import Template
-from .util import patch_namespaces_to_disk, process_namespaces, get_namespaces, Nanopublication, validateTerm, parse_value, CSVW, PROV, DC, SKOS, RDF
+from .util import (patch_namespaces_to_disk, process_namespaces,
+                   get_namespaces, Nanopublication, validateTerm,
+                   parse_value, CSVW, PROV, DC, SKOS, RDF)
 from rdflib import URIRef, Literal, Graph, BNode, XSD, Dataset
 from rdflib.resource import Resource
 from rdflib.collection import Collection
@@ -28,18 +30,24 @@ ch.setLevel(logging.INFO)
 logger.addHandler(ch)
 
 rdfTermLogger = logging.getLogger('rdflib.term')
-rdfTermLogger.setLevel(logging.ERROR) # It's too chatty with warnings and it was impossible to stop selectively toggle the logger
+rdfTermLogger.setLevel(logging.ERROR) # It's too chatty with warnings
 
 # Serialization extension dictionary
-extensions = {'xml': 'xml', 'n3' : 'n3', 'turtle': 'ttl', 'nt' : 'nt', 'pretty-xml' : 'xml', 'trix' : 'trix', 'trig' : 'trig', 'nquads' : 'nq'}
+extensions = {'xml': 'xml', 'n3' : 'n3', 'turtle': 'ttl', 'nt' : 'nt',
+              'pretty-xml' : 'xml', 'trix' : 'trix', 'trig' : 'trig',
+              'nquads' : 'nq'}
 
 UTF8 = 'utf-8'
 
-def build_schema(infile, outfile, delimiter=None, quotechar='\"', encoding=None, dataset_name=None, base="https://iisg.amsterdam/"):
+def build_schema(infile, outfile, delimiter=None, quotechar='\"',
+                 encoding=None, dataset_name=None,
+                 base="https://iisg.amsterdam/"):
     """
-    Build a CSVW schema based on the ``infile`` CSV file, and write the resulting JSON CSVW schema to ``outfile``.
+    Build a CSVW schema based on the ``infile`` CSV file, and write the
+    resulting JSON CSVW schema to ``outfile``.
 
-    Takes various optional parameters for instructing the CSV reader, but is also quite good at guessing the right values.
+    Takes various optional parameters for instructing the CSV reader, but
+    is also quite good at guessing the right values.
     """
 
     url = os.path.basename(infile)
@@ -379,11 +387,11 @@ class CSVWConverter(object):
                 # converted CSV
                 out = c.process(0, reader, 1)
                 # We then write it to the file
-                target_file.write(out)
+                target_file.write(out.encode())
 
             self.convert_info()
             # Finally, write the nanopublication info to file
-            target_file.write(self.np.serialize(format=self.output_format))
+            target_file.write(self.np.serialize(format=self.output_format).encode())
 
     def _parallel(self):
         """Starts parallel processes for converting the file. Each process will receive max ``chunksize`` number of rows"""
@@ -416,7 +424,7 @@ class CSVWConverter(object):
                 # The result of each chunksize run will be written to the
                 # target file
                 for out in pool.imap(burstConvert_partial, enumerate(grouper(self._chunksize, reader))):
-                    target_file.write(out)
+                    target_file.write(out.encode())
 
                 # Make sure to close and join the pool once finished.
                 pool.close()
@@ -424,7 +432,7 @@ class CSVWConverter(object):
 
             self.convert_info()
             # Finally, write the nanopublication info to file
-            target_file.write(self.np.serialize(format=self.output_format))
+            target_file.write(self.np.serialize(format=self.output_format).encode())
 
 
 def grouper(n, iterable, padvalue=None):

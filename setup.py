@@ -19,7 +19,7 @@ setup(name = 'cow_csvw',
       description = 'Integrated CSV to RDF converter, using CSVW and nanopublications',
       long_description = open('README.md').read(),
       long_description_content_type="text/markdown",
-      author = 'Albert Meroño-Peñuela, Roderick van der Weerdt, Rinke Hoekstra, Kathrin Dentler, Auke Rijpma, Richard Zijdeman, Melvin Roest',
+      author = 'Albert Meroño-Peñuela, Roderick van der Weerdt, Rinke Hoekstra, Kathrin Dentler, Auke Rijpma, Richard Zijdeman, Melvin Roest, Xander Wilcke',
       author_email = 'albert.merono@vu.nl',
       url = 'https://github.com/CLARIAH/COW',
       download_url = 'https://github.com/CLARIAH/COW/archive/' + cow_version + '.tar.gz',
@@ -27,7 +27,7 @@ setup(name = 'cow_csvw',
       classifiers = [
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.7"
+        "Programming Language :: Python :: 3.10"
         ],
       packages = ['cow_csvw'],
       package_dir = {'cow_csvw': 'src'},

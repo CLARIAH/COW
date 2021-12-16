@@ -27,11 +27,13 @@ ch.setLevel(logging.INFO)
 logger.addHandler(ch)
 
 """
-Initialize a set of default namespaces from a configuration file (namespaces.yaml)
+Initialize a set of default namespaces from a configuration file
+(namespaces.yaml)
 """
 # global namespaces
 namespaces = {}
-YAML_NAMESPACE_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'namespaces.yaml')
+YAML_NAMESPACE_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                   'namespaces.yaml')
 
 
 def init():
@@ -41,7 +43,7 @@ def init():
     # Read the file into a dictionary
     with open(YAML_NAMESPACE_FILE, 'r') as nsfile:
         global namespaces
-        namespaces = yaml.load(nsfile, Loader=yaml.FullLoader)
+        namespaces = yaml.load(nsfile, Loader=yaml.Loader)
 
     # Replace each value with a Namespace object for that value
     for prefix, uri in namespaces.items():
@@ -61,7 +63,8 @@ init()
 
 def open_file_then_apply_git_hash(file_name):
     """
-    Generates a Git-compatible hash for identifying (the current version of) the data
+    Generates a Git-compatible hash for identifying (the current version of)
+    the data
     """
     file_hash = sha1()
     file_size = 0
@@ -94,9 +97,11 @@ def get_namespaces():
     return namespaces
 
 def patch_namespaces_to_disk(nameSpaceDict):
-    """Patch any namespace(s) in memory and write it to the yaml namespace file
-    Namespaces that require to be lazily loaded, instead of being loaded on startup, can be called with this function."""
-    # TODO refactor to lazily load the namespaces YAML file, so that this function isn't needed
+    """Patch any namespace(s) in memory and write it to the yaml namespace
+    file. Namespaces that require to be lazily loaded, instead of being
+    loaded on startup, can be called with this function."""
+    # TODO refactor to lazily load the namespaces YAML file, so that this 
+    # function isn't needed
     for prefix, value in nameSpaceDict.items():
         namespaces[prefix] = Namespace(value)
         globals()[prefix.upper()] = namespaces[prefix]
@@ -108,16 +113,17 @@ def validateTerm(term, headers):
     if type(term) == URIRef:
         iri = None
         template = Template(term)
-        #E.g. http://example.com/{{jinja_statement}} --> http://example.com/None
+        # http://example.com/{{jinja_statement}} --> http://example.com/None
 
         rendered_template = None
         try:
             rendered_template = template.render(**headers)
-            #E.g. http://example.com/{csv_column_name} --> http://example.com/None
+            # http://example.com/{csv_column_name} --> http://example.com/None
         except TypeError as e:
-            # This could happen when LD concepts interact with Jinja concepts, e.g. {{ _row + 'some_string' }}
-            # In that case we take the {{ }} out, and assume the template is fine
-            # In the rare cases it isn't, the conversion will fail
+            # This could happen when LD concepts interact with Jinja concepts,
+            # e.g. {{ _row + 'some_string' }}
+            # In that case we take the {{ }} out, and assume the template is
+            # fine. In the rare cases it isn't, the conversion will fail
             rendered_template = re.sub(r'/{{.+}}', '', str(term))
 
         try:
@@ -134,17 +140,19 @@ def parse_value(value):
     elif type(value) is csvw.Item:
         # See https://rdflib.readthedocs.io/en/stable/rdf_terms.html
         return str(value.identifier)
-    else: # assuming value is a string or can be coerced as such (i.e. rdflib.term)
+    else: # assuming value is a string or can be coerced as such
+          # (i.e. rdflib.term)
         return str(value)
 
 
 class Nanopublication(Dataset):
     """
     A subclass of the rdflib Dataset class that comes pre-initialized with
-    required Nanopublication graphs: np, pg, ag, pig, for nanopublication, provenance,
-    assertion and publication info, respectively.
+    required Nanopublication graphs: np, pg, ag, pig, for nanopublication,
+    provenance, assertion and publication info, respectively.
 
-    NOTE: Will only work if the required namespaces are specified in namespaces.yaml and the init() function has been called
+    NOTE: Will only work if the required namespaces are specified in
+    namespaces.yaml and the init() function has been called
     """
 
     def __init__(self, file_name):
@@ -154,7 +162,8 @@ class Nanopublication(Dataset):
         super().__init__()
 
         # Virtuoso does not accept BNodes as graph names
-        self.default_context = Graph(store=self.store, identifier=URIRef(uuid.uuid4().urn))
+        self.default_context = Graph(store=self.store,
+                                     identifier=URIRef(uuid.uuid4().urn))
 
 
         # Assign default namespace prefixes
@@ -171,13 +180,16 @@ class Nanopublication(Dataset):
         # Shorten the source hash to 8 digits (similar to Github)
         short_hash = source_hash[:8]
 
-        # Determine a 'hash_part' for all timestamped URIs generated through this procedure
+        # Determine a 'hash_part' for all timestamped URIs generated through
+        # this procedure
         hash_part = f"{short_hash}/{timestamp}"
 
         # A URI that represents the version of the file being converted
         self.dataset_version_uri = SDR[source_hash]
-        self.add((self.dataset_version_uri, SDV['path'], Literal(file_name, datatype=XSD.string)))
-        self.add((self.dataset_version_uri, SDV['sha1_hash'], Literal(source_hash, datatype=XSD.string)))
+        self.add((self.dataset_version_uri, SDV['path'],
+                  Literal(file_name, datatype=XSD.string)))
+        self.add((self.dataset_version_uri, SDV['sha1_hash'],
+                  Literal(source_hash, datatype=XSD.string)))
 
         # ----
         # The nanopublication graph
@@ -211,9 +223,12 @@ class Nanopublication(Dataset):
         # The provenance graph
         # ----
 
-        # Provenance information for the assertion graph (the data structure definition itself)
-        self.pg.add((assertion_graph_uri, PROV['wasDerivedFrom'], self.dataset_version_uri))
-        # self.pg.add((dataset_uri, PROV['wasDerivedFrom'], self.dataset_version_uri))
+        # Provenance information for the assertion graph (the data structure
+        # definition itself)
+        self.pg.add((assertion_graph_uri, PROV['wasDerivedFrom'],
+                     self.dataset_version_uri))
+        # self.pg.add((dataset_uri, PROV['wasDerivedFrom'],
+        #              self.dataset_version_uri))
         self.pg.add((assertion_graph_uri, PROV['generatedAtTime'],
                      Literal(timestamp, datatype=XSD.dateTime)))
 
@@ -223,7 +238,8 @@ class Nanopublication(Dataset):
 
         # The URI of the latest version of this converter
         # TODO: should point to the actual latest commit of this converter.
-        # TODO: consider linking to this as the plan of some activity, rather than an activity itself.
+        # TODO: consider linking to this as the plan of some activity, rather
+        # than an activity itself.
         clariah_uri = URIRef('https://github.com/CLARIAH/wp4-converters')
 
         self.pig.add((self.uri, PROV['wasGeneratedBy'], clariah_uri))
@@ -233,9 +249,10 @@ class Nanopublication(Dataset):
 
     def ingest(self, graph, target_graph=None):
         """
-        Adds all triples in the RDFLib ``graph`` to this :class:`Nanopublication` dataset.
-        If ``target_graph`` is ``None``, then the triples are added to the default graph,
-        otherwise they are added to the indicated graph
+        Adds all triples in the RDFLib ``graph`` to this
+        :class:`Nanopublication` dataset. If ``target_graph`` is ``None``,
+        then the triples are added to the default graph, otherwise they are
+        added to the indicated graph
         """
         if target_graph is None:
             for s, p, o in graph:
