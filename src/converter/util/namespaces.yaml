@@ -26,8 +26,8 @@
   rdfs: !!python/object/new:rdflib.namespace.Namespace ['http://www.w3.org/2000/01/rdf-schema#'],
   schema: !!python/object/new:rdflib.namespace.Namespace ['http://schema.org/'], sdmx-concept: !!python/object/new:rdflib.namespace.Namespace [
     'http://purl.org/linked-data/sdmx/2009/concept#'], sdr: !!python/object/new:rdflib.namespace.Namespace [
-    'http://example.org/'], sdv: !!python/object/new:rdflib.namespace.Namespace [
-    'http://example.org/vocab/'], sem: !!python/object/new:rdflib.namespace.Namespace [
+    'https://iisg.amsterdam/'], sdv: !!python/object/new:rdflib.namespace.Namespace [
+    'https://iisg.amsterdam/vocab/'], sem: !!python/object/new:rdflib.namespace.Namespace [
     'http://semanticweb.cs.vu.nl/2009/11/sem/'], skos: !!python/object/new:rdflib.namespace.Namespace [
     'http://www.w3.org/2004/02/skos/core#'], time: !!python/object/new:rdflib.namespace.Namespace [
     'http://www.w3.org/2006/time#'], ulan: !!python/object/new:rdflib.namespace.Namespace [

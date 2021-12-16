@@ -4,6 +4,7 @@
 import os
 import datetime
 import json
+import gzip
 import logging
 import iribaker
 import traceback
@@ -180,12 +181,19 @@ class CSVWConverter(object):
     * A nanopublication structure for publishing the converted data (using :class:`converter.util.Nanopublication`)
     """
 
-    def __init__(self, file_name, delimiter=',', quotechar='\"', encoding=UTF8, processes=4, chunksize=5000, output_format='nquads', base="https://iisg.amsterdam/"):
+    def __init__(self, file_name, delimiter=',', quotechar='\"',
+                 encoding=UTF8, processes=4, chunksize=5000,
+                 output_format='nquads', base="https://iisg.amsterdam/",
+                 gzipped=False):
         logger.info("Initializing converter for {}".format(file_name))
         self.file_name = file_name
         self.output_format = output_format
+        self.gzipped = gzipped
         self.target_file = f"{self.file_name}.{extensions[self.output_format]}"
         schema_file_name = f"{file_name}-metadata.json"
+
+        if self.gzipped:
+            self.target_file = self.target_file + ".gz"
 
         if not os.path.exists(schema_file_name) or not os.path.exists(file_name):
             raise Exception(
@@ -372,7 +380,8 @@ class CSVWConverter(object):
 
     def _simple(self):
         """Starts a single process for converting the file"""
-        with open(self.target_file, 'wb') as target_file:
+        writer = gzip.open if self.gzipped else open
+        with writer(self.target_file, 'wb') as target_file:
             with open(self.file_name, 'rb') as csvfile:
                 logger.info("Opening CSV file for reading")
                 reader = csv.DictReader(csvfile,
@@ -395,7 +404,8 @@ class CSVWConverter(object):
 
     def _parallel(self):
         """Starts parallel processes for converting the file. Each process will receive max ``chunksize`` number of rows"""
-        with open(self.target_file, 'wb') as target_file:
+        writer = gzip.open if self.gzipped else open
+        with writer(self.target_file, 'wb') as target_file:
             with open(self.file_name, 'rb') as csvfile:
                 logger.info("Opening CSV file for reading")
                 reader = csv.DictReader(csvfile,

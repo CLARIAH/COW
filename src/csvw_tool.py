@@ -10,6 +10,7 @@ import os
 import datetime
 import argparse
 import sys
+import gzip
 import traceback
 from glob import glob
 from rdflib import ConjunctiveGraph
@@ -22,7 +23,8 @@ class COW(object):
 
     def __init__(self, mode=None, files=None, dataset=None, delimiter=None,
                  encoding=None, quotechar='\"', processes=4, chunksize=5000,
-                 base="https://iisg.amsterdam/", output_format='nquads'):
+                 base="https://iisg.amsterdam/", output_format='nquads',
+                 gzipped=False):
         """
         COW entry point
         """
@@ -53,21 +55,29 @@ class COW(object):
                     c = CSVWConverter(source_file, delimiter=delimiter,
                                       quotechar=quotechar, encoding=encoding,
                                       processes=processes, chunksize=chunksize,
-                                      output_format='nquads', base=base)
+                                      output_format='nquads', base=base,
+                                      gzipped=gzipped)
                     c.convert()
 
                     # We convert the output serialization if different from nquads
                     if output_format not in ['nquads']:
+                        func = open
                         quads_filename = source_file + '.' + 'nq'
-                        with open(quads_filename, 'rb') as nquads_file:
+                        new_filename = source_file + '.' + extensions[output_format]
+                        if gzipped:
+                            func = gzip.open
+                            quads_filename = quads_filename + '.gz'
+                            new_filename = new_filename + '.gz'
+
+                        with func(quads_filename, 'rb') as nquads_file:
                             g = ConjunctiveGraph()
-                            g.parse(nquads_file, format='nquads')
+                            g.parse(nquads_file, format='nquads') if not gzipped\
+                                    else g.parse(data=nquads_file.read(), format='nquads')
+
                         # We serialize in the requested format
-                        filename = source_file + '.' + extensions[output_format]
-                        with open(filename, 'w') as output_file:
-                            g.serialize(destination=filename,
+                        with func(new_filename, 'w') as output_file:
+                            g.serialize(destination=output_file,
                                         format=output_format)
-                            #utput_file.write(g.serialize(format=output_format).decode())
 
                 except ValueError:
                     raise
@@ -87,6 +97,7 @@ def main():
     parser.add_argument('--encoding', dest='encoding', default=None, type=str, help="The character encoding used in the CSV file(s)")
     parser.add_argument('--processes', dest='processes', default='4', type=int, help="The number of processes the converter should use")
     parser.add_argument('--chunksize', dest='chunksize', default='5000', type=int, help="The number of rows processed at each time")
+    parser.add_argument('--gzip', action='store_true', help="Compress the output using gzip")
     parser.add_argument('--base', dest='base', default='https://iisg.amsterdam/', type=str, help="The base for URIs generated with the schema (only relevant when `build`ing a schema)")
     parser.add_argument('--format', '-f', dest='format', nargs='?', choices=['xml', 'n3', 'turtle', 'nt', 'pretty-xml', 'trix', 'trig', 'nquads'], default='nquads', help="RDF serialization format")
 
@@ -107,7 +118,7 @@ def main():
 
     COW(args.mode, files, args.dataset, args.delimiter, args.encoding,
         args.quotechar, args.processes, args.chunksize, args.base,
-        args.format)
+        args.format, args.gzip)
 
 if __name__ == '__main__':
     main()
