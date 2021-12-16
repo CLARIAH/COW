@@ -2,6 +2,7 @@
   bibo: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/ontology/bibo/'],
   bio: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/vocab/bio/0.1/'],
   cidoc: !!python/object/new:rdflib.namespace.Namespace ['http://www.cidoc-crm.org/cidoc-crm/'],
+  civ: !!python/object/new:rdflib.namespace.Namespace ['https://iisg.amsterdam/id/civ/'],
   csvw: !!python/object/new:rdflib.namespace.Namespace ['http://www.w3.org/ns/csvw#'],
   dbo: !!python/object/new:rdflib.namespace.Namespace ['http://dbpedia.org/ontology/'],
   dc: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/dc/terms/'],
