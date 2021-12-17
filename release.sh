@@ -9,7 +9,7 @@ git tag $1 -m "$1"
 git push --tags origin master
 sleep 2
 echo 'Renaming version...'
-sed -i "s/x.xx/$1/" setup.py src/csvw_tool.py
+sed -i "s/\(version\s=\s'\)[0-9]\+\.[0-9]\+\('\)/\1$1\2/" setup.py src/csvw_tool.py
 sleep 2
 echo 'Cleaning previous dist content...'
 rm -rf dist/ local/
@@ -18,13 +18,10 @@ echo 'Preparing dist...'
 python3 setup.py sdist
 sleep 2
 echo 'Uploading to pipy...'
-twine upload dist/*
+../python3.10env/bin/twine upload dist/*
 rm -rf dist/ local/
 sleep 2
-echo 'Renaming back to version generic...'
-sed -i "s/$1/x.xx/" setup.py src/csvw_tool.py
 echo 'Upgrading user lib version...'
-sleep 10
-pip3 install cow_csvw --upgrade
+echo 'pip3 install cow_csvw --upgrade'
 echo 'All done.'
 exit 0

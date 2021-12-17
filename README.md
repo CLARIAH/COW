@@ -32,7 +32,7 @@ Possible issues:
 - Permission issues. You can get around them by installing CoW in user space: `pip3 install cow-csvw --user`. Make sure your binary user directory (typically something like `/Users/user/Library/Python/3.7/bin` in MacOS or `/home/user/.local/bin` in Linux) is in your PATH. For Windows/MacOS we recommend to install Python via the [official distribution page](https://www.python.org/downloads/). You can also use [virtualenv](https://virtualenv.pypa.io/en/latest/) to avoid conflicts with your system libraries
 - Please [report your unlisted issue](https://github.com/CLARIAH/CoW/issues/new)
 
-If you can't/don't want to deal with installing CoW, you can use the [cattle](http://cattle.datalegend.net/) [web service version](#web-service) (with some limitations).
+If you can't/don't want to deal with installing CoW, you can use the [cattle](http://cattle.datalegend.net/) [web service version](#web-service) (deprecated).
 
 ### Usage
 
@@ -63,7 +63,7 @@ usage: cow_tool [-h] [--dataset DATASET] [--delimiter DELIMITER]
                 [--quotechar QUOTECHAR] [--encoding ENCODING] [--processes PROCESSES]
                 [--chunksize CHUNKSIZE] [--base BASE]
                 [--format [{xml,n3,turtle,nt,pretty-xml,trix,trig,nquads}]]
-                [--version]
+				[--gzip] [--version]
                 {convert,build} file [file ...]
 
 Not nearly CSVW compliant schema builder and RDF converter
@@ -91,6 +91,7 @@ optional arguments:
                         The number of rows processed at each time
   --base BASE           The base for URIs generated with the schema (only
                         relevant when `build`ing a schema)
+  --gzip 				Compress the output file using gzip
   --format [{xml,n3,turtle,nt,pretty-xml,trix,trig,nquads}], -f [{xml,n3,turtle,nt,pretty-xml,trix,trig,nquads}]
                         RDF serialization format
   --version             show program's version number and exit
@@ -107,6 +108,7 @@ Beware of the web service limitations:
 
 - There's a limit to the size of the CSVs you can upload
 - It's a public instance, so your conversion could take longer
+- Cattle is no longer being maintained and these public instances will eventually be taken offline
 
 #### Library
 
@@ -118,7 +120,7 @@ import os
 
 COW(mode='build', files=[os.path.join(path, filename)], dataset='My dataset', delimiter=';', quotechar='\"')
 
-COW(mode='convert', files=[os.path.join(path, filename)], dataset='My dataset', delimiter=';', quotechar='\"', processes=4, chunksize=100, base='http://example.org/my-dataset', format='turtle')
+COW(mode='convert', files=[os.path.join(path, filename)], dataset='My dataset', delimiter=';', quotechar='\"', processes=4, chunksize=100, base='http://example.org/my-dataset', format='turtle', gzipped=False)
 ```
 
 ### Documentation
@@ -137,7 +139,7 @@ MIT License (see [license.txt](license.txt))
 
 ### Acknowledgements
 
-**Authors:**    Albert Meroño-Peñuela, Roderick van der Weerdt, Rinke Hoekstra, Kathrin Dentler, Auke Rijpma, Richard Zijdeman, Melvin Roest
+**Authors:**    Albert Meroño-Peñuela, Roderick van der Weerdt, Rinke Hoekstra, Kathrin Dentler, Auke Rijpma, Richard Zijdeman, Melvin Roest, Xander Wilcke
 
 **Copyright:**  Vrije Universiteit Amsterdam, Utrecht University, International Institute of Social History
 
