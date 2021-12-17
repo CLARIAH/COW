@@ -12,7 +12,7 @@ with open('requirements.txt') as f:
 cow_base = os.path.join('src', '')
 cow_data = [ os.path.join('.', os.path.join(root.replace(cow_base, ''), '*')) for root,dirs,files in os.walk(cow_base) ]
 
-version = 'x.xx'
+version = '1.13'
 
 setup(name = 'cow_csvw',
       version = version,
