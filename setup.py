@@ -15,14 +15,14 @@ cow_data = [ os.path.join('.', os.path.join(root.replace(cow_base, ''), '*')) fo
 version = 'x.xx'
 
 setup(name = 'cow_csvw',
-      version = cow_version,
+      version = version,
       description = 'Integrated CSV to RDF converter, using CSVW and nanopublications',
       long_description = open('README.md').read(),
       long_description_content_type="text/markdown",
       author = 'Albert Meroño-Peñuela, Roderick van der Weerdt, Rinke Hoekstra, Kathrin Dentler, Auke Rijpma, Richard Zijdeman, Melvin Roest, Xander Wilcke',
       author_email = 'albert.merono@vu.nl',
       url = 'https://github.com/CLARIAH/COW',
-      download_url = 'https://github.com/CLARIAH/COW/archive/' + cow_version + '.tar.gz',
+      download_url = 'https://github.com/CLARIAH/COW/archive/' + version + '.tar.gz',
       license = "MIT",
       classifiers = [
         "License :: OSI Approved :: MIT License",
