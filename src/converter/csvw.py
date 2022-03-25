@@ -94,7 +94,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
             "columns": [],
             "primaryKey": None,
             "aboutUrl": "{_row}"
-        }        
+        },       
         "url": url,
         "dialect": {"delimiter": delimiter,
                     "encoding": encoding,
