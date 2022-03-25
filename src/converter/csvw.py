@@ -36,7 +36,7 @@ rdfTermLogger.setLevel(logging.ERROR) # It's too chatty with warnings
 # Serialization extension dictionary
 extensions = {'xml': 'xml', 'n3' : 'n3', 'turtle': 'ttl', 'nt' : 'nt',
               'pretty-xml' : 'xml', 'trix' : 'trix', 'trig' : 'trig',
-              'nquads' : 'nq'}/
+              'nquads' : 'nq'}
 
 UTF8 = 'utf-8'
 
