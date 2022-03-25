@@ -91,9 +91,9 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
                       "@base": "{}/".format(base)},
                      process_namespaces(base)],
         "tableSchema": {
-            "columns": [],
+            "aboutUrl": "{_row}",
             "primaryKey": None,
-            "aboutUrl": "{_row}"
+            "columns": []
         },       
         "url": url,
         "dialect": {"delimiter": delimiter,
