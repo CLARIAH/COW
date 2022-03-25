@@ -90,11 +90,11 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
                      {"@language": "en",
                       "@base": "{}/".format(base)},
                      process_namespaces(base)],
-#        "tableSchema": {
-#            "aboutUrl": "{_row}",
-#            "primaryKey": None,
-#            "columns": []
-#        },       
+        "tableSchema": {
+            "aboutUrl": "{_row}",
+            "primaryKey": None,
+            "columns": []
+        },       
         "url": url,
         "dialect": {"delimiter": delimiter,
                     "encoding": encoding,
