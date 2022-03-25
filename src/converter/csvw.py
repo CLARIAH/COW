@@ -36,13 +36,13 @@ rdfTermLogger.setLevel(logging.ERROR) # It's too chatty with warnings
 # Serialization extension dictionary
 extensions = {'xml': 'xml', 'n3' : 'n3', 'turtle': 'ttl', 'nt' : 'nt',
               'pretty-xml' : 'xml', 'trix' : 'trix', 'trig' : 'trig',
-              'nquads' : 'nq'}
+              'nquads' : 'nq'}/
 
 UTF8 = 'utf-8'
 
 def build_schema(infile, outfile, delimiter=None, quotechar='\"',
                  encoding=None, dataset_name=None,
-                 base="https://iisg.amsterdam/"):
+                 base="https://example.com/id/"):
     """
     Build a CSVW schema based on the ``infile`` CSV file, and write the
     resulting JSON CSVW schema to ``outfile``.
@@ -90,6 +90,11 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
                      {"@language": "en",
                       "@base": "{}/".format(base)},
                      process_namespaces(base)],
+        "tableSchema": {
+            "columns": [],
+            "primaryKey": None,
+            "aboutUrl": "{_row}"
+        }        
         "url": url,
         "dialect": {"delimiter": delimiter,
                     "encoding": encoding,
@@ -102,12 +107,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
             "schema:url": {"@id": "http://datalegend.net"}
         },
         "dc:license": {"@id": "http://opendefinition.org/licenses/cc-by/"},
-        "dc:modified": {"@value": today, "@type": "xsd:date"},
-        "tableSchema": {
-            "columns": [],
-            "primaryKey": None,
-            "aboutUrl": "{_row}"
-        }
+        "dc:modified": {"@value": today, "@type": "xsd:date"}
     }
 
     with io.open(infile, 'rb') as infile_file:
@@ -129,8 +129,8 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
             col = {
                 "@id": iribaker.to_iri("{}/{}/column/{}".format(base, url, head)),
                 "name": head,
-                "titles": [head],
-                "dc:description": head,
+                # "titles": [head],        # to reduce 'clutter' in the output
+                # "dc:description": head,  # to reduce 'clutter in the output
                 "datatype": "string"
             }
 
@@ -183,7 +183,7 @@ class CSVWConverter(object):
 
     def __init__(self, file_name, delimiter=',', quotechar='\"',
                  encoding=UTF8, processes=4, chunksize=5000,
-                 output_format='nquads', base="https://iisg.amsterdam/",
+                 output_format='nquads', base="https://example.com/id/",
                  gzipped=False):
         logger.info("Initializing converter for {}".format(file_name))
         self.file_name = file_name
