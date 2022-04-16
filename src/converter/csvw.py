@@ -85,14 +85,14 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
         base = base[:-1]
 
     metadata = {
-        "@context": [ {"@language": "en",
-                       "@base": "{}/".format(base)},
-                     process_namespaces(base),
-                    "https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json"],
-        #"@context": ["https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json",
-        #             {"@language": "en",
-        #              "@base": "{}/".format(base)},
-        #             process_namespaces(base)],
+#        "@context": [ {"@language": "en",
+#                       "@base": "{}/".format(base)},
+#                     process_namespaces(base),
+#                    "https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json"],
+        "@context": ["https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json",
+                     {"@language": "en",
+                      "@base": "{}/".format(base)},
+                     process_namespaces(base)],
         "tableSchema": {
             "aboutUrl": "{_row}",
             "primaryKey": None,
