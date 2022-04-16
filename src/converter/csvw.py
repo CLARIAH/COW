@@ -42,7 +42,7 @@ UTF8 = 'utf-8'
 
 def build_schema(infile, outfile, delimiter=None, quotechar='\"',
                  encoding=None, dataset_name=None,
-                 base="https://iisg.amsterdam/"):
+                 base="https://example.com/id/"):
     """
     Build a CSVW schema based on the ``infile`` CSV file, and write the
     resulting JSON CSVW schema to ``outfile``.
@@ -85,11 +85,19 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
         base = base[:-1]
 
     metadata = {
-        "@id": iribaker.to_iri("{}/{}".format(base, url)),
+#        "@context": [ {"@language": "en",
+#                       "@base": "{}/".format(base)},
+#                     process_namespaces(base),
+#                    "https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json"],
         "@context": ["https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json",
                      {"@language": "en",
                       "@base": "{}/".format(base)},
                      process_namespaces(base)],
+        "tableSchema": {
+            "aboutUrl": "{_row}",
+            "primaryKey": None,
+            "columns": []
+        },       
         "url": url,
         "dialect": {"delimiter": delimiter,
                     "encoding": encoding,
@@ -103,11 +111,7 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
         },
         "dc:license": {"@id": "http://opendefinition.org/licenses/cc-by/"},
         "dc:modified": {"@value": today, "@type": "xsd:date"},
-        "tableSchema": {
-            "columns": [],
-            "primaryKey": None,
-            "aboutUrl": "{_row}"
-        }
+        "@id": iribaker.to_iri("{}/{}".format(base, url))
     }
 
     with io.open(infile, 'rb') as infile_file:
@@ -127,11 +131,11 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
 
         for head in header:
             col = {
-                "@id": iribaker.to_iri("{}/{}/column/{}".format(base, url, head)),
                 "name": head,
-                "titles": [head],
-                "dc:description": head,
-                "datatype": "string"
+                # "titles": [head],        # to reduce 'clutter' in the output
+                # "dc:description": head,  # to reduce 'clutter in the output
+                "datatype": "string",
+                "@id": iribaker.to_iri("{}/{}/column/{}".format(base, url, head))
             }
 
             metadata['tableSchema']['columns'].append(col)
@@ -183,7 +187,7 @@ class CSVWConverter(object):
 
     def __init__(self, file_name, delimiter=',', quotechar='\"',
                  encoding=UTF8, processes=4, chunksize=5000,
-                 output_format='nquads', base="https://iisg.amsterdam/",
+                 output_format='nquads', base="https://example.com/id/",
                  gzipped=False):
         logger.info("Initializing converter for {}".format(file_name))
         self.file_name = file_name
