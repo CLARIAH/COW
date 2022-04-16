@@ -85,11 +85,10 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
         base = base[:-1]
 
     metadata = {
-        "@id": iribaker.to_iri("{}/{}".format(base, url)),
         "@context": ["https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json",
+                     process_namespaces(base),
                      {"@language": "en",
-                      "@base": "{}/".format(base)},
-                     process_namespaces(base)],
+                      "@base": "{}/".format(base)}],
         "tableSchema": {
             "aboutUrl": "{_row}",
             "primaryKey": None,
@@ -107,7 +106,8 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
             "schema:url": {"@id": "http://datalegend.net"}
         },
         "dc:license": {"@id": "http://opendefinition.org/licenses/cc-by/"},
-        "dc:modified": {"@value": today, "@type": "xsd:date"}
+        "dc:modified": {"@value": today, "@type": "xsd:date"},
+        "@id": iribaker.to_iri("{}/{}".format(base, url))
     }
 
     with io.open(infile, 'rb') as infile_file:
