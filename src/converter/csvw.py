@@ -85,11 +85,14 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
         base = base[:-1]
 
     metadata = {
-        "@context": ["https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json",
-                  #   process_namespaces(base),
-                     {"@language": "en",
-                      "@base": "{}/".format(base)},
-                     process_namespaces(base)],
+        "@context": [ {"@base": "{}/".format(base),
+                       "@language": "en"}, 
+                     process_namespaces(base),
+                    "https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json"]
+        #"@context": ["https://raw.githubusercontent.com/CLARIAH/COW/master/csvw.json",
+        #             {"@language": "en",
+        #              "@base": "{}/".format(base)},
+        #             process_namespaces(base)],
         "tableSchema": {
             "aboutUrl": "{_row}",
             "primaryKey": None,
@@ -128,11 +131,11 @@ def build_schema(infile, outfile, delimiter=None, quotechar='\"',
 
         for head in header:
             col = {
-                "@id": iribaker.to_iri("{}/{}/column/{}".format(base, url, head)),
                 "name": head,
                 # "titles": [head],        # to reduce 'clutter' in the output
                 # "dc:description": head,  # to reduce 'clutter in the output
-                "datatype": "string"
+                "datatype": "string",
+                "@id": iribaker.to_iri("{}/{}/column/{}".format(base, url, head))
             }
 
             metadata['tableSchema']['columns'].append(col)
