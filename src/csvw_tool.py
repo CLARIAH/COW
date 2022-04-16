@@ -23,7 +23,7 @@ class COW(object):
 
     def __init__(self, mode=None, files=None, dataset=None, delimiter=None,
                  encoding=None, quotechar='\"', processes=4, chunksize=5000,
-                 base="https://iisg.amsterdam/", output_format='nquads',
+                 base="https://example.com/id/", output_format='nquads',
                  gzipped=False):
         """
         COW entry point
@@ -98,7 +98,7 @@ def main():
     parser.add_argument('--processes', dest='processes', default='4', type=int, help="The number of processes the converter should use")
     parser.add_argument('--chunksize', dest='chunksize', default='5000', type=int, help="The number of rows processed at each time")
     parser.add_argument('--gzip', action='store_true', help="Compress the output using gzip")
-    parser.add_argument('--base', dest='base', default='https://iisg.amsterdam/', type=str, help="The base for URIs generated with the schema (only relevant when `build`ing a schema)")
+    parser.add_argument('--base', dest='base', default='https://example.com/id/', type=str, help="The base for URIs generated with the schema (only relevant when `build`ing a schema)")
     parser.add_argument('--format', '-f', dest='format', nargs='?', choices=['xml', 'n3', 'turtle', 'nt', 'pretty-xml', 'trix', 'trig', 'nquads'], default='nquads', help="RDF serialization format")
     parser.add_argument('--version', dest='version', action='version', version = '1.14')
 
