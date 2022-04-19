@@ -27,7 +27,7 @@ fi
 function do_update () {
 	echo ' - uploading tags'
 	git tag "$1" -m "Release of COW $1"
-	git push --tags origin master
+	git push --tags origin base
 
 	sleep 1
 
@@ -47,7 +47,7 @@ function do_update () {
 	sleep 1
 	
 	echo ' - uploading update to PiPy'
-	"$TWINE_PATH" upload dist/*
+	"$TWINE_PATH" upload dist/* &> /dev/null
 
 	sleep 1
 
