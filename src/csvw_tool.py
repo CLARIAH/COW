@@ -100,7 +100,7 @@ def main():
     parser.add_argument('--gzip', action='store_true', help="Compress the output using gzip")
     parser.add_argument('--base', dest='base', default='https://example.com/id/', type=str, help="The base for URIs generated with the schema (only relevant when `build`ing a schema)")
     parser.add_argument('--format', '-f', dest='format', nargs='?', choices=['xml', 'n3', 'turtle', 'nt', 'pretty-xml', 'trix', 'trig', 'nquads'], default='nquads', help="RDF serialization format")
-    parser.add_argument('--version', dest='version', action='version', version = '1.14')
+    parser.add_argument('--version', dest='version', action='version', version = '1.16')
 
     args = parser.parse_args()
 

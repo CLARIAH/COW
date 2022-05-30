@@ -47,7 +47,7 @@ function do_update () {
 	sleep 1
 	
 	echo ' - uploading update to PiPy'
-	"$TWINE_PATH" upload dist/* &> /dev/null
+	"$TWINE_PATH" upload dist/*
 
 	sleep 1
 
