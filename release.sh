@@ -6,10 +6,15 @@ CURRENT_TAG=$(git tag | tail -n1)
 
 # test if we have access to twine
 if [ -z "$TWINE_PATH" ];
-then 
-	python3 -m twine &> /dev/null
-	if [ $? -eq 0 ]
+then
+    TWINE_PATH=$(command -v twine)
+	if [ $? -eq 0 ];
+    then
+        # found a system binary
+        break
+    elif [ ! $(python3 -m twine &> /dev/null ; echo $?) ];
 	then
+        # found a Python module
 		TWINE_PATH="python3 -m twine"
 	else
 		# check for virtual environment on current and higher level
@@ -17,7 +22,7 @@ then
 		if [ $(echo "$TWINE_PATH" | wc -l) -ne 1 ];
 		then
 			echo "Cannot find Python module 'twine'."
-			echo "Please install twine via pip or run this script with 'env TWINE_PATH=...' to specify its location."
+			echo "Please install twine or run this script with 'env TWINE_PATH=...' to specify its location."
 
 			exit 2
 		fi
@@ -46,7 +51,7 @@ function do_update () {
 
 	sleep 1
 	
-	echo ' - uploading update to PiPy'
+    echo ' - uploading update to PiPy (using $TWINE_PATH)'
 	"$TWINE_PATH" upload dist/*
 
 	sleep 1
