@@ -13,6 +13,9 @@ CoW is a command-line utility to convert any CSV file into an RDF dataset. Its d
 - Available as a pythonic [CLI tool](#cli), [library](#library), and [web service](#web-service)
 - Supports Python 3
 
+### Documentation and support
+For user documentation see the basic introduction video https://t.co/SDWC3NhWZf and [wiki](https://github.com/clariah/cow/wiki/). Technical details are provided below. If you encounter an issue then please [report](https://github.com/CLARIAH/COW/issues/new/choose) it. Also feel free to create pull requests!
+
 ### Install (requires Python to be installed)
 
 `pip3` is the recommended method of installing COW in your system:
@@ -123,7 +126,7 @@ COW(mode='build', files=[os.path.join(path, filename)], dataset='My dataset', de
 COW(mode='convert', files=[os.path.join(path, filename)], dataset='My dataset', delimiter=';', quotechar='\"', processes=4, chunksize=100, base='http://example.org/my-dataset', format='turtle', gzipped=False)
 ```
 
-### Documentation
+### Technical documentation
 
 Technical documentation for CoW are maintained in this GitHub repository (under <docs>), and published through [Read the Docs](http://readthedocs.org) at <http://csvw-converter.readthedocs.io/en/latest/>.
 
