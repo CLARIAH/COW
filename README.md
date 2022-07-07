@@ -118,7 +118,7 @@ Beware of the web service limitations:
 Once installed, CoW can be used as a library as follows:
 
 ```
-from cow_csvw.csvw_tool import CoW
+from cow_csvw.csvw_tool import COW
 import os
 
 COW(mode='build', files=[os.path.join(path, filename)], dataset='My dataset', delimiter=';', quotechar='\"')
