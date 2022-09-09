@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: iso-8859-15 -*-
+# -*- coding: utf-8 -*-
 
 #from distutils.core import setup
 from setuptools import setup
@@ -12,7 +12,7 @@ with open('requirements.txt') as f:
 cow_base = os.path.join('src', '')
 cow_data = [ os.path.join('.', os.path.join(root.replace(cow_base, ''), '*')) for root,dirs,files in os.walk(cow_base) ]
 
-version = '1.20'
+version = '1.21'
 
 setup(name = 'cow_csvw',
       version = version,
