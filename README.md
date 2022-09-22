@@ -30,9 +30,11 @@ You can upgrade your currently installed version with:
 pip3 install cow-csvw --upgrade
 ```
 
-Possible issues:
+Possible installation issues:
 
-- Permission issues. You can get around them by installing CoW in user space: `pip3 install cow-csvw --user`. Make sure your binary user directory (typically something like `/Users/user/Library/Python/3.7/bin` in MacOS or `/home/user/.local/bin` in Linux) is in your PATH (in MacOS: `/etc/paths`. For Windows/MacOS we recommend to install Python via the [official distribution page](https://www.python.org/downloads/). You can also use [virtualenv](https://virtualenv.pypa.io/en/latest/) to avoid conflicts with your system libraries
+- Permission issues. You can get around them by installing CoW in user space: `pip3 install cow-csvw --user`. 
+- Cannot find command: make sure your binary user directory (typically something like `/Users/user/Library/Python/3.7/bin` in MacOS or `/home/user/.local/bin` in Linux) is in your PATH (in MacOS: `/etc/paths`). 
+- For Windows/MacOS we recommend to install Python via the [official distribution page](https://www.python.org/downloads/). You can also use [virtualenv](https://virtualenv.pypa.io/en/latest/) to avoid conflicts with your system libraries
 - Please [report your unlisted issue](https://github.com/CLARIAH/CoW/issues/new)
 
 If you can't/don't want to deal with installing CoW, you can use the [cattle](http://cattle.datalegend.net/) [web service version](#web-service) (deprecated).
