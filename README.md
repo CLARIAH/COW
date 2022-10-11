@@ -17,7 +17,7 @@ For user documentation see the [basic introduction video](https://t.co/SDWC3NhWZ
 
 ### Docker Image
 
-Several data science tools, including CoW, are available via a [Docker image](https://github.com/wxwilcke/datalegendtools).
+Several data science tools, including CoW, are available via a [Docker image](https://github.com/CLARIAH/datalegendtools).
 
 #### Install
 
@@ -35,7 +35,7 @@ After the image has successfully been downloaded (or 'pulled'), the container ca
 ```
 The virtual system can now be accessed by opening [http://localhost:3000/wetty](http://localhost:3000/wetty) in your preferred browser, and by logging in using username **datalegend** and password **datalegend**.
 
-For detailed instructions on this Docker image, see [DataLegend Playground](https://github.com/wxwilcke/datalegendtools). For instructions on how to use the tool, see  [usage](#usage) below.
+For detailed instructions on this Docker image, see [DataLegend Playground](https://github.com/CLARIAH/datalegendtools). For instructions on how to use the tool, see  [usage](#usage) below.
 
 
 
