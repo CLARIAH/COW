@@ -1,6 +1,6 @@
 ## CSV on the Web (CoW)
 
-> CoW is an integrated CSV to RDF converter using the W3C standard [CSVW](https://www.w3.org/TR/tabular-data-primer/) for rich semantic table specificatons, producing [nanopublications](http://nanopub.org/) as an output RDF model. CoW converts any CSV file into an RDF dataset.
+> CoW is a tool to convert a .csv file into Linked Data. Specifically, CoW is an integrated CSV to RDF converter using the W3C standard [CSVW](https://www.w3.org/TR/tabular-data-primer/) for rich semantic table specificatons, producing [nanopublications](http://nanopub.org/) as an output RDF model. CoW converts any CSV file into an RDF dataset.
 
 
 
@@ -14,6 +14,8 @@
 For user documentation see the [basic introduction video](https://t.co/SDWC3NhWZf) and the  [GitHub wiki](https://github.com/clariah/cow/wiki/). [Technical details](#technical-details) are provided below. If you encounter an issue then please [report](https://github.com/CLARIAH/COW/issues/new/choose) it. Also feel free to create pull requests.
 
 ## Quick Start Guide
+
+There are two ways to run CoW. The quickest is via Docker, the more flexible via PIP.
 
 ### Docker Image
 
@@ -165,4 +167,4 @@ MIT License (see [license.txt](license.txt))
 **Copyright:**  Vrije Universiteit Amsterdam, Utrecht University, International Institute of Social History
 
 
-CoW is developed and maintained by the CLARIAH project](https://www.clariah.nl) and funded by NWO.
+CoW is developed and maintained by the [CLARIAH project](https://www.clariah.nl) and funded by NWO.
