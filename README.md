@@ -1,24 +1,53 @@
-## CoW: Integrated CSV to RDF Converter
+## CSV on the Web (CoW)
 
-> CoW (Csv on the Web) is an integrated CSV to RDF converter that uses the W3C standard [CSVW](https://www.w3.org/TR/tabular-data-primer/) for rich semantic table specificatons, and [nanopublications](http://nanopub.org/) as an output RDF model
+> CoW is an integrated CSV to RDF converter using the W3C standard [CSVW](https://www.w3.org/TR/tabular-data-primer/) for rich semantic table specificatons, producing [nanopublications](http://nanopub.org/) as an output RDF model. CoW converts any CSV file into an RDF dataset.
 
 
 
-### What is CoW
+### Features
 
-CoW is a command-line utility to convert any CSV file into an RDF dataset. Its distinctive features are:
-
-- Expressive CSVW-compatible schemas based on the [Jinja](https://github.com/pallets/jinja) template enginge
-- Highly efficient implementation leveraging multithreaded and multicore architectures
-- Available as a pythonic [CLI tool](#cli), [library](#library), and [web service](#web-service)
-- Supports Python 3
+- Expressive CSVW-compatible schemas based on the [Jinja](https://github.com/pallets/jinja) template enginge.
+- Highly efficient implementation leveraging multithreaded and multicore architectures.
+- Available as a [Docker image](#docker-image), [command line interface (CLI) tool](command-line-interface), and [library](#library).
 
 ### Documentation and support
-For user documentation see the basic introduction video https://t.co/SDWC3NhWZf and [wiki](https://github.com/clariah/cow/wiki/). Technical details are provided below. If you encounter an issue then please [report](https://github.com/CLARIAH/COW/issues/new/choose) it. Also feel free to create pull requests!
+For user documentation see the [basic introduction video](https://t.co/SDWC3NhWZf) and the  [GitHub wiki](https://github.com/clariah/cow/wiki/). [Technical details](#technical-details) are provided below. If you encounter an issue then please [report](https://github.com/CLARIAH/COW/issues/new/choose) it. Also feel free to create pull requests.
 
-### Install (requires Python to be installed)
+## Quick Start Guide
 
-`pip3` is the recommended method of installing COW in your system:
+### Docker Image
+
+Several data science tools, including CoW, are available via a [Docker image](https://github.com/wxwilcke/datalegendtools).
+
+#### Install
+
+First, install the Docker virtualisation engine on your computer. Instructions on how to accomplish this can be found on the [official Docker website](https://docs.docker.com/get-docker). Use the following command in the Docker terminal:
+
+```
+# docker pull wxwilcke/datalegend
+```
+Here, the #-symbol refers to the terminal of a user with administrative privileges on your machine and is not part of the command.
+
+After the image has successfully been downloaded (or 'pulled'), the container can be run as follows:
+
+```
+# docker run --rm -p 3000:3000 -it wxwilcke/datalegend
+```
+The virtual system can now be accessed by opening [http://localhost:3000/wetty](http://localhost:3000/wetty) in your preferred browser, and by logging in using username **datalegend** and password **datalegend**.
+
+For detailed instructions on this Docker image, see [DataLegend Playground](https://github.com/wxwilcke/datalegendtools). For instructions on how to use the tool, see  [usage](#usage) below.
+
+
+
+### Command Line Interface (CLI)
+
+The Command Line Interface (CLI) is the recommended way of using CoW for most users.
+
+#### Install
+
+> Check whether the latest version of Python is installed on your device. For Windows/MacOS we recommend to install Python via the [official distribution page](https://www.python.org/downloads/).
+
+The recommended method of installing CoW on your system is `pip3`:
 
 ```
 pip3 install cow-csvw
@@ -33,33 +62,27 @@ pip3 install cow-csvw --upgrade
 Possible installation issues:
 
 - Permission issues. You can get around them by installing CoW in user space: `pip3 install cow-csvw --user`. 
-- Cannot find command: make sure your binary user directory (typically something like `/Users/user/Library/Python/3.7/bin` in MacOS or `/home/user/.local/bin` in Linux) is in your PATH (in MacOS: `/etc/paths`). 
-- For Windows/MacOS we recommend to install Python via the [official distribution page](https://www.python.org/downloads/). You can also use [virtualenv](https://virtualenv.pypa.io/en/latest/) to avoid conflicts with your system libraries
-- Please [report your unlisted issue](https://github.com/CLARIAH/CoW/issues/new)
+- Cannot find command: make sure your binary user directory (typically something like `/Users/user/Library/Python/3.7/bin` in MacOS or `/home/user/.local/bin` in Linux) is in your PATH (in MacOS: `/etc/paths`).
+- Please [report your unlisted issue](https://github.com/CLARIAH/CoW/issues/new).
 
-If you can't/don't want to deal with installing CoW, you can use the [cattle](http://cattle.datalegend.net/) [web service version](#web-service) (deprecated).
+#### Usage
 
-### Usage
-
-#### CLI
-
-The CLI (command line interface) is the recommended way of using CoW for most users. The straightforward CSV to RDF conversion is done in two steps. First:
+The straightforward CSV to RDF conversion is done by entering the following commands:
 
 ```
 cow_tool build myfile.csv
 ```
 
-This will create a file named `myfile.csv-metadata.json` (from now on: JSON schema file or just JSF). You don't need to worry about this file if you only want a syntactic conversion. Then:
+This will create a file named `myfile.csv-metadata.json` (JSON schema file). Next:
 
 ```
 cow_tool convert myfile.csv
 ```
+This command will output a `myfile.csv.nq` RDF file (nquads by default).
 
-Will output a `myfile.csv.nq` RDF file (nquads by default; you can control the output RDF serialization with e.g. ``--format turtle``). That's it!
+You don't need to worry about the JSON file, unless you want to change the metadata schema. To control the base URI namespace, URIs used in predicates, virtual columns, etcetera, edit the `myfile.csv-metadata.json` file and/or use CoW commands. For instance, you can control the output RDF serialization (with e.g. ``--format turtle``). Have a look at the [options](#options) below, the examples in the [GitHub wiki](https://github.com/CLARIAH/CoW/wiki), and the [technical documentation](http://csvw-converter.readthedocs.io/en/latest/).
 
-If you want to control the base URI namespace, URIs used in predicates, virtual columns, and the many other features of CoW, you'll need to edit the `myfile.csv-metadata.json` JSF and/or use CoW arguments. Have a look at the [CLI options](#options) below, the examples in the [wiki](https://github.com/CLARIAH/CoW/wiki), and the [technical documentation](http://csvw-converter.readthedocs.io/en/latest/).
-
-##### Options
+#### Options
 
 Check the ``--help`` for a complete list of options:
 
@@ -102,20 +125,9 @@ optional arguments:
   --version             show program's version number and exit
 ```
 
-#### Web service
 
-There is web service and interface running CoW, called [cattle](http://cattle.datalegend.net/). Two public instances are running at:
 
-- http://cattle.datalegend.net/ - runs CoW in Python3
-- http://legacy.cattle.datalegend.net/ - runs CoW in Python2 for legacy reasons
-
-Beware of the web service limitations:
-
-- There's a limit to the size of the CSVs you can upload
-- It's a public instance, so your conversion could take longer
-- Cattle is no longer being maintained and these public instances will eventually be taken offline
-
-#### Library
+### Library
 
 Once installed, CoW can be used as a library as follows:
 
@@ -128,15 +140,19 @@ COW(mode='build', files=[os.path.join(path, filename)], dataset='My dataset', de
 COW(mode='convert', files=[os.path.join(path, filename)], dataset='My dataset', delimiter=';', quotechar='\"', processes=4, chunksize=100, base='http://example.org/my-dataset', format='turtle', gzipped=False)
 ```
 
+
+
+## Further Information
+
+### Examples
+
+The [GitHub wiki](https://github.com/CLARIAH/COW/wiki) provides more hands-on examples of transposing CSVs into Linked Data.
+
 ### Technical documentation
 
 Technical documentation for CoW are maintained in this GitHub repository (under <docs>), and published through [Read the Docs](http://readthedocs.org) at <http://csvw-converter.readthedocs.io/en/latest/>.
 
 To build the documentation from source, change into the `docs` directory, and run `make html`. This should produce an HTML version of the documentation in the `_build/html` directory.
-
-### Examples
-
-The [wiki](https://github.com/CLARIAH/COW/wiki) provides more hands-on examples of transposing CSVs into Linked Data
 
 ### License
 
@@ -149,4 +165,4 @@ MIT License (see [license.txt](license.txt))
 **Copyright:**  Vrije Universiteit Amsterdam, Utrecht University, International Institute of Social History
 
 
-CoW is developed and maintained by the CLARIAH project and funded by NWO.
+CoW is developed and maintained by the CLARIAH project](https://www.clariah.nl) and funded by NWO.
