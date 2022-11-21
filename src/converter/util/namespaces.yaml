@@ -25,8 +25,10 @@
   qb: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/linked-data/cube#'],
   rdf: !!python/object/new:rdflib.namespace.Namespace ['http://www.w3.org/1999/02/22-rdf-syntax-ns#'],
   rdfs: !!python/object/new:rdflib.namespace.Namespace ['http://www.w3.org/2000/01/rdf-schema#'],
-  schema: !!python/object/new:rdflib.namespace.Namespace ['http://schema.org/'], sdmx-concept: !!python/object/new:rdflib.namespace.Namespace [
-    'http://purl.org/linked-data/sdmx/2009/concept#'], sdr: !!python/object/new:rdflib.namespace.Namespace [
+  schema: !!python/object/new:rdflib.namespace.Namespace ['http://schema.org/'], 
+  sdmx-concept: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/linked-data/sdmx/2009/concept#'], 
+  sdmx-dimension: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/linked-data/sdmx/2009/dimension#'], 
+    sdr: !!python/object/new:rdflib.namespace.Namespace [
     'https://iisg.amsterdam/'], sdv: !!python/object/new:rdflib.namespace.Namespace [
     'https://iisg.amsterdam/vocab/'], sem: !!python/object/new:rdflib.namespace.Namespace [
     'http://semanticweb.cs.vu.nl/2009/11/sem/'], skos: !!python/object/new:rdflib.namespace.Namespace [
