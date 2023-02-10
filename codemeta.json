@@ -1,0 +1,387 @@
+{
+    "@context": [
+        "https://doi.org/10.5063/schema/codemeta-2.0",
+        "https://w3id.org/software-iodata",
+        "https://w3id.org/nwo-research-fields",
+        "https://raw.githubusercontent.com/jantman/repostatus.org/master/badges/latest/ontology.jsonld",
+        "https://w3id.org/research-technology-readiness-levels",
+        "https://schema.org",
+        "https://w3id.org/software-types"
+    ],
+    "@id": "https://tools.dev.clariah.nl/cow/1.21",
+    "@type": "SoftwareSourceCode",
+    "author": [
+        {
+            "@id": "https://tools.dev.clariah.nl/person/albert-meroño-peñuela",
+            "@type": "Person",
+            "email": [
+                "albert.merono@vu.nl",
+                "albert.meronyo@gmail.com"
+            ],
+            "familyName": "Meroño-Peñuela",
+            "givenName": "Albert"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/roderick-van-der-weerdt",
+            "@type": "Person",
+            "email": "rvanderweerdt@hotmail.com",
+            "familyName": "van der Weerdt",
+            "givenName": "Roderick"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/rinke-hoekstra",
+            "@type": "Person",
+            "email": "rinke.hoekstra@vu.nl",
+            "familyName": "Hoekstra",
+            "givenName": "Rinke"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/kathrin-dentler",
+            "@type": "Person",
+            "email": "kathrin@dentler.org",
+            "familyName": "Dentler",
+            "givenName": "Kathrin"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/auke-rijpma",
+            "@type": "Person",
+            "familyName": "Rijpma",
+            "givenName": "Auke"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/richard-zijdeman",
+            "@type": "Person",
+            "email": "richard.zijdeman@gmail.com",
+            "familyName": "Zijdeman",
+            "givenName": "Richard"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/melvin-roest",
+            "@type": "Person",
+            "email": "melvinroest@gmail.com",
+            "familyName": "Roest",
+            "givenName": "Melvin"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/xander-wilcke",
+            "@type": "Person",
+            "email": "w.x.wilcke@vu.nl",
+            "familyName": "Wilcke",
+            "givenName": "Xander"
+        }
+    ],
+    "contributor": [
+        {
+            "@id": "https://tools.dev.clariah.nl/person/rinke-hoekstra",
+            "@type": "Person",
+            "email": "rinke.hoekstra@vu.nl",
+            "familyName": "Hoekstra",
+            "givenName": "Rinke"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/albert-meroño-peñuela",
+            "@type": "Person",
+            "email": [
+                "albert.merono@vu.nl",
+                "albert.meronyo@gmail.com"
+            ],
+            "familyName": "Meroño-Peñuela",
+            "givenName": "Albert"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/rijpma",
+            "@type": "Person",
+            "email": "auke.rijpma@gmail.com",
+            "familyName": "",
+            "givenName": "rijpma"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/rlzijdeman",
+            "@type": "Person",
+            "email": "richard.zijdeman@iisg.nl",
+            "familyName": "",
+            "givenName": "rlzijdeman"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/kathrinrin",
+            "@type": "Person",
+            "email": "k.dentler@vu.nl",
+            "familyName": "",
+            "givenName": "kathrinrin"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/roderick-van-der-weerdt",
+            "@type": "Person",
+            "email": "rvanderweerdt@hotmail.com",
+            "familyName": "van der Weerdt",
+            "givenName": "Roderick"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/melvin-roest",
+            "@type": "Person",
+            "email": "melvinroest@gmail.com",
+            "familyName": "Roest",
+            "givenName": "Melvin"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/richard-zijdeman",
+            "@type": "Person",
+            "email": "richard.zijdeman@gmail.com",
+            "familyName": "Zijdeman",
+            "givenName": "Richard"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/xander-wilcke",
+            "@type": "Person",
+            "email": "w.x.wilcke@vu.nl",
+            "familyName": "Wilcke",
+            "givenName": "Xander"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/kathrin-dentler",
+            "@type": "Person",
+            "email": "kathrin@dentler.org",
+            "familyName": "Dentler",
+            "givenName": "Kathrin"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/melvinroest",
+            "@type": "Person",
+            "email": "44729293+melvinroest@users.noreply.github.com",
+            "familyName": "",
+            "givenName": "melvinroest"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/rubenschalk",
+            "@type": "Person",
+            "email": "r.schalk@uu.nl",
+            "familyName": "",
+            "givenName": "RubenSchalk"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/roderickvanderweerdt",
+            "@type": "Person",
+            "email": "14040777+RoderickvanderWeerdt@users.noreply.github.com",
+            "familyName": "",
+            "givenName": "RoderickvanderWeerdt"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/kathrin",
+            "@type": "Person",
+            "email": "Kathrin@kathrins-mbp.home",
+            "familyName": "",
+            "givenName": "Kathrin"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/joe",
+            "@type": "Person",
+            "email": "raad.joe@hotmail.com",
+            "familyName": "",
+            "givenName": "Joe"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/person/ivo-zandhuis",
+            "@type": "Person",
+            "email": "ivo@zandhuis.nl",
+            "familyName": "Zandhuis",
+            "givenName": "Ivo"
+        }
+    ],
+    "maintainer": {
+        "@id": "https://tools.dev.clariah.nl/person/richard-zijdeman",
+        "@type": "Person",
+        "email": "richard.zijdeman@gmail.com",
+        "familyName": "Zijdeman",
+        "givenName": "Richard"
+    },
+    "codeRepository": "https://github.com/CLARIAH/COW",
+    "description": "Integrated CSV to RDF converter, using CSVW and nanopublications",
+    "developmentStatus": {
+        "@id": "https://www.repostatus.org/#inactive",
+        "@type": "skos:Concept",
+        "og:image": "https://www.repostatus.org/badges/latest/inactive.svg",
+        "skos:definition": "The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.",
+        "skos:inScheme": {
+            "@id": "https://www.repostatus.org",
+            "@type": "skos:ConceptScheme",
+            "dct:creator": "Jason Antman",
+            "dct:description": "A standard to easily communicate to humans and machines the development/support and usability status of software repositories/projects.",
+            "dct:title": "repostatus.org"
+        },
+        "skos:prefLabel": "Inactive"
+    },
+    "downloadUrl": "https://github.com/CLARIAH/COW/archive/refs/tags/1.21.zip",
+    "issueTracker": "https://github.com/CLARIAH/COW/issues",
+    "identifier": "cow",
+    "keywords": [
+        "csv",
+        "csvw",
+        "rdf"
+    ],
+    "license": "http://spdx.org/licenses/MIT",
+    "name": "cow-csvw",
+    "owl:sameAs": [
+        {
+            "@id": "https://tools.dev.clariah.nl/cow/snapshot"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/cow.contributors/snapshot"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/cow-csvw/1.21"
+        }
+    ],
+    "producer": {
+        "@id": "https://tools.dev.clariah.nl/org/clariah",
+        "@type": "Organization",
+        "name": "CLARIAH",
+        "url": "http://www.clariah.nl"
+    },
+    "programmingLanguage": "Python",
+    "readme": "https://github.com/CLARIAH/COW/blob/1.21/README.md",
+    "releaseNotes": "https://github.com/CLARIAH/COW/releases/tag/1.21",
+    "review": {
+        "@id": "https://tools.dev.clariah.nl/validation/N01043db934fab402ca5df3a3b7c322ba",
+        "@type": "Review",
+        "author": "codemetapy validator using software.ttl",
+        "datePublished": "2023-02-10 03:04:13",
+        "name": "Automatic software metadata validation report for cow-csvw 1.21",
+        "reviewBody": "Please consult the CLARIAH Software Metadata Requirements at https://github.com/CLARIAH/clariah-plus/blob/main/requirements/software-metadata-requirements.md for an in-depth explanation of any found problems\n\nValidation of cow-csvw 1.21 was successful (score=3/5), but there are some warnings which should be addressed:\n\n1. Warning: Software source code *SHOULD* link to a continuous integration service that builds the software and runs the software's tests (This is missing in the metadata)\n2. Info: Reference publications *SHOULD* be expressed (This is missing in the metadata)\n3. Info: The funder *SHOULD* be acknowledged (This is missing in the metadata)\n4. Info: The technology readiness level *SHOULD* be expressed (This is missing in the metadata)",
+        "reviewRating": 3
+    },
+    "runtimePlatform": [
+        "Python",
+        "Python 3",
+        "Python 3.10"
+    ],
+    "funding": {
+        "@type": "Grant",
+        "name": "CLARIAH-PLUS (NWO grant 184.034.023)",
+        "funder": {
+            "@type": "Organization",
+            "name": "NWO",
+            "url": "https://www.nwo.nl"
+        }
+    },
+    "softwareHelp": {
+        "@id": "http://csvw-converter.readthedocs.io/en/latest/",
+        "@type": "WebSite",
+        "name": "CoW: Converter for CSV on the Web — CSVW Converters 1.0.0 documentation",
+        "url": "http://csvw-converter.readthedocs.io/en/latest/"
+    },
+    "softwareRequirements": [
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/jinja23.0.3",
+            "@type": "SoftwareApplication",
+            "identifier": "Jinja2",
+            "name": "Jinja2",
+            "runtimePlatform": "Python 3",
+            "version": "3.0.3"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/js2py0.71",
+            "@type": "SoftwareApplication",
+            "identifier": "Js2Py",
+            "name": "Js2Py",
+            "runtimePlatform": "Python 3",
+            "version": "0.71"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/pyyaml6.0",
+            "@type": "SoftwareApplication",
+            "identifier": "PyYAML",
+            "name": "PyYAML",
+            "runtimePlatform": "Python 3",
+            "version": "6.0"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/werkzeug2.0.2",
+            "@type": "SoftwareApplication",
+            "identifier": "Werkzeug",
+            "name": "Werkzeug",
+            "runtimePlatform": "Python 3",
+            "version": "2.0.2"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/chardet4.0.0",
+            "@type": "SoftwareApplication",
+            "identifier": "chardet",
+            "name": "chardet",
+            "runtimePlatform": "Python 3",
+            "version": "4.0.0"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/iribaker0.2",
+            "@type": "SoftwareApplication",
+            "identifier": "iribaker",
+            "name": "iribaker",
+            "runtimePlatform": "Python 3",
+            "version": "0.2"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/isodate0.6.1",
+            "@type": "SoftwareApplication",
+            "identifier": "isodate",
+            "name": "isodate",
+            "runtimePlatform": "Python 3",
+            "version": "0.6.1"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/pyjsparser2.7.1",
+            "@type": "SoftwareApplication",
+            "identifier": "pyjsparser",
+            "name": "pyjsparser",
+            "runtimePlatform": "Python 3",
+            "version": "2.7.1"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/pytz2021.3",
+            "@type": "SoftwareApplication",
+            "identifier": "pytz",
+            "name": "pytz",
+            "runtimePlatform": "Python 3",
+            "version": "2021.3"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/rdflib6.0.2",
+            "@type": "SoftwareApplication",
+            "identifier": "rdflib",
+            "name": "rdflib",
+            "runtimePlatform": "Python 3",
+            "version": "6.0.2"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/rfc39871.3.8",
+            "@type": "SoftwareApplication",
+            "identifier": "rfc3987",
+            "name": "rfc3987",
+            "runtimePlatform": "Python 3",
+            "version": "1.3.8"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/tzlocal4.1",
+            "@type": "SoftwareApplication",
+            "identifier": "tzlocal",
+            "name": "tzlocal",
+            "runtimePlatform": "Python 3",
+            "version": "4.1"
+        },
+        {
+            "@id": "https://tools.dev.clariah.nl/dependency/unicodecsv0.14.1",
+            "@type": "SoftwareApplication",
+            "identifier": "unicodecsv",
+            "name": "unicodecsv",
+            "runtimePlatform": "Python 3",
+            "version": "0.14.1"
+        }
+    ],
+    "targetProduct": {
+        "@id": "https://tools.dev.clariah.nl/commandlineapplication/cow_tool/1.21",
+        "@type": "CommandLineApplication",
+        "executableName": "cow_tool",
+        "name": "cow_tool",
+        "runtimePlatform": "Python 3"
+    },
+    "url": "https://github.com/CLARIAH/COW",
+    "version": "1.21"
+}
