@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+   xmlns:ns1="http://www.w3.org/ns/csvw#"
+   xmlns:ns2="https://example.com/id/vocab/"
+   xmlns:ns3="http://www.w3.org/ns/prov#"
+   xmlns:ns4="http://purl.org/dc/terms/"
+   xmlns:ns5="http://www.nanopub.org/nschema#"
+   xmlns:ns6="http://schema.org/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <rdf:Description rdf:about="https://example.com/id/__row_">
+    <ns3:wasDerivedFrom rdf:datatype="http://www.w3.org/2001/XMLSchema#string">https://example.com/id/{_row}</ns3:wasDerivedFrom>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/buurt.csv/column/Dienstboden">
+    <ns1:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <ns1:name>Dienstboden</ns1:name>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/1">
+    <ns2:properties_name_in_uri rdf:datatype="http://www.w3.org/2001/XMLSchema#string">buurt-b</ns2:properties_name_in_uri>
+    <ns2:Dienstboden rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2,32</ns2:Dienstboden>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/3">
+    <ns2:properties_name_in_uri rdf:datatype="http://www.w3.org/2001/XMLSchema#string">buurt-d</ns2:properties_name_in_uri>
+    <ns2:Dienstboden rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1,37</ns2:Dienstboden>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/buurt.csv/column/properties_name_in_uri">
+    <ns1:name>properties_name_in_uri</ns1:name>
+    <ns1:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/buurt/assertion/3a36c3a5/2023-11-08T19:06">
+    <ns3:generatedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2023-11-08T19:06:00</ns3:generatedAtTime>
+    <ns3:wasDerivedFrom rdf:resource="https://example.com/id/buurt.csv"/>
+    <ns3:wasDerivedFrom rdf:resource="https://example.com/id/3a36c3a5f51dd99f252c8a93fac06e788fcf0664"/>
+    <rdf:type rdf:resource="http://www.nanopub.org/nschema#Assertion"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nd4c9d36a0d874129ada5ca6eaee5f736">
+    <ns1:delimiter>;</ns1:delimiter>
+    <ns1:quoteChar>"</ns1:quoteChar>
+    <ns1:encoding>ascii</ns1:encoding>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/buurt.csv">
+    <ns4:publisher rdf:nodeID="Ne1c3994c48f8464395e3ad98d93eb099"/>
+    <ns1:dialect rdf:nodeID="Nd4c9d36a0d874129ada5ca6eaee5f736"/>
+    <ns1:tableSchema rdf:nodeID="Nba619321c48f48bd8cc008649d135d42"/>
+    <ns4:title xml:lang="en">buurt.csv</ns4:title>
+    <ns4:license rdf:resource="http://opendefinition.org/licenses/cc-by/"/>
+    <ns4:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2023-11-08</ns4:modified>
+    <ns1:url rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">buurt.csv</ns1:url>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/buurt/nanopublication/3a36c3a5/2023-11-08T19:06">
+    <ns3:wasGeneratedBy rdf:resource="https://github.com/CLARIAH/wp4-converters"/>
+    <ns3:generatedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2023-11-08T19:06:00</ns3:generatedAtTime>
+    <ns5:hasProvenance rdf:resource="https://example.com/id/buurt/provenance/3a36c3a5/2023-11-08T19:06"/>
+    <ns5:hasPublicationInfo rdf:resource="https://example.com/id/buurt/pubinfo/3a36c3a5/2023-11-08T19:06"/>
+    <rdf:type rdf:resource="http://www.nanopub.org/nschema#Nanopublication"/>
+    <ns5:hasAssertion rdf:resource="https://example.com/id/buurt/assertion/3a36c3a5/2023-11-08T19:06"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N60ed3d38f24c4029943960cc119680bd">
+    <rdf:rest rdf:nodeID="Ne1a7b0a43017418882525f0913a6adef"/>
+    <rdf:first rdf:resource="https://example.com/id/buurt.csv/column/properties_name_in_uri"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/buurt/pubinfo/3a36c3a5/2023-11-08T19:06">
+    <rdf:type rdf:resource="http://www.nanopub.org/nschema#PublicationInfo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/3a36c3a5f51dd99f252c8a93fac06e788fcf0664">
+    <ns2:sha1_hash rdf:datatype="http://www.w3.org/2001/XMLSchema#string">3a36c3a5f51dd99f252c8a93fac06e788fcf0664</ns2:sha1_hash>
+    <ns2:path rdf:datatype="http://www.w3.org/2001/XMLSchema#string">C:/Users/RISHI R/Desktop/COW/examples/buurt.csv</ns2:path>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/0">
+    <ns2:properties_name_in_uri rdf:datatype="http://www.w3.org/2001/XMLSchema#string">buurt-a</ns2:properties_name_in_uri>
+    <ns2:Dienstboden rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1,5</ns2:Dienstboden>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/2">
+    <ns2:Dienstboden rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1,96</ns2:Dienstboden>
+    <ns2:properties_name_in_uri rdf:datatype="http://www.w3.org/2001/XMLSchema#string">buurt-c</ns2:properties_name_in_uri>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Ne1a7b0a43017418882525f0913a6adef">
+    <rdf:first rdf:resource="https://example.com/id/buurt.csv/column/Dienstboden"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nba619321c48f48bd8cc008649d135d42">
+    <ns1:primaryKey>properties_name_in_uri</ns1:primaryKey>
+    <ns1:column rdf:nodeID="N60ed3d38f24c4029943960cc119680bd"/>
+    <ns1:aboutUrl rdf:resource="https://example.com/id/__row_"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Ne1c3994c48f8464395e3ad98d93eb099">
+    <ns6:name xml:lang="en">CLARIAH Structured Data Hub - Datalegend</ns6:name>
+    <ns6:url rdf:resource="http://datalegend.net/"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/buurt/provenance/3a36c3a5/2023-11-08T19:06">
+    <rdf:type rdf:resource="http://www.nanopub.org/nschema#Provenance"/>
+  </rdf:Description>
+</rdf:RDF>

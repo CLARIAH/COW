@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+   xmlns:ns1="http://www.w3.org/ns/csvw#"
+   xmlns:ns2="https://example.com/id/vocab/"
+   xmlns:ns3="http://www.w3.org/ns/prov#"
+   xmlns:ns4="http://purl.org/dc/terms/"
+   xmlns:ns5="http://www.nanopub.org/nschema#"
+   xmlns:ns6="http://schema.org/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <rdf:Description rdf:about="https://example.com/id/__row_">
+    <ns3:wasDerivedFrom rdf:datatype="http://www.w3.org/2001/XMLSchema#string">https://example.com/id/{_row}</ns3:wasDerivedFrom>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/cow_person_example.csv/column/male">
+    <ns1:name>male</ns1:name>
+    <ns1:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/cow_person_example/nanopublication/c1e573f3/2023-11-08T19:07">
+    <rdf:type rdf:resource="http://www.nanopub.org/nschema#Nanopublication"/>
+    <ns5:hasProvenance rdf:resource="https://example.com/id/cow_person_example/provenance/c1e573f3/2023-11-08T19:07"/>
+    <ns5:hasPublicationInfo rdf:resource="https://example.com/id/cow_person_example/pubinfo/c1e573f3/2023-11-08T19:07"/>
+    <ns5:hasAssertion rdf:resource="https://example.com/id/cow_person_example/assertion/c1e573f3/2023-11-08T19:07"/>
+    <ns3:wasGeneratedBy rdf:resource="https://github.com/CLARIAH/wp4-converters"/>
+    <ns3:generatedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2023-11-08T19:07:00</ns3:generatedAtTime>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/cow_person_example.csv/column/surname">
+    <ns1:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <ns1:name>surname</ns1:name>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N7f90bfa6b48d4c308821768c7db030ed">
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:first rdf:resource="https://example.com/id/cow_person_example.csv/column/occupation"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Na6d44683f23c435280baf1746d008450">
+    <rdf:rest rdf:nodeID="N7f90bfa6b48d4c308821768c7db030ed"/>
+    <rdf:first rdf:resource="https://example.com/id/cow_person_example.csv/column/male"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N1574abe0b7194bf3abf453ae6639ab67">
+    <rdf:rest rdf:nodeID="N5c882a9c051340e99723c8a5bc2d1c15"/>
+    <rdf:first rdf:resource="https://example.com/id/cow_person_example.csv/column/personID"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/1">
+    <ns2:personID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">013</ns2:personID>
+    <ns2:surname rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Careful</ns2:surname>
+    <ns2:male rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</ns2:male>
+    <ns2:occupation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">nurse</ns2:occupation>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/cow_person_example/assertion/c1e573f3/2023-11-08T19:07">
+    <rdf:type rdf:resource="http://www.nanopub.org/nschema#Assertion"/>
+    <ns3:wasDerivedFrom rdf:resource="https://example.com/id/cow_person_example.csv"/>
+    <ns3:wasDerivedFrom rdf:resource="https://example.com/id/c1e573f356eb31b5b52895409423151dce8b428b"/>
+    <ns3:generatedAtTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2023-11-08T19:07:00</ns3:generatedAtTime>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/2">
+    <ns2:occupation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">shrubber</ns2:occupation>
+    <ns2:male rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</ns2:male>
+    <ns2:personID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">017</ns2:personID>
+    <ns2:surname rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Bushman</ns2:surname>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/cow_person_example.csv">
+    <ns4:license rdf:resource="http://opendefinition.org/licenses/cc-by/"/>
+    <ns1:url rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">cow_person_example.csv</ns1:url>
+    <ns1:dialect rdf:nodeID="Nfbf8137628d34cd9912dae369a2cc7c1"/>
+    <ns4:publisher rdf:nodeID="N6a7924a6484f40e398d6586e03799ec8"/>
+    <ns1:tableSchema rdf:nodeID="N10e9c082a2394473a0afbaf115f93bc2"/>
+    <ns4:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2023-11-08</ns4:modified>
+    <ns4:title xml:lang="en">cow_person_example.csv</ns4:title>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N5c882a9c051340e99723c8a5bc2d1c15">
+    <rdf:rest rdf:nodeID="Na6d44683f23c435280baf1746d008450"/>
+    <rdf:first rdf:resource="https://example.com/id/cow_person_example.csv/column/surname"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/c1e573f356eb31b5b52895409423151dce8b428b">
+    <ns2:sha1_hash rdf:datatype="http://www.w3.org/2001/XMLSchema#string">c1e573f356eb31b5b52895409423151dce8b428b</ns2:sha1_hash>
+    <ns2:path rdf:datatype="http://www.w3.org/2001/XMLSchema#string">C:/Users/RISHI R/Desktop/COW/examples/cow_person_example.csv</ns2:path>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N10e9c082a2394473a0afbaf115f93bc2">
+    <ns1:primaryKey>personID</ns1:primaryKey>
+    <ns1:aboutUrl rdf:resource="https://example.com/id/__row_"/>
+    <ns1:column rdf:nodeID="N1574abe0b7194bf3abf453ae6639ab67"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/cow_person_example.csv/column/personID">
+    <ns1:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <ns1:name>personID</ns1:name>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/cow_person_example.csv/column/occupation">
+    <ns1:name>occupation</ns1:name>
+    <ns1:datatype rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N6a7924a6484f40e398d6586e03799ec8">
+    <ns6:name xml:lang="en">CLARIAH Structured Data Hub - Datalegend</ns6:name>
+    <ns6:url rdf:resource="http://datalegend.net/"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/0">
+    <ns2:personID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">012</ns2:personID>
+    <ns2:surname rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fumes</ns2:surname>
+    <ns2:male rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0</ns2:male>
+    <ns2:occupation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chimney sweep</ns2:occupation>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/cow_person_example/pubinfo/c1e573f3/2023-11-08T19:07">
+    <rdf:type rdf:resource="http://www.nanopub.org/nschema#PublicationInfo"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nfbf8137628d34cd9912dae369a2cc7c1">
+    <ns1:delimiter>,</ns1:delimiter>
+    <ns1:quoteChar>"</ns1:quoteChar>
+    <ns1:encoding>ascii</ns1:encoding>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/cow_person_example/provenance/c1e573f3/2023-11-08T19:07">
+    <rdf:type rdf:resource="http://www.nanopub.org/nschema#Provenance"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://example.com/id/3">
+    <ns2:occupation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">woodturner</ns2:occupation>
+    <ns2:personID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">019</ns2:personID>
+    <ns2:male rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0</ns2:male>
+    <ns2:surname rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Oak</ns2:surname>
+  </rdf:Description>
+</rdf:RDF>

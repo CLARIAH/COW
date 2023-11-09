@@ -1,0 +1,39 @@
+{aat: !!python/object/new:rdflib.namespace.Namespace ['http://vocab.getty.edu/aat/'],
+  bibo: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/ontology/bibo/'],
+  bio: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/vocab/bio/0.1/'],
+  cidoc: !!python/object/new:rdflib.namespace.Namespace ['http://www.cidoc-crm.org/cidoc-crm/'],
+  civ: !!python/object/new:rdflib.namespace.Namespace ['https://iisg.amsterdam/id/civ/'],
+  csvw: !!python/object/new:rdflib.namespace.Namespace ['http://www.w3.org/ns/csvw#'],
+  dbo: !!python/object/new:rdflib.namespace.Namespace ['http://dbpedia.org/ontology/'],
+  dc: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/dc/terms/'],
+  dc11: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/dc/elements/1.1/'],
+  dcterms: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/dc/terms/'],
+  ecpo: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/ontology/ecpo#'],
+  foaf: !!python/object/new:rdflib.namespace.Namespace ['http://xmlns.com/foaf/0.1/'],
+  frbr: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/spar/frbr/core#'],
+  geo: !!python/object/new:rdflib.namespace.Namespace ['http://www.opengis.net/ont/geosparql#'],
+  geonames: !!python/object/new:rdflib.namespace.Namespace ['http://www.geonames.org/ontology#'],
+  gvp: !!python/object/new:rdflib.namespace.Namespace ['http://vocab.getty.edu/ontology#'],
+  juso: !!python/object/new:rdflib.namespace.Namespace ['http://http://rdfs.co/juso/'],
+  lemon: !!python/object/new:rdflib.namespace.Namespace ['http://lemon-model.net/lemon#'],
+  midi: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/midi-ld/midi#'],
+  np: !!python/object/new:rdflib.namespace.Namespace ['http://www.nanopub.org/nschema#'],
+  owl: !!python/object/new:rdflib.namespace.Namespace ['http://www.w3.org/2002/07/owl#'],
+  periodo: !!python/object/new:rdflib.namespace.Namespace ['http://n2t.net/ark:/99152/p0v#'],
+  pnv: !!python/object/new:rdflib.namespace.Namespace ['https://www.lodewijkpetram.nl/vocab/pnv/doc/'],
+  prov: !!python/object/new:rdflib.namespace.Namespace ['http://www.w3.org/ns/prov#'],
+  qb: !!python/object/new:rdflib.namespace.Namespace ['http://purl.org/linked-data/cube#'],
+  rdf: !!python/object/new:rdflib.namespace.Namespace ['http://www.w3.org/1999/02/22-rdf-syntax-ns#'],
+  rdfs: !!python/object/new:rdflib.namespace.Namespace ['http://www.w3.org/2000/01/rdf-schema#'],
+  schema: !!python/object/new:rdflib.namespace.Namespace ['http://schema.org/'], sdmx-concept: !!python/object/new:rdflib.namespace.Namespace [
+    'http://purl.org/linked-data/sdmx/2009/concept#'], sdmx-dimension: !!python/object/new:rdflib.namespace.Namespace [
+    'http://purl.org/linked-data/sdmx/2009/dimension#'], sdr: !!python/object/new:rdflib.namespace.Namespace [
+    'https://example.com/id/'], sdv: !!python/object/new:rdflib.namespace.Namespace [
+    'https://example.com/id/vocab/'], sem: !!python/object/new:rdflib.namespace.Namespace [
+    'http://semanticweb.cs.vu.nl/2009/11/sem/'], skos: !!python/object/new:rdflib.namespace.Namespace [
+    'http://www.w3.org/2004/02/skos/core#'], time: !!python/object/new:rdflib.namespace.Namespace [
+    'http://www.w3.org/2006/time#'], ulan: !!python/object/new:rdflib.namespace.Namespace [
+    'http://vocab.getty.edu/ulan/'], wgs84: !!python/object/new:rdflib.namespace.Namespace [
+    'http://www.w3.org/2003/01/geo/wgs84_pos#'], xml: !!python/object/new:rdflib.namespace.Namespace [
+    'http://www.w3.org/XML/1998/namespace/'], xsd: !!python/object/new:rdflib.namespace.Namespace [
+    'http://www.w3.org/2001/XMLSchema#']}
