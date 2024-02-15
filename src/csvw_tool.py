@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-import cProfile
 try:
     # git install
     from converter.csvw import CSVWConverter, build_schema, extensions
@@ -12,7 +11,6 @@ import argparse
 import sys
 import gzip
 import traceback
-import cProfile
 from glob import glob
 from rdflib import ConjunctiveGraph
 from werkzeug.utils import secure_filename
@@ -87,7 +85,7 @@ class COW(object):
             else:
                 print("Whoops for file {}".format(source_file))
 
-def main():
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Not nearly CSVW compliant schema builder and RDF converter")
     parser.add_argument('mode', choices=['convert','build'], default='convert', help='Use the schema of the `file` specified to convert it to RDF, or build a schema from scratch.')
     parser.add_argument('files', metavar='file', nargs='+', type=str, help="Path(s) of the file(s) that should be used for building or converting. Must be a CSV file.")
@@ -118,9 +116,3 @@ def main():
     COW(args.mode, files, args.dataset, args.delimiter, args.encoding,
         args.quotechar, args.processes, args.chunksize, args.base,
         args.format, args.gzip)
-
-if __name__ == '__main__':
-   cProfile.run("main()")
-
-# FILE = '../sdh-private-hisco-datasets/hisco_45.csv'
-# SCHEMA = '../sdh-private-hisco-datasets/hisco_45.csv-metadata.json'
