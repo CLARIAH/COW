@@ -85,7 +85,7 @@ class COW(object):
             else:
                 print("Whoops for file {}".format(source_file))
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description="Not nearly CSVW compliant schema builder and RDF converter")
     parser.add_argument('mode', choices=['convert','build'], default='convert', help='Use the schema of the `file` specified to convert it to RDF, or build a schema from scratch.')
     parser.add_argument('files', metavar='file', nargs='+', type=str, help="Path(s) of the file(s) that should be used for building or converting. Must be a CSV file.")
@@ -116,3 +116,6 @@ if __name__ == '__main__':
     COW(args.mode, files, args.dataset, args.delimiter, args.encoding,
         args.quotechar, args.processes, args.chunksize, args.base,
         args.format, args.gzip)
+
+if __name__ == '__main__':
+    main()
