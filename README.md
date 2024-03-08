@@ -8,7 +8,7 @@
 
 - Expressive CSVW-compatible schemas based on the [Jinja](https://github.com/pallets/jinja) template enginge.
 - Highly efficient implementation leveraging multithreaded and multicore architectures.
-- Available as a [Docker image](#docker-image), [command line interface (CLI) tool](command-line-interface), and [library](#library).
+- Available as a [Docker image](#docker-image), graphical or [command line interface (CLI) tool](command-line-interface), and [library](#library).
 
 ### Documentation and support
 For user documentation see the [basic introduction video](https://t.co/SDWC3NhWZf) and the  [GitHub wiki](https://github.com/clariah/cow/wiki/). [Technical details](#technical-details) are provided below. If you encounter an issue then please [report](https://github.com/CLARIAH/COW/issues/new/choose) it. Also feel free to create pull requests.
@@ -43,7 +43,7 @@ For detailed instructions on this Docker image, see [DataLegend Playground](http
 
 ### Command Line Interface (CLI)
 
-The Command Line Interface (CLI) is the recommended way of using CoW for most users.
+The Command Line Interface (CLI) is the recommended way of installing CoW for most users.
 
 #### Install
 
@@ -67,7 +67,7 @@ Possible installation issues:
 - Cannot find command: make sure your binary user directory (typically something like `/Users/user/Library/Python/3.7/bin` in MacOS or `/home/user/.local/bin` in Linux) is in your PATH (in MacOS: `/etc/paths`).
 - Please [report your unlisted issue](https://github.com/CLARIAH/CoW/issues/new).
 
-#### Usage
+### Usage
 
 Start the graphical interface by entering the following command:
 
