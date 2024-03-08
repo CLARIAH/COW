@@ -1,7 +1,8 @@
 import sys
 import os
 import datetime
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFileDialog, QRadioButton, QTextEdit
+import webbrowser
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QHBoxLayout, QLabel, QPushButton, QFileDialog, QRadioButton, QTextEdit
 try:
     # git install
     from converter.csvw import CSVWConverter, build_schema, extensions
@@ -11,6 +12,8 @@ except ImportError:
 
 from rdflib import ConjunctiveGraph
 
+COW_WIKI = "https://github.com/CLARIAH/COW/wiki"
+
 class COWGUI(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -18,75 +21,77 @@ class COWGUI(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle('CSV on the Web Converter GUI')
+        self.setWindowTitle('CSV on the Web Converter')
         self.setGeometry(100, 100, 400, 300)  # Adjusted for additional button
 
         self.central_widget = QWidget(self)
         self.setCentralWidget(self.central_widget)
 
-        layout = QVBoxLayout()
+        layout = QGridLayout()
 
-        self.mode_label = QLabel('Select Mode:')
-        layout.addWidget(self.mode_label)
-
-        self.mode_radio_layout = QHBoxLayout()
-        self.mode_radio_build = QRadioButton('Build')
-        self.mode_radio_convert = QRadioButton('Convert')
-        self.mode_radio_build.setChecked(True)
-        self.mode_radio_layout.addWidget(self.mode_radio_build)
-        self.mode_radio_layout.addWidget(self.mode_radio_convert)
-        layout.addLayout(self.mode_radio_layout)
-
-        self.file_label = QLabel('Select File:')
-        layout.addWidget(self.file_label)
-
-        self.file_button = QPushButton('Browse Files')
+        self.file_button = QPushButton('Select CSV File(s)')
         self.file_button.clicked.connect(self.browse_files)
-        layout.addWidget(self.file_button)
+        layout.addWidget(self.file_button, 1, 0, 1, 2)
 
-        self.process_button = QPushButton('Build/Convert')
-        self.process_button.clicked.connect(self.process_files)
-        layout.addWidget(self.process_button)
+        self.process_button = QPushButton('Build Metadata File')
+        self.process_button.clicked.connect(self.build_schemas)
+        layout.addWidget(self.process_button, 2, 0)
 
         # Button for editing the JSON file
-        self.edit_button = QPushButton('Edit JSON')
+        self.edit_button = QPushButton('Customize Metadata File')
         self.edit_button.clicked.connect(self.edit_json)
-        layout.addWidget(self.edit_button)
+        layout.addWidget(self.edit_button, 2, 1)
+
+        self.process_button = QPushButton('Convert CSV File(s)')
+        self.process_button.clicked.connect(self.convert_files)
+        layout.addWidget(self.process_button, 3, 0, 1, 2)
+
 
         self.output_text_edit = QTextEdit()
-        layout.addWidget(self.output_text_edit)
+        layout.addWidget(self.output_text_edit, 4, 0, 1, 2)
+
+        self.process_button = QPushButton('Help')
+        self.process_button.clicked.connect(self.wiki)
+        layout.addWidget(self.process_button, 5, 0)
+
+        self.process_button = QPushButton('Exit')
+        self.process_button.clicked.connect(self.quit)
+        layout.addWidget(self.process_button, 5, 1)
+
+        self.output_text_edit.append("Welcome to COW!\n\nStart by selecting one or"
+                                     " more CSV files. Next, click 'build' to"
+                                     " generate a metadata file with"
+                                     " mappings, and finally click 'convert' to"
+                                     " translate your data to RDF.\n")
 
         self.central_widget.setLayout(layout)
 
         self.files = []
-        self.mode = 'build'  # Default mode
+
+    def wiki(self):
+        webbrowser.open(COW_WIKI)
+
+    def quit(self):
+        sys.exit(0)
 
     def browse_files(self):
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly
-        options |= QFileDialog.ExistingFiles
+
         file_dialog = QFileDialog()
         file_dialog.setNameFilter('CSV Files (*.csv)')
-        selected_files, _ = file_dialog.getOpenFileNames(self, 'Select CSV File(s)', '', 'CSV Files (*.csv);;All Files (*)', options=options)
+        selected_files, _ = file_dialog.getOpenFileNames(self, caption='Select CSV File(s)',
+                                                         filter='CSV Files (*.csv);;All Files (*)',
+                                                         options=options)
         if selected_files:
             self.files = selected_files
             self.output_text_edit.append(f"Added the files {', '.join(self.files)}")
 
-    def process_files(self):
+    def build_schemas(self):
         if not self.files:
             self.output_text_edit.append("No files selected.")
             return
 
-        # Determine the mode based on the selected radio button
-        self.mode = 'convert' if self.mode_radio_convert.isChecked() else 'build'
-
-        # Execute the appropriate method based on the mode
-        if self.mode == 'build':
-            self.build_schemas()
-        elif self.mode == 'convert':
-            self.convert_files()
-
-    def build_schemas(self):
         for file in self.files:
             self.output_text_edit.append(f"Building schema for {file}")
             target_file = f"{file}-metadata.json"
@@ -100,6 +105,10 @@ class COWGUI(QMainWindow):
             self.output_text_edit.append(f"Schema built and saved as {target_file}")
 
     def convert_files(self):
+        if not self.files:
+            self.output_text_edit.append("No files selected.")
+            return
+
         for file in self.files:
             self.output_text_edit.append(f"Converting {file} to RDF")
             try:
