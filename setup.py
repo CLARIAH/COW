@@ -32,7 +32,8 @@ setup(name = 'cow_csvw',
       packages = ['cow_csvw'],
       package_dir = {'cow_csvw': 'src'},
       package_data = {'cow_csvw': cow_data},
-      entry_points={'console_scripts' : [ 'cow_tool = cow_csvw.csvw_tool:main' ]},
+      entry_points={'console_scripts' : [ 'cow_tool_cli = cow_csvw.csvw_tool:main',
+                                          'cow_tool = cow_csvw.csvw_gui:main' ]},
       keywords = ['csv', 'rdf', 'csvw'],
       install_requires=required
 )

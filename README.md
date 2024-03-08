@@ -69,32 +69,42 @@ Possible installation issues:
 
 #### Usage
 
+Start the graphical interface by entering the following command:
+
+```
+cow_tool
+```
+
+Select a CSV file and click `build` to generate a file named `myfile.csv-metadata.json` (JSON schema file) with your mappings. Edit this file (optional) and then click `convert` to convert the CSV file to RDF. The output should be a `myfile.csv.nq` RDF file (nquads by default).
+
+#### Command Line Interface
+
 The straightforward CSV to RDF conversion is done by entering the following commands:
 
 ```
-cow_tool build myfile.csv
+cow_tool_cli build myfile.csv
 ```
 
 This will create a file named `myfile.csv-metadata.json` (JSON schema file). Next:
 
 ```
-cow_tool convert myfile.csv
+cow_tool_cli convert myfile.csv
 ```
 This command will output a `myfile.csv.nq` RDF file (nquads by default).
 
 You don't need to worry about the JSON file, unless you want to change the metadata schema. To control the base URI namespace, URIs used in predicates, virtual columns, etcetera, edit the `myfile.csv-metadata.json` file and/or use CoW commands. For instance, you can control the output RDF serialization (with e.g. ``--format turtle``). Have a look at the [options](#options) below, the examples in the [GitHub wiki](https://github.com/CLARIAH/CoW/wiki), and the [technical documentation](http://csvw-converter.readthedocs.io/en/latest/).
 
-#### Options
+##### Options
 
 Check the ``--help`` for a complete list of options:
 
 ```
-usage: cow_tool [-h] [--dataset DATASET] [--delimiter DELIMITER]
-                [--quotechar QUOTECHAR] [--encoding ENCODING] [--processes PROCESSES]
-                [--chunksize CHUNKSIZE] [--base BASE]
-                [--format [{xml,n3,turtle,nt,pretty-xml,trix,trig,nquads}]]
-				[--gzip] [--version]
-                {convert,build} file [file ...]
+usage: cow_tool_cli [-h] [--dataset DATASET] [--delimiter DELIMITER]
+                    [--quotechar QUOTECHAR] [--encoding ENCODING] [--processes PROCESSES]
+                    [--chunksize CHUNKSIZE] [--base BASE]
+                    [--format [{xml,n3,turtle,nt,pretty-xml,trix,trig,nquads}]]
+                    [--gzip] [--version]
+                    {convert,build} file [file ...]
 
 Not nearly CSVW compliant schema builder and RDF converter
 
